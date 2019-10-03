@@ -1,0 +1,42 @@
+config:
+    renderer: adoc
+
+modules:
+  introduction:
+    name: Introduction
+  getting-started-codeready:
+    name: Getting Started
+  catalog-spring-boot-codeready:
+    name: Create Catalog Service as a Microservice with Spring Boot
+  catalog-deployment:
+    name: Deploy Catalog Service as a Microservice with Spring Boot
+  inventory-thorntail-codeready:
+    name: Create Inventory Service as an Enterprise Microservice with Thorntail
+  inventory-vertx-codeready:
+    name: Create Inventory Service as a Reactive Microservice with Eclipse Vert.x
+  inventory-deployment:
+    name: Deploy Inventory Service
+  gateway-vertx-codeready:
+    name: Create Gateway Service as a Reactive Microservice with Eclipse Vert.x
+  gateway-deployment:
+    name: Deploy Gateway Service
+  webui-deployment:
+    name: Deploy Web UI as a Microservice with with Node.js and AngularJS
+  health:
+    name: Monitoring Application Health 
+  fault-tolerance-codeready:
+    name: Service Resilience and Fault Tolerance
+  app-config-thorntail:
+    name:  Application Configuration
+  app-config-vertx:
+    name:  Application Configuration
+  continuous-delivery:
+    name:  Continuous Delivery
+  debug-codeready:
+    name:  Debugging Applications
+  service-mesh:
+    name:  Microservice Tracing with Service Mesh
+  abtesting:
+    name:  "A/B Testing with Service Mesh"
+  env-info:
+    name: "Appendix: Lab Env Info"

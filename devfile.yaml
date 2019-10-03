@@ -1,0 +1,90 @@
+apiVersion: 1.0.0
+metadata:
+  generateName: wksp-cloud-native
+projects:
+  - name: workshop
+    source:
+      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
+      type: git
+      branch: master
+components:
+  - id: redhat/java/latest
+    type: chePlugin
+    alias: java
+  - id: redhat/vscode-openshift-connector/latest
+    type: chePlugin
+    alias: openshift-connector
+  - id: redhat/vscode-tekton/latest
+    type: chePlugin
+    alias: tekton
+  - mountSources: true
+    memoryLimit: 2Gi
+    type: dockerimage
+    volumes:
+      - name: m2
+        containerPath: /home/user/.m2
+    alias: maven
+    image: 'quay.io/eclipse/che-java11-maven:7.2.0'
+    env:
+      - value: /home/user/.m2
+        name: MAVEN_CONFIG
+      - value: >-
+          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom -Duser.home=/home/user
+        name: MAVEN_OPTS
+      - value: http://nexus.opentlc-shared.svc:8081/repository/maven-all-public
+        name: MAVEN_MIRROR_URL
+      - value: >-
+          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom
+        name: JAVA_OPTS
+      - value: >-
+          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
+          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
+          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
+          -Xms20m -Djava.security.egd=file:/dev/./urandom
+        name: JAVA_TOOL_OPTIONS
+commands:
+  - name: 1- build inventory-thorntail
+    actions:
+      - type: exec
+        command: mvn clean package
+        component: quay-io-mcouliba-che
+        workdir: /projects/cloud-native-labs/inventory-thorntail
+  - name: 1- run dev inventory-thorntail
+    actions:
+      - type: exec
+        command: java -Dswarm.http.port=9001 -jar target/*-thorntail.jar
+        component: quay-io-mcouliba-che
+        workdir: /projects/cloud-native-labs/inventory-thorntail
+
+  - name: 2- build catalog-spring-boot
+    actions:
+      - type: exec
+        command: mvn clean package
+        component: quay-io-mcouliba-che
+        workdir: /projects/cloud-native-labs/catalog-spring-boot
+  - name: 2- run dev catalog-spring-boot
+    actions:
+      - type: exec
+        command: mvn spring-boot:run
+        component: quay-io-mcouliba-che
+        workdir: /projects/cloud-native-labs/catalog-spring-boot
+
+  - name: 3- build gateway-vertx
+    actions:
+      - type: exec
+        command: mvn clean package
+        component: quay-io-mcouliba-che
+        workdir: /projects/cloud-native-labs/gateway-vertx
+
+  - name: 3- run dev gateway-vertx
+    actions:
+      - type: exec
+        command: mvn vertx:run
+        component: quay-io-mcouliba-che
+        workdir: /projects/cloud-native-labs/gateway-vertx
