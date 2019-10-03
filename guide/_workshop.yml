@@ -5,10 +5,12 @@ content:
   url: https://raw.githubusercontent.com/openshift-labs/cloud-native-guides/ocp-3.11
 
 vars:
-  OPENSHIFT_DOCS_BASE: "https://docs.openshift.com/container-platform/3.11"
+  OPENSHIFT_CONSOLE_URL: "https://console-openshift-console.192.168.99.100.nip.io"
+  OPENSHIFT_API_URL: "https://api.192.168.99.100.nip.io"
+  APPS_HOSTNAME_SUFFIX: "192.168.99.100.nip.io"
   OPENSHIFT_USER: userX
   OPENSHIFT_PASSWORD: PASSWORD
-  COOLSTORE_PROJECT: coolstoreX
+  PROJECT: cn-projectX
   INFRA_PROJECT: infraX
   DOWNLOAD_CLIENT_WINDOWS: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/windows/oc.zip
   DOWNLOAD_CLIENT_MAC: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/macosx/oc.tar.gz
@@ -17,27 +19,26 @@ vars:
   LABS_DOWNLOAD_URL: https://github.com/openshift-labs/cloud-native-labs/archive/ocp-3.11.zip
   WEB_NODEJS_GIT_REPO: https://github.com/openshift-labs/cloud-native-labs/tree/ocp-3.11/web-nodejs
   OPENSHIFT_CONSOLE_URL: OPENSHIFT-CONSOLE-URL
-  APPS_HOSTNAME_SUFFIX: APPS_HOSTNAME_SUFFIX
   INVENTORY_ROUTE_HOST: INVENTORY-ROUTE-HOST
   CATALOG_ROUTE_HOST: CATALOG-ROUTE-HOST
   API_GATEWAY_ROUTE_HOST: API-GATEWAY-ROUTE-HOST
-  CODEREADY_WORKSPACES_URL: http://codeready-lab-infra.192.168.99.100.nip.io
-  GIT_URL: http://gogs-lab-infra.192.168.99.100.nip.io
-  NEXUS_URL: http://nexus.lab-infra.svc:8081/repository/maven-all-public
-  KIALI_URL: http://kiali-infra.192.168.99.100.nip.io
-  JAEGER_URL: https://jaeger-query-istio-system.192.168.99.100.nip.io
+  CHE_URL: http://che-eclipse-che.apps.192.168.99.100.nip.io
+  JAEGER_URL: http://jaeger-istio-system.apps.192.168.99.100.nip.io
+  NEXUS_URL: http://nexus.workshop-infra.apps.192.168.99.100.nip.io
+  KIALI_URL: http://kiali-istio-system.apps.192.168.99.100.nip.io
+  KIBANA_URL: http://kibana.apps192.168.99.100.nip.io
   
 modules:
   activate:
   - introduction
-  - getting-started-codeready
-  - inventory-thorntail-codeready
-  - catalog-spring-boot-codeready
-  - gateway-vertx-codeready
+  - getting-started
+  - inventory-thorntail
+  - catalog-spring-boot
+  - gateway-vertx
   - webui-deployment
   - app-config-thorntail
   - health
-  - fault-tolerance-codeready
+  - fault-tolerance
   - continuous-delivery
   - service-mesh
   - abtesting

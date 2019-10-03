@@ -214,7 +214,7 @@ The above command creates a new build config of type pipeline which is automatic
 configured to fetch the *_Jenkinsfile_* from the Git repository of the current folder 
 (**inventory-thorntail** Git repository) and execute it on Jenkins.
 
-`*Go to the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]*` inside the **{{COOLSTORE_PROJECT}}** project and from the left sidebar 
+`*Go to the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]*` inside the **{{PROJECT}}** project and from the left sidebar 
 `*click on 'Builds >> Pipelines'*`
 
 image:{% image_path cd-pipeline-inprogress.png %}[OpenShift Pipeline,900]

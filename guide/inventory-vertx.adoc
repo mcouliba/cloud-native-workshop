@@ -373,7 +373,7 @@ OpenShift CLI:
 $ oc get routes
 
 NAME        HOST/PORT                                        PATH       SERVICES  PORT  TERMINATION   
-inventory   inventory-{{COOLSTORE_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}   inventory  8080            None
+inventory   inventory-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}   inventory  8080            None
 ----
 
 IMPORTANT: The route urls in your project would be different from the ones in this lab guide! Use the one from yor project.

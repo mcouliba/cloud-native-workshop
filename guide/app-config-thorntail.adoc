@@ -143,7 +143,7 @@ at **/app/config/project-defaults.yaml**
 
 [TIP]
 ====
-If you don't like bash commands, go to the **{{COOLSTORE_PROJECT}}** project in {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] 
+If you don't like bash commands, go to the **{{PROJECT}}** project in {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] 
 and then on the left sidebar, **Resources >> Config Maps**. Click on **Create Config Map** button to create a config map with the following info:
 
 * Name: **inventory**
@@ -247,7 +247,7 @@ This name will be resolved by the internal DNS server exposed by OpenShift and a
 
 [TIP]
 ====
-If you don't like bash commands, go to the **{{COOLSTORE_PROJECT}}** project in {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] 
+If you don't like bash commands, go to the **{{PROJECT}}** project in {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] 
 and then on the left sidebar, **Resources >> Config Maps**. Click on **Create Config Map** button to create a config map with the following info:
 
 * Name: **catalog**
@@ -352,7 +352,7 @@ This secret has three encrypted properties defined as ***database-name***, ***da
 the PostgreSQL database name, username and password values. These values are injected in the PostgreSQL container as 
 environment variables and used to initialize the database.
 
-`*Go to '{{COOLSTORE_PROJECT}}' project*` in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] and `*click on the 'catalog-postgresql' 
+`*Go to '{{PROJECT}}' project*` in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] and `*click on the 'catalog-postgresql' 
 deployment*` (blue text under the title **Deployment**) and then `*click on the 'Environment' tab*`. Notice the values 
 from the secret are defined as env vars on the deployment:
 

@@ -132,7 +132,7 @@ Go to Kiali to see the traffic distribution between Catalog v1 and v2.
 
 From the {{ KIALI_URL }}[Kiali Console^], `*click on the 'Graph' link*` in the left navigation and enter the following configuration in the drop down menus:
 
- * Namespace: **{{COOLSTORE_PROJECT}}**
+ * Namespace: **{{PROJECT}}**
  * Display: **'Traffic Animation'** check
  * Edge Label: **Requests percent of total**
  * Fetching: **Last 5 min**

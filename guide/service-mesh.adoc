@@ -149,13 +149,13 @@ In the Terminal, `*execute the following command*` to create an *_Istio Gateway_
 
 ----
 oc create -f /projects/labs/gateway-vertx/openshift/istio-gateway.yml
-sed s/COOLSTORE_PROJECT/{{COOLSTORE_PROJECT}}/g /projects/labs/gateway-vertx/openshift/virtualservice.yml | oc create -f -
+sed s/PROJECT/{{PROJECT}}/g /projects/labs/gateway-vertx/openshift/virtualservice.yml | oc create -f -
 ----
 
 To confirm that the *_Istio Gateway_* is properly configured,
 
 ----
-$ curl -o /dev/null -s -w "%{http_code}\n" http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{COOLSTORE_PROJECT}}/api/products
+$ curl -o /dev/null -s -w "%{http_code}\n" http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{PROJECT}}/api/products
 200
 ----
 
@@ -166,7 +166,7 @@ The result should be *_200_* (Successful).
 `*Issue the following command*` to configure the *_WebUI Service_* to use the *_Istio Gateway_* instead of the *_OpenShift Route_*:
 
 ----
-$ oc set env dc/web COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{COOLSTORE_PROJECT}}
+$ oc set env dc/web COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{PROJECT}}
 ----
 
 === Testing the application
@@ -200,7 +200,7 @@ Log in to the Kiali console as `*{{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}}*`
 
 After you log in, `*click on the 'Graph' link*` in the left navigation and enter the following configuration in the drop down menus:
 
- * Namespace: **{{COOLSTORE_PROJECT}}**
+ * Namespace: **{{PROJECT}}**
  * Display: **'Traffic Animation'** check
 
 image:{% image_path kiali-graph-param.png %}[Kiali- Graph,300]
@@ -232,7 +232,7 @@ IMPORTANT: Because of certificates issues, you need first to access the main {{ 
 
 From the {{ KIALI_URL }}[Kiali Console^], `*click on the _Distributed Tracing_ link*` in the left navigation and enter the following configuration in the drop down menus:
 
- * Select a Namespace: *_{{COOLSTORE_PROJECT}}_*
+ * Select a Namespace: *_{{PROJECT}}_*
  * Select a Service: *_gateway_*
  
 image:{% image_path kiali-traces-param.png %}[Kiali- Traces View,500]

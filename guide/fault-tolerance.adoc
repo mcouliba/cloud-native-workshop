@@ -41,7 +41,7 @@ down arrows on the right side of each pods blue circle.
 First, get list of deployment configs available in the project.
 
 ----
-$ oc project {{COOLSTORE_PROJECT}}
+$ oc project {{PROJECT}}
 $ oc get dc 
 
 NAME        REVISION   DESIRED   CURRENT   TRIGGERED BY
@@ -139,7 +139,7 @@ deploymentconfig "web" resource requirements updated
 ----
 
 TIP: You can also use the OpenShift Web Console by clicking on **Applications** >> **Deployments** within 
-the **{{COOLSTORE_PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
+the **{{PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
 the top-right, choose **Edit Resource Limits**.
 
 The pods get restarted automatically setting the new resource limits in effect. Now you can define an 
@@ -148,7 +148,7 @@ the CPU consumption passes 50% utilization:
 
 TIP: You can configure an autoscaler using OpenShift Web Console by clicking 
 on **Applications** >> **Deployments** within 
-the **{{COOLSTORE_PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
+the **{{PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
 the top-right, choose **Add Autoscaler** or **Edit Autoscaler**, depending on whether or not 
 you already have an autoscaler configured.
 
@@ -166,10 +166,10 @@ installed within your CodeReady Workspaces workspace.
 Run the following command in the **Terminal** window.
 
 ----
-$ siege -c80 -d2 -t5M http://web.{{COOLSTORE_PROJECT}}.svc.cluster.local:8080
+$ siege -c80 -d2 -t5M http://web.{{PROJECT}}.svc.cluster.local:8080
 ----
 
- > Make sure to use your dedicated project {{COOLSTORE_PROJECT}}
+ > Make sure to use your dedicated project {{PROJECT}}
  
 Note that you are using the internal url of the Web UI in this command. Since CodeReady Workspaces is running on 
 the same OpenShift cluster as Web UI, you can choose to use the external URL that is exposed on the load balancer 

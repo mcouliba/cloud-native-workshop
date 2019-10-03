@@ -4,19 +4,19 @@ config:
 modules:
   introduction:
     name: Introduction
-  getting-started-codeready:
+  getting-started:
     name: Getting Started
-  catalog-spring-boot-codeready:
+  catalog-spring-boot:
     name: Create Catalog Service as a Microservice with Spring Boot
   catalog-deployment:
     name: Deploy Catalog Service as a Microservice with Spring Boot
-  inventory-thorntail-codeready:
+  inventory-thorntail:
     name: Create Inventory Service as an Enterprise Microservice with Thorntail
-  inventory-vertx-codeready:
+  inventory-vertx:
     name: Create Inventory Service as a Reactive Microservice with Eclipse Vert.x
   inventory-deployment:
     name: Deploy Inventory Service
-  gateway-vertx-codeready:
+  gateway-vertx:
     name: Create Gateway Service as a Reactive Microservice with Eclipse Vert.x
   gateway-deployment:
     name: Deploy Gateway Service
@@ -24,7 +24,7 @@ modules:
     name: Deploy Web UI as a Microservice with with Node.js and AngularJS
   health:
     name: Monitoring Application Health 
-  fault-tolerance-codeready:
+  fault-tolerance:
     name: Service Resilience and Fault Tolerance
   app-config-thorntail:
     name:  Application Configuration
@@ -32,7 +32,7 @@ modules:
     name:  Application Configuration
   continuous-delivery:
     name:  Continuous Delivery
-  debug-codeready:
+  debug:
     name:  Debugging Applications
   service-mesh:
     name:  Microservice Tracing with Service Mesh

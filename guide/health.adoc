@@ -61,7 +61,7 @@ dependencies which is already done for the **Catalog Service**.
 Verify that the health endpoint works for the **Catalog Service** using `*curl*`
 
 ----
-$ curl http://catalog.{{COOLSTORE_PROJECT}}.svc:8080/health
+$ curl http://catalog.{{PROJECT}}.svc:8080/health
 
 {"status":"UP"}
 ----
@@ -73,7 +73,7 @@ This is also already done for the **Inventory Service**.
 Verify that the health endpoint works for the **Inventory Service** using `*curl*`
 
 ----
-$ curl http://inventory.{{COOLSTORE_PROJECT}}.svc:8080/node
+$ curl http://inventory.{{PROJECT}}.svc:8080/node
 
 {
     "name" : "localhost",
@@ -91,7 +91,7 @@ which is enabled by adding **io.vertx:vertx-health-check** as a dependency to th
 Verify that the health endpoint works for the **Gateway Service** using `*curl*`
 
 ----
-$ curl http://gateway.{{COOLSTORE_PROJECT}}.svc:8080/health
+$ curl http://gateway.{{PROJECT}}.svc:8080/health
 
 {"status":"UP"}
 ----
@@ -179,7 +179,7 @@ configured as you wanted:
 $ oc describe dc/inventory
 
 Name:       inventory
-Namespace:  {{COOLSTORE_PROJECT}}
+Namespace:  {{PROJECT}}
 ...
   Containers:
    thorntail-v2:
@@ -205,7 +205,7 @@ ready to receive traffic.
 Although you can add the liveness and health probes to the Web UI using a single CLI command, let's 
 give the OpenShift Web Console a try this time.
 
-`*Go to {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]*` in your browser and in the **{{COOLSTORE_PROJECT}}** project. 
+`*Go to {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]*` in your browser and in the **{{PROJECT}}** project. 
 `*Click on 'Applications > Deployments'*` on the left-side bar. `*Click on 'web > Configuration tab'*`.
 You will see the warning about health checks, with a link to
 click in order to add them. `*Click on 'Add health checks'*` now. 

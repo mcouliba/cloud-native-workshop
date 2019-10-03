@@ -320,9 +320,9 @@ OpenShift CLI.
 $ oc get routes
 
 NAME        HOST/PORT                                       PATH        SERVICES        PORT        TERMINATION   
-catalog     catalog-{{COOLSTORE_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                      catalog         8080        None
-gateway     gateway-{{COOLSTORE_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                      gateway         8080        None
-inventory   inventory-{{COOLSTORE_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                    inventory       8080        None
+catalog     catalog-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                      catalog         8080        None
+gateway     gateway-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                      gateway         8080        None
+inventory   inventory-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                    inventory       8080        None
 ----
 
 `*Click on the OpenShift Route of _'Gateway Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^].

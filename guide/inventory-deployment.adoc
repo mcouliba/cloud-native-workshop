@@ -70,7 +70,7 @@ Once this completes, your project should be up and running. You can see the expo
 $ oc get routes
 
 NAME        HOST/PORT                                       PATH        SERVICES        PORT        TERMINATION   
-inventory   inventory-{{COOLSTORE_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                    inventory       8080        None
+inventory   inventory-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                    inventory       8080        None
 ----
 
 `*Click on the OpenShift Route of _'Inventory Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^].

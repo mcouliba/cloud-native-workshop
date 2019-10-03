@@ -53,38 +53,38 @@ commands:
     actions:
       - type: exec
         command: mvn clean package
-        component: quay-io-mcouliba-che
+        component: maven
         workdir: /projects/cloud-native-labs/inventory-thorntail
   - name: 1- run dev inventory-thorntail
     actions:
       - type: exec
         command: java -Dswarm.http.port=9001 -jar target/*-thorntail.jar
-        component: quay-io-mcouliba-che
+        component: maven
         workdir: /projects/cloud-native-labs/inventory-thorntail
 
   - name: 2- build catalog-spring-boot
     actions:
       - type: exec
         command: mvn clean package
-        component: quay-io-mcouliba-che
+        component: maven
         workdir: /projects/cloud-native-labs/catalog-spring-boot
   - name: 2- run dev catalog-spring-boot
     actions:
       - type: exec
         command: mvn spring-boot:run
-        component: quay-io-mcouliba-che
+        component: maven
         workdir: /projects/cloud-native-labs/catalog-spring-boot
 
   - name: 3- build gateway-vertx
     actions:
       - type: exec
         command: mvn clean package
-        component: quay-io-mcouliba-che
+        component: maven
         workdir: /projects/cloud-native-labs/gateway-vertx
 
   - name: 3- run dev gateway-vertx
     actions:
       - type: exec
         command: mvn vertx:run
-        component: quay-io-mcouliba-che
+        component: maven
         workdir: /projects/cloud-native-labs/gateway-vertx

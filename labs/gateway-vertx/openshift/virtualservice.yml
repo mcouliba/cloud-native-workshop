@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: gateway-COOLSTORE_PROJECT
+  name: gateway-PROJECT
 spec:
   hosts:
   - "*"
@@ -11,7 +11,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /COOLSTORE_PROJECT/api
+        prefix: /PROJECT/api
     rewrite:
       uri: "/api"
     route:
