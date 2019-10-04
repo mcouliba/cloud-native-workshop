@@ -17,6 +17,9 @@ components:
   - id: redhat/vscode-tekton/latest
     type: chePlugin
     alias: tekton
+  - id: redhat/vscode-quarkus/latest
+    type: chePlugin
+    alias: quarkus
   - mountSources: true
     memoryLimit: 2Gi
     type: dockerimage
