@@ -11,83 +11,46 @@ components:
   - id: redhat/java/latest
     type: chePlugin
     alias: java
-  - id: redhat/vscode-openshift-connector/latest
+  - id: redhat/workshop-tools/latest
     type: chePlugin
-    alias: openshift-connector
-  - id: redhat/vscode-tekton/latest
-    type: chePlugin
-    alias: tekton
-  - id: redhat/vscode-quarkus/latest
-    type: chePlugin
-    alias: quarkus
-  - mountSources: true
-    memoryLimit: 2Gi
-    type: dockerimage
-    volumes:
-      - name: m2
-        containerPath: /home/user/.m2
-    alias: maven
-    image: 'quay.io/eclipse/che-java11-maven:7.2.0'
-    env:
-      - value: /home/user/.m2
-        name: MAVEN_CONFIG
-      - value: >-
-          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
-          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
-          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
-          -Xms20m -Djava.security.egd=file:/dev/./urandom -Duser.home=/home/user
-        name: MAVEN_OPTS
-      - value: http://nexus.opentlc-shared.svc:8081/repository/maven-all-public
-        name: MAVEN_MIRROR_URL
-      - value: >-
-          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
-          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
-          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
-          -Xms20m -Djava.security.egd=file:/dev/./urandom
-        name: JAVA_OPTS
-      - value: >-
-          -XX:MaxRAMPercentage=50 -XX:+UseParallelGC -XX:MinHeapFreeRatio=10
-          -XX:MaxHeapFreeRatio=20 -XX:GCTimeRatio=4
-          -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true
-          -Xms20m -Djava.security.egd=file:/dev/./urandom
-        name: JAVA_TOOL_OPTIONS
+    alias: workshop-tools
 commands:
-  - name: 1- build inventory-thorntail
+  - name: 'OpenShift: Login'
     actions:
       - type: exec
-        command: mvn clean package
-        component: maven
-        workdir: /projects/cloud-native-labs/inventory-thorntail
-  - name: 1- run dev inventory-thorntail
+        command: >-
+          oc login --server=$(oc whoami --show-server) -u
+          ${CHE_WORKSPACE_NAMESPACE}  -p 'openshift' --insecure-skip-tls-verify
+          &&  oc project cn-project${CHE_WORKSPACE_NAMESPACE#user}
+        component: workshop-tools
+  - name: 'Quarkus: Compile Inventory Service (Dev Mode)'
     actions:
-      - type: exec
-        command: java -Dswarm.http.port=9001 -jar target/*-thorntail.jar
-        component: maven
-        workdir: /projects/cloud-native-labs/inventory-thorntail
-
-  - name: 2- build catalog-spring-boot
+      - workdir: /projects/inventory
+        type: exec
+        command: 'mvn compile quarkus:dev'
+        component: workshop-tools
+  - name: 'Inventory: Local Build'
     actions:
-      - type: exec
-        command: mvn clean package
-        component: maven
-        workdir: /projects/cloud-native-labs/catalog-spring-boot
-  - name: 2- run dev catalog-spring-boot
+      - workdir: /projects/inventory
+        type: exec
+        command: mvn clean package -DskipTests
+        component: workshop-tools
+  - name: 'Inventory: Initialize on OpenShift'
     actions:
-      - type: exec
-        command: mvn spring-boot:run
-        component: maven
-        workdir: /projects/cloud-native-labs/catalog-spring-boot
-
-  - name: 3- build gateway-vertx
+      - workdir: /projects/inventory
+        type: exec
+        command: >-
+          mvn clean package -DskipTests && 
+          oc new-build --name=inventory java --binary=true && oc start-build
+          inventory --from-file=target/inventory-1.0.0-SNAPSHOT-runner.jar
+          --follow && oc new-app inventory &&  oc expose svc inventory
+        component: workshop-tools
+  - name: 'Inventory: Start Build on OpenShift'
     actions:
-      - type: exec
-        command: mvn clean package
-        component: maven
-        workdir: /projects/cloud-native-labs/gateway-vertx
-
-  - name: 3- run dev gateway-vertx
-    actions:
-      - type: exec
-        command: mvn vertx:run
-        component: maven
-        workdir: /projects/cloud-native-labs/gateway-vertx
+      - workdir: /projects/inventory
+        type: exec
+        command: >-
+          mvn clean package -DskipTests &&
+          oc start-build inventory
+          --from-file=target/inventory-1.0.0-SNAPSHOT-runner.jar --follow
+        component: workshop-tools
