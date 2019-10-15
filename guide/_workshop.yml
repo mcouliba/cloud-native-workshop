@@ -36,9 +36,8 @@ modules:
   - catalog-spring-boot
   - gateway-vertx
   - webui-deployment
-  - health
+  - app-health
   - app-config-quarkus
-  - fault-tolerance
   - continuous-delivery
   - service-mesh
   - abtesting

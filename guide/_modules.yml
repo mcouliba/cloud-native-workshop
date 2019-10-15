@@ -26,8 +26,8 @@ modules:
     name: Deploy Gateway Service
   webui-deployment:
     name: Deploy Web UI as a Microservice with with Node.js and AngularJS
-  health:
-    name: Monitoring Application Health 
+  app-health:
+    name: Monitor Application Health 
   fault-tolerance:
     name: Service Resilience and Fault Tolerance
   app-config-thorntail:
@@ -35,7 +35,7 @@ modules:
   app-config-vertx:
     name:  Application Configuration
   app-config-quarkus:
-    name:  Application Configuration
+    name:  Externalize Application Configuration
   continuous-delivery:
     name:  Continuous Delivery
   debug:

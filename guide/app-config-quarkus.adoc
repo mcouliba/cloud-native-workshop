@@ -43,7 +43,7 @@ even integration tests. Since it's strongly recommended to use the same technolo
 system, JVM, middleware, database, etc.) that is used in production across all environments, you 
 should modify Inventory and Catalog services to use PostgreSQL instead of the H2 in-memory database.
 
-Fortunately, OpenShfit supports stateful applications such as databases which require access to 
+Fortunately, OpenShift supports stateful applications such as databases which require access to 
 a persistent storage that survives the container itself. You can deploy databases on OpenShift and 
 regardless of what happens to the container itself, the data is safe and can be used by the next 
 database container.
@@ -59,35 +59,72 @@ making it simple to re-create complex deployments by just deploying a single tem
 be parameterized to get input for fields like service names and generate values for fields like passwords.
 ====
 
-----
-$ oc new-app postgresql-persistent \
-    --param=DATABASE_SERVICE_NAME=inventory-postgresql \
-    --param=POSTGRESQL_DATABASE=inventory \
-    --param=POSTGRESQL_USER=inventory \
-    --param=POSTGRESQL_PASSWORD=inventory \
-    --labels=app=inventory
-----
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on '+ Add' and select 'Database'*`
 
-Deploy another PostgreSQL database for the **Catalog Service**:
+image:{% image_path openshift-add-database.png %}[OpenShift - Add database, 700]
 
-----
-$ oc new-app postgresql-persistent \
-    --param=DATABASE_SERVICE_NAME=catalog-postgresql \
-    --param=POSTGRESQL_DATABASE=catalog \
-    --param=POSTGRESQL_USER=catalog \
-    --param=POSTGRESQL_PASSWORD=catalog \
-    --labels=app=catalog
-----
+`*Select 'MariaDB (Ephemeral)' and click on 'Instantiate Template'*`
 
-[NOTE]
-====
-The `*--param*` parameter provides a value for the template parameters. The recommended approach is 
-not to provide any value for username and password and allow the template to generate a random value for 
-you due to security reasons. In this lab in order to reduce typos, a fixed value is provided for username and 
-password.
-====
+Then, enter the following information:
 
-Now you can move on to configure the Inventory and Catalog service to use these PostgreSQL databases.
+.Web UI Project
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Database Service Name
+|inventory-mariadb
+
+|MariaDB Connection Username
+|inventory
+
+|MariaDB Connection Password
+|inventory
+
+|MariaDB root Password
+|inventoryadmin
+
+|MariaDB Database Name
+|inventorydb
+
+|===
+
+`*Click on 'Create' button*`
+
+image:{% image_path openshift-inventory-mariadb-topology.png %}[OpenShift - Inventory MariaDB, 700]
+
+
+`*click again on '+ Add' and select 'Database', delect 'PostgreSQL (Ephemeral)' and click on 'Instantiate Template'*` 
+to create the Catalog Database as following:
+
+Then, enter the following information:
+
+.Web UI Project
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Database Service Name
+|catalog-postgresql
+
+|PostgreSQL Connection Username
+|catalog
+
+|PostgreSQL Connection Password
+|catalog
+
+|PostgreSQL Database Name
+|catalogdb
+
+|===
+
+`*Click on 'Create' button*`
+
+image:{% image_path openshift-catalog-postgresql-topology.png %}[OpenShift - Catalog PostgreSQL, 700]
+
+Now you can move on to configure the Inventory and Catalog service to use these databases.
 
 '''
 

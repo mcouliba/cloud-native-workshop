@@ -276,60 +276,59 @@ the health probes when running **fabric8:deploy** goal. `*Look at '/projects/wor
 
 '''
 
-===  Monitoring Web UI Health TODO
+===  Monitoring Web UI Health
 
-Although you can add the liveness and health probes to the Web UI using a single CLI command, let's 
-give the OpenShift Web Console a try this time.
+You are an expert in health probes by now! `*Add Liveness and Readiness Probes*` to the WebUI Service 
+using the following information:
 
-`*Go to {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]*` in your browser and in the **{{PROJECT}}** project. 
-`*Click on 'Applications > Deployments'*` on the left-side bar. `*Click on 'web > Configuration tab'*`.
-You will see the warning about health checks, with a link to
-click in order to add them. `*Click on 'Add health checks'*` now. 
 
-TIP: Instead of **Configuration** tab, you can directly click on **Actions** button on the top-right 
-and then **Edit Health Checks**
+.Health Probes
+[%header,cols=4*]
+|===
+|Probe 
+|Path
+|Initial Delay
+|Timeout
 
-image:{% image_path health-web-details.png %}[Health Probes,900]
+|Readiness
+|/
+|10
+|1
 
-You will want to `*click on both 'Add Readiness Probe' and 'Add Liveness Probe'*` and
-then fill them out as follows:
+|Liveness
+|/
+|180
+|1
 
-Readiness Probe::
-* Path: **/**
-* Initial Delay: **10**
-* Timeout: **1**
+|===
 
-Liveness Probe::
-* Path: **/**
-* Initial Delay: **180**
-* Timeout: **1**
-
-image:{% image_path health-readiness.png %}[Readiness Probe,700]
-
-image:{% image_path health-liveness.png %}[Readiness Probe,700]
-
-`*Click on 'Save'*` and then `*click the 'Overview' button*` in the left navigation. You
-will notice that Web UI pod is getting restarted and it stays light blue
-for a while. This is a sign that the pod(s) have not yet passed their readiness
-checks and it turns blue when it's ready!
-
-image:{% image_path health-web-redeploy.png %}[Web Redeploy,740]
+[TIP]
+.Timeout Parameter
+====
+Use the **--timeout-seconds** parameter for **oc probe** command.
+It defines the time in seconds to wait before considering the probe to have failed.
+====
 
 '''
 
-=== Monitoring Metrics TODO
+=== Monitoring Metrics
 
 Metrics are another important aspect of monitoring applications which is required in order to 
 gain visibility into how the application behaves and particularly in identifying issues.
 
 OpenShift provides container metrics out-of-the-box and displays how much memory, cpu and network 
-each container has been consuming over time. In the project overview, you can see three charts 
-near each pod that shows the resource consumption by that pod.
+each container has been consuming over time. 
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Administrator view**,
+`*click on your '{{PROJECT}}' project*`.
+
+In the project overview, you can see the **Health** and **Resource Usage** sections
 
 image:{% image_path health-metrics-brief.png %}[Container Metrics,740]
 
-`*Click on any of the pods*` (blue circle) which takes you to the pod details. `*Click on the 'Metrics' tab*`
-to see a more detailed view of the metrics charts.
+From the **Developer view**, `*select any Deployment Config (DC) and click on the associated Pod (P)*`
+
+In the pod overview, you can see a more detailed view of the pod consumption.
 
 image:{% image_path health-metrics-detailed.png %}[Container Metrics,900]
 
