@@ -15,7 +15,7 @@ components:
     type: chePlugin
     alias: workshop-tools
 commands:
-  - name: 'OpenShift: Login'
+  - name: 'OpenShift - Login'
     actions:
       - type: exec
         command: >-
@@ -23,34 +23,58 @@ commands:
           ${CHE_WORKSPACE_NAMESPACE}  -p 'openshift' --insecure-skip-tls-verify
           &&  oc project cn-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
-  - name: 'Quarkus: Compile Inventory Service (Dev Mode)'
+  - name: 'Inventory - Compile (Dev Mode)'
     actions:
-      - workdir: /projects/inventory
+      - workdir: /projects/workshop/labs/inventory-quarkus
         type: exec
         command: 'mvn compile quarkus:dev'
         component: workshop-tools
-  - name: 'Inventory: Local Build'
+  - name: 'Inventory - Deploy on OpenShift'
     actions:
-      - workdir: /projects/inventory
-        type: exec
-        command: mvn clean package -DskipTests
-        component: workshop-tools
-  - name: 'Inventory: Initialize on OpenShift'
-    actions:
-      - workdir: /projects/inventory
+      - workdir: /projects/workshop/labs/inventory-quarkus
         type: exec
         command: >-
           mvn clean package -DskipTests && 
           oc new-build --name=inventory java --binary=true && oc start-build
-          inventory --from-file=target/inventory-1.0.0-SNAPSHOT-runner.jar
+          inventory --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar
           --follow && oc new-app inventory &&  oc expose svc inventory
         component: workshop-tools
-  - name: 'Inventory: Start Build on OpenShift'
+  - name: 'Inventory - Build on OpenShift'
     actions:
-      - workdir: /projects/inventory
+      - workdir: /projects/workshop/labs/inventory-quarkus
         type: exec
         command: >-
           mvn clean package -DskipTests &&
           oc start-build inventory
-          --from-file=target/inventory-1.0.0-SNAPSHOT-runner.jar --follow
+          --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow
+        component: workshop-tools
+  - name: 'Catalog - Build'
+    actions:
+      - workdir: /projects/workshop/labs/catalog-spring-boot
+        type: exec
+        command: mvn clean package -DskipTests
+        component: workshop-tools
+  - name: 'Catalog - Run'
+    actions:
+      - workdir: /projects/workshop/labs/catalog-spring-boot
+        type: exec
+        command: mvn spring-boot:run
+        component: workshop-tools
+  - name: 'Catalog - Deploy on OpenShift'
+    actions:
+      - workdir: /projects/workshop/labs/catalog-spring-boot
+        type: exec
+        command: mvn clean fabric8:deploy
+        component: workshop-tools
+  - name: 'Gateway - Build'
+    actions:
+      - workdir: /projects/workshop/labs/gateway-vertx
+        type: exec
+        command: 'mvn clean package -DskipTests'
+        component: workshop-tools
+  - name: 'Gateway - Deploy on OpenShift'
+    actions:
+      - workdir: /projects/workshop/labs/gateway-vertx
+        type: exec
+        command: mvn clean fabric8:deploy
         component: workshop-tools

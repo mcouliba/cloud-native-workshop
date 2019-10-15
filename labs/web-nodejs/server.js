@@ -1,18 +1,20 @@
-var express = require('express'),
-    http = require('http'),
-    request = require('request'),
-    fs = require('fs'),
-    app = express(),
-    path = require("path"),
-    keycloakConfig = require('./app/keycloak.config.js'),
-    coolstoreConfig = require('./app/coolstore.config.js'),
-    Keycloak = require('keycloak-connect'),
-    cors = require('cors');
+'use strict';
 
+const path = require("path");
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
-    secport = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8443;
+const request = require('request');
+const fs = require('fs');
+const keycloakConfig = require('./config/keycloak.config.js');
+const coolstoreConfig = require('./config/coolstore.config.js');
+const Keycloak = require('keycloak-connect');
+const cors = require('cors');
+const probe = require('kube-probe');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 // Enable CORS support
 app.use(cors());
@@ -32,16 +34,14 @@ app.get('/coolstore.json', function(req, res, next) {
     res.json(coolstoreConfig);
 });
 
-app.use(express.static(path.join(__dirname, '/views')));
-app.use('/app', express.static(path.join(__dirname, '/app')));
-app.use('/bower_components', express.static(path.join(__dirname, '/bower_components')));
+app.use('/', express.static(path.join(__dirname, 'views')));
+app.use('/app', express.static(path.join(__dirname, 'app')));
+app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 
 console.log("coolstore config: " + JSON.stringify(coolstoreConfig));
 console.log("keycloak config: " + JSON.stringify(keycloakConfig));
 
-
-http.createServer(app).listen(port);
-
-console.log('HTTP Server running on http://%s:%s', ip, port);
+// Add a health check
+probe(app);
 
 module.exports = app;

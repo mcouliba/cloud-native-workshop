@@ -10,9 +10,9 @@
   <name>CoolStore Inventory Service</name>
   <description>CoolStore Inventory Service with Thorntail</description>
   <properties>
-    <version.thorntail>2.2.0.Final-redhat-00021</version.thorntail>
+    <version.thorntail>2.5.0.Final</version.thorntail>
     <fabric8.version>3.0.12</fabric8.version>
-    <fabric8.maven.plugin.version>3.5.40</fabric8.maven.plugin.version>
+    <fabric8.maven.plugin.version>4.3.0</fabric8.maven.plugin.version>
     <h2.version>1.4.187</h2.version>
     <postgresql.version>42.2.4</postgresql.version>
     <failOnMissingWebXml>false</failOnMissingWebXml>
@@ -55,6 +55,10 @@
     <dependency>
       <groupId>io.thorntail</groupId>
       <artifactId>cdi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.thorntail</groupId>
+      <artifactId>jpa</artifactId>
     </dependency>
     <dependency>
       <groupId>io.thorntail</groupId>

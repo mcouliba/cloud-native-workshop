@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project 
-  xmlns="http://maven.apache.org/POM/4.0.0" 
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.redhat.cloudnative</groupId>
@@ -9,10 +9,10 @@
   <name>CoolStore Catalog Service</name>
   <description>CoolStore Catalog Service with Spring Boot</description>
   <properties>
-    <spring-boot.version>1.5.14.RELEASE</spring-boot.version>
-    <spring-boot.bom.version>1.5.14.Final-redhat-1</spring-boot.bom.version>
-    <spring.k8s.bom.version>0.2.0.RELEASE</spring.k8s.bom.version>
-    <fabric8.maven.plugin.version>3.5.40</fabric8.maven.plugin.version>
+    <spring-boot.version>2.1.6.SP3-redhat-00001</spring-boot.version>
+    <spring-boot.maven.plugin.version>2.1.4.RELEASE-redhat-00001</spring-boot.maven.plugin.version>
+    <spring.k8s.bom.version>1.0.3.RELEASE</spring.k8s.bom.version>
+    <fabric8.maven.plugin.version>4.3.0</fabric8.maven.plugin.version>
     <postgresql.version>42.2.4</postgresql.version>
   </properties>
   <repositories>
@@ -32,7 +32,7 @@
       <dependency>
         <groupId>me.snowdrop</groupId>
         <artifactId>spring-boot-bom</artifactId>
-        <version>${spring-boot.bom.version}</version>
+        <version>${spring-boot.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -86,7 +86,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>${spring-boot.version}</version>
+        <version>${spring-boot.maven.plugin.version}</version>
         <executions>
           <execution>
             <goals>
