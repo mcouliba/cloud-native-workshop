@@ -307,7 +307,7 @@ The CoolStore online shop cannot function without the products list, however the
 crucial bit in the shopping experience. Let's add a circuit breaker for calls to the Inventory service and 
 provide a default inventory status when the Inventory service is not responsive.
 
-In the `*gateway-vertx*` project, `*open /projects/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java*` and 
+In the `*gateway-vertx*` project, `*open /projects/workshop/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java*` and 
 replace its code it with the following code:
 
 [source,java]

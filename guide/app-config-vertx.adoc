@@ -103,7 +103,7 @@ Check out **inventory-vertx/src/main/resources/config/app-config.yml** which con
 name to this configuration (e.g. `*prod`) in order to tell Thorntail which one to use:
 
 ----
-$ cat <<EOF > /projects/labs/app-config.yml
+$ cat <<EOF > /projects/workshop/labs/app-config.yml
 driverClassName: org.postgresql.Driver
 jdbcUrl: jdbc:postgresql://inventory-postgresql:5432/inventory <1>
 principal: inventory
@@ -117,7 +117,7 @@ And then `*create a Config Map*` that you will use to overlay on the default **a
 packaged in the Inventory JAR archive:
 
 ----
-oc create configmap inventory --from-file=/projects/labs/app-config.yml # <1>
+oc create configmap inventory --from-file=/projects/workshop/labs/app-config.yml # <1>
 oc set volume dc/inventory --add --configmap-name=inventory --mount-path=/deployments/config # <2>
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
@@ -212,14 +212,14 @@ configuration using an alternative **application.properties** backed by a config
 credentials:
 
 ----
-$ cat <<EOF > /projects/labs/application.properties
+$ cat <<EOF > /projects/workshop/labs/application.properties
 spring.datasource.url=jdbc:postgresql://catalog-postgresql:5432/catalog#<1>
 spring.datasource.username=catalog
 spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.hibernate.ddl-auto=create
 EOF
-$ oc create configmap catalog --from-file=/projects/labs/application.properties
+$ oc create configmap catalog --from-file=/projects/workshop/labs/application.properties
 ----
 <1> The hostname defined for the PostgreSQL connection-url (catalog-postgresql) corresponds to the PostgreSQL service name published on OpenShift. 
 This name will be resolved by the internal DNS server exposed by OpenShift and accessible to containers running on OpenShift.

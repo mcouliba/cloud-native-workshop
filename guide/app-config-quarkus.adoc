@@ -33,6 +33,8 @@ and reuse that image to deploy the application across various environments with
 different configurations that are provided to the application at runtime.
 --
 
+'''
+
 ===  Create PostgreSQL Databases for Inventory and Catalog
 
 So far Catalog and Inventory services have been using an in-memory H2 database. Although H2 
@@ -87,59 +89,56 @@ password.
 
 Now you can move on to configure the Inventory and Catalog service to use these PostgreSQL databases.
 
-===  Externalize Thorntail (Inventory) Configuration
+'''
 
-Thorntail supports multiple mechanisms for externalizing configurations such as environment variables, 
+===  Externalize Quarkus (Inventory) Configuration
+
+Quarkus supports multiple mechanisms for externalizing configurations such as environment variables, 
 Maven properties, command-line arguments and more. The recommend approach for the long-term for externalizing 
-configuration is however using a https://reference.wildfly-swarm.io/configuration.html#_using_yaml[YAML file^] 
+configuration is however using an https://quarkus.io/guides/application-configuration-guide#create-the-configuration[application.properties^] 
 which you have already packaged within the Inventory Maven project.
 
-[NOTE]
-====
-Check out **inventory-thorntail/src/main/resources/project-defaults.yml** which contains the default configuration.
-====
 
-The YAML file can be packaged within the application JAR file and be overladed 
-https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/configuration/command_line.html[using command-line or system properties^] 
-which you will do in this lab.
+First, let's add the PostgreSQL JDBC Driver to */projects/inventory/pom.xml*:
 
-`*Create a YAML file with the PostgreSQL database credentials*`. Note that you can give an arbitrary 
-name to this configuration (e.g. `*prod`) in order to tell Thorntail which one to use:
+In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Quarkus: Add extensions to current project'*`
+
+image:{% image_path che-quarkus-addextensions.png %}[Che - Quarkus Add Extensions, 600]
+
+Then `*select the 'JDBC Driver - PostgreSQL (quarkus-jdbc-postgresql)' extension*`
+
+`*Create a Config Map*` with the Quarkus configuration content using the PostgreSQL database 
+credentials:
 
 ----
-$ cat <<EOF > /projects/workshop/labs/project-defaults.yml
-swarm:
-  datasources:
-    data-sources:
-      InventoryDS:
-        driver-name: postgresql
-        connection-url: jdbc:postgresql://inventory-postgresql:5432/inventory # <1>
-        user-name: inventory
-        password: inventory
+$ cat <<EOF > /projects/application.properties
+quarkus.datasource.url=jdbc:postgresql://inventory-postgresql:5432/inventory#<1>
+quarkus.datasource.driver=org.postgresql.Driver
+quarkus.datasource.username=inventory
+quarkus.datasource.password=inventory
+quarkus.hibernate-orm.database.generation=create
+quarkus.hibernate-orm.log.sql=true
+quarkus.hibernate-orm.sql-load-script=import.sql
 EOF
 ----
+
 <1> The hostname defined for the PostgreSQL connection-url (inventory-postgresql) corresponds to the PostgreSQL service name published on OpenShift. 
 This name will be resolved by the internal DNS server exposed by OpenShift and accessible to containers running on OpenShift.
 
-And then `*create a Config Map*` that you will use to overlay on the default **project-defaults.yml** which is 
+And then `*create a Config Map*` that you will use to overlay on the default **application.properties** which is 
 packaged in the Inventory JAR archive:
 
 ----
-oc create configmap inventory --from-file=/projects/workshop/labs/project-defaults.yml # <1>
-oc rollout pause dc/inventory # <2>
-oc set volume dc/inventory --add --configmap-name=inventory --mount-path=/app/config # <3>
-oc set env dc/inventory JAVA_ARGS="-s /app/config/project-defaults.yml" # <4>
-oc rollout resume dc/inventory # <5>
+oc create configmap inventory --from-file=/projects/application.properties # <1>
+oc set volume dc/inventory --add --configmap-name=inventory --mount-path=/deployments/config # <2>
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
-is created with **project-defaults.yml** as the key and the **content of the project-defaults.yml** as the 
+is created with **application.properties** as the key and the **content of the application.properties** as the 
 value. Whenever a config map is injected into a container, it would appear as a file with the same 
 name as the key, at specified path on the filesystem.
-<2> Pause the deployment
-<3> Mounts the content of the **Inventory Config Map** as a file inside the **Inventory container**
-at **/app/config/project-defaults.yaml**
-<4> https://wildfly-swarm.gitbooks.io/wildfly-swarm-users-guide/configuration/command_line.html[aforementioned system properties^] on the Inventory container to overlay the Thorntail configuration, using the **JAVA_ARGS** environment variable. 
-<5> Resume the deployment 
+<2> Mounts the content of the **Inventory Config Map** as a file inside the **Inventory container**
+at **/deployments/config/application.properties **
 
 [TIP]
 ====
@@ -147,8 +146,8 @@ If you don't like bash commands, go to the **{{PROJECT}}** project in {{OPENSHIF
 and then on the left sidebar, **Resources >> Config Maps**. Click on **Create Config Map** button to create a config map with the following info:
 
 * Name: **inventory**
-* Key: **project-defaults.yml**
-* Value: copy-paste the content of the above **project-defaults.yml** excluding the first and last lines (the lines that contain EOF)
+* Key: **application.properties**
+* Value: copy-paste the content of the above **application.properties** excluding the first and last lines (the lines that contain EOF)
 ====
 
 [TIP]
@@ -214,6 +213,8 @@ sh-4.2$ exit
 You have now created a config map that holds the configuration content for Inventory and can be updated 
 at anytime for example when promoting the container image between environments without needing to 
 modify the Inventory container image itself. 
+
+'''
 
 ===  Externalize Spring Boot (Catalog) Configuration
 

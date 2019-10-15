@@ -8,6 +8,8 @@ create a scalable API Gateway that aggregates Catalog and Inventory APIs.
 
 image:{% image_path coolstore-arch-gateway-vertx.png %}[CoolStore Architecture,400]
 
+'''
+
 === What is Eclipse Vert.x?
 
 [sidebar]
@@ -29,6 +31,8 @@ services that are:
 http://vertx.io/[Eclipse Vert.x^] is designed to be event-driven and non-blocking. Events are delivered in an event loop that must never be blocked. Unlike traditional applications, Vert.x uses a very small number of threads responsible for dispatching the events to event handlers. If the event loop is blocked, the events won’t be delivered anymore and therefore the code needs to be mindful of this execution model.
 --
 
+'''
+
 === Vert.x Maven Project 
 
 The **gateway-vertx** project has the following structure which shows the components of 
@@ -48,7 +52,7 @@ image:{% image_path vertx-event-loop.png %}[Vert.x Event Loop,600]
 
 Although you can have multiple, there is currently only one Verticle created in the *_gateway-vertx_* project. 
 
-`*Examine 'GatewayVerticle' class*` in the **com.redhat.cloudnative.gateway** package in the **/projects/labs/gateway-vertx/src** directory.
+`*Examine 'GatewayVerticle' class*` in the **com.redhat.cloudnative.gateway** package in the **/projects/workshop/labs/gateway-vertx/src** directory.
 
 [source,java]
 .GatewayVerticle.java
@@ -82,20 +86,25 @@ public class GatewayVerticle extends AbstractVerticle { // <1>
 You can use Maven to make sure the skeleton project builds successfully. You should get a **BUILD SUCCESS** message 
 in the build logs, otherwise the build has failed.
 
-In CodeReady Workspaces, `*right click on 'gateway-vertx'*` project in the project explorer then, `*click on 'Commands > Build > build'*`
+In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Task: Run Task...' ->  'che: Gateway - Build'*`
 
-image:{% image_path codeready-commands-build.png %}[Maven Build,600]
+image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+
+image:{% image_path che-gateway-build.png %}[Che - Catalog Build, 500]
 
 Once successfully built, the resulting *_jar_* is located in the **target/** directory:
 
 ----
-$ ls /projects/labs/gateway-vertx/target/*.jar
+$ ls /projects/workshop/labs/gateway-vertx/target/*.jar
 
-/projects/labs/gateway-vertx/target/gateway-1.0-SNAPSHOT.jar
+/projects/workshop/labs/gateway-vertx/target/gateway-1.0-SNAPSHOT.jar
 ----
 
 This is an uber-jar with all the dependencies required packaged in the *jar* to enable running the 
 application with `*java -jar*`.
+
+'''
 
 === Create an API Gateway
 
@@ -107,7 +116,7 @@ architecture.
 
 image:{% image_path coolstore-arch.png %}[API Gateway Pattern,400]
 
-`*Replace the content of '/projects/labs/gateway-vertx/src/main/java/com.redhat.cloudnative.gateway/GatewayVerticle.java'*` class with the following:
+`*Replace the content of '/projects/workshop/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java'*` class with the following:
 
 [source,java]
 .GatewayVerticle.java
@@ -246,11 +255,16 @@ will be acted upon and update the response which is then sent back to the client
 <4> The **getAvailabilityFromInventory()** method is similar to the **product()** method, it invokes the 
 Inventory REST endpoint and retrieves the inventory.
 
-Build and package the *_Gateway Service_* using Maven by `*right-clicking on gateway-vertx*` project in the project explorer then, `*click on 'Commands > Build > build'*`
+In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Task: Run Task...' ->  'che: Gateway - Build'*`
 
-image:{% image_path codeready-commands-build.png %}[Maven Build,600]
+image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
-=== Deploy Vert.x on OpenShift
+image:{% image_path che-gateway-build.png %}[Che - Catalog Build, 500]
+
+'''
+
+=== Deploy on OpenShift
 
 It’s time to build and deploy our service on OpenShift. 
 
@@ -264,10 +278,9 @@ Maven projects can use the https://maven.fabric8.io[Fabric8 Maven Plugin^] to ac
 This maven plugin is a Kubernetes/OpenShift client and uses the REST API to communicate with OpenShift and issue commands to build, 
 deploy and launch the application as a pod.
 
-To build and deploy the **Gateway Service** on OpenShift using the *fabric8* maven plugin, 
-which is already configured in CodeReady Workspaces, `*right click on 'gateway-vertx'*` project in the project explorer then, `*click on 'Commands > Deploy > fabric8:deploy'*`
+image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
-image:{% image_path codeready-commands-deploy.png %}[Fabric8 Deploy,600]
+image:{% image_path che-gateway-deploy.png %}[Che - Gateway Deploy, 500]
 
 [TIP]
 .fabric8:deploy
@@ -283,49 +296,15 @@ Once this completes, your project should be up and running. OpenShift runs the d
 the project in one or more pods which are the unit of runtime deployment and consists of the running 
 containers for the project. 
 
-Let's take a moment and review the OpenShift resources that are created for the API Gateway:
+'''
 
-* **Build Config**: *gateway-s2i* build config is the configuration for building the Gateway 
-container image from the gateway source code or JAR archive
-* **Image Stream**: *gateway* image stream is the virtual view of all gateway container 
-images built and pushed to the OpenShift integrated registry.
-* **Deployment Config**: *gateway* deployment config deploys and redeploys the Gateway container 
-image whenever a new Gateway container image becomes available
-* **Service**: *gateway* service is an internal load balancer which identifies a set of 
-pods (containers) in order to proxy the connections it receives to them. Backing pods can be 
-added to or removed from a service arbitrarily while the service remains consistently available, 
-enabling anything that depends on the service to refer to it at a consistent address (service name 
-or IP).
-* **Route**: *gateway* route registers the service on the built-in external load-balancer 
-and assigns a public DNS name to it so that it can be reached from outside OpenShift cluster.
+=== Test your Service
 
-You can review the above resources in the OpenShift Web Console or using `*oc describe*` command:
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on 'DC gateway' -> 'RT gateway'*`
 
-TIP: **bc** is the short-form of **buildconfig** and can be interchangeably used instead of it with the 
-OpenShift CLI. The same goes for **is** instead of **imagestream**, **dc** instead of **deploymentconfig** 
-and **svc** instead of **service**.
+image:{% image_path openshift-gateway-topology.png %}[OpenShift - Gateway Topology, 700]
 
-----
-$ oc describe bc gateway-s2i
-$ oc describe is gateway
-$ oc describe dc gateway
-$ oc describe svc gateway
-$ oc describe route gateway
-----
-
-You can see the expose DNS url for the *_Gateway Service_* in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]or using 
-OpenShift CLI.
-
-----
-$ oc get routes
-
-NAME        HOST/PORT                                       PATH        SERVICES        PORT        TERMINATION   
-catalog     catalog-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                      catalog         8080        None
-gateway     gateway-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                      gateway         8080        None
-inventory   inventory-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}}                    inventory       8080        None
-----
-
-`*Click on the OpenShift Route of _'Gateway Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^].
+Your browser will be redirect on your **Gateway Service** running on OpenShift.
 
 image:{% image_path gateway-service.png %}[Gateway Service,500]
 

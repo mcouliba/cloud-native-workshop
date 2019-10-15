@@ -32,12 +32,12 @@ modules:
   activate:
   - introduction
   - getting-started
-  - inventory-thorntail
+  - inventory-quarkus
   - catalog-spring-boot
   - gateway-vertx
   - webui-deployment
-  - app-config-thorntail
   - health
+  - app-config-quarkus
   - fault-tolerance
   - continuous-delivery
   - service-mesh

@@ -24,7 +24,7 @@ requests (tens of thousands) using a single thread which makes it desirable choi
 scalable web applications.
 --
 
-=== Deploy Web UI on OpenShift
+=== Deploy on OpenShift
 
 The Web UI is built using Node.js for server-side JavaScript and AngularJS for client-side 
 JavaScript. Let's deploy it on OpenShift using the certified Node.js container image available 
@@ -36,6 +36,47 @@ feature via the https://maven.fabric8.io[Fabric8 Maven Plugin^] to build a conta
 source code on your laptop. In this lab, you will still use S2I but instead instruct OpenShift 
 to obtain the application code directly from the source repository and build and deploy a 
 container image of it.
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on '+ Add' and select 'From Git'*`
+
+image:{% image_path openshift-add-from-git.png %}[OpenShift - Add from Git, 700]
+
+Then, enter the following information:
+
+.Web UI Project
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Git Repo URL
+|{{WORKSHOP_GIT_REPO}}
+
+|Git Reference
+|{{WORKSHOP_GIT_REF}}
+
+|Context Dir
+|/labs/web-nodejs
+
+|Builder Image
+|Node.js
+
+|Builder Image Version
+|8-RHOAR
+
+|Application Name
+|web
+
+|Name
+|web
+
+|Create a route to the application
+|Checked
+|===
+
+`*Click on 'Create' button*`
+
+image:{% image_path openshift-web-topology.png %}[OpenShift - Web Topology, 700]
 
 The source code for the Node.js Web front-end is available in this Git repository: 
 

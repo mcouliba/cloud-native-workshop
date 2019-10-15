@@ -69,7 +69,7 @@ the GitHub repository as the remote repository for your working copy.
 IMPORTANT: Replace **GIT-REPO-URL** with the Git repository url copied in the previous steps
 
 ----
-$ cd /projects/labs/inventory-thorntail
+$ cd /projects/workshop/labs/inventory-thorntail
 $ git init
 $ git remote add origin GIT-REPO-URL
 ----

@@ -148,8 +148,8 @@ In a OpenShift environment, the OpenShift Route is used to specify services that
 In the Terminal, `*execute the following command*` to create an *_Istio Gateway_* and a *_VirtualService_* for the *_Gateway Service_*
 
 ----
-oc create -f /projects/labs/gateway-vertx/openshift/istio-gateway.yml
-sed s/PROJECT/{{PROJECT}}/g /projects/labs/gateway-vertx/openshift/virtualservice.yml | oc create -f -
+oc create -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
+sed s/PROJECT/{{PROJECT}}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -f -
 ----
 
 To confirm that the *_Istio Gateway_* is properly configured,

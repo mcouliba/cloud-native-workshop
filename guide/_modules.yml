@@ -12,12 +12,16 @@ modules:
     name: Deploy Catalog Service as a Microservice with Spring Boot
   inventory-thorntail:
     name: Create Inventory Service as an Enterprise Microservice with Thorntail
+  inventory-quarkus:
+    name: Create Inventory Service as an Enterprise Microservice with Quarkus
   inventory-vertx:
     name: Create Inventory Service as a Reactive Microservice with Eclipse Vert.x
   inventory-deployment:
     name: Deploy Inventory Service
   gateway-vertx:
     name: Create Gateway Service as a Reactive Microservice with Eclipse Vert.x
+  gateway-quarkus-vertx:
+    name: Create Gateway Service as a Reactive Microservice with Quarkus/Eclipse Vert.x
   gateway-deployment:
     name: Deploy Gateway Service
   webui-deployment:
@@ -29,6 +33,8 @@ modules:
   app-config-thorntail:
     name:  Application Configuration
   app-config-vertx:
+    name:  Application Configuration
+  app-config-quarkus:
     name:  Application Configuration
   continuous-delivery:
     name:  Continuous Delivery
