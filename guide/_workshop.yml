@@ -37,8 +37,9 @@ modules:
   - gateway-vertx
   - webui-deployment
   - app-health
-  - app-config-quarkus
-  - continuous-delivery
+  - fault-tolerance
+  - app-config
+  - continuous-delivery-jenkins
   - service-mesh
   - abtesting
   - env-info

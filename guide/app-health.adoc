@@ -5,11 +5,8 @@ _15 MINUTE EXERCISE_
 In this lab we will learn how to monitor application health using OpenShift 
 health probes and how you can see container resource consumption using metrics.
 
-'''
-
-=== What is OpenShift Health Probes?
-
 [sidebar]
+.OpenShift Health Probes
 --
 
 When building microservices, monitoring becomes of extreme importance to make sure all services 
@@ -48,65 +45,6 @@ determined based on the return value (0 is success).
 only if the check can establish a connection. TCP socket check is ideal for applications that do not 
 start listening until initialization is complete.
 --
-
-'''
-
-===  Explore Health REST Endpoints
-
-Let's add health probes to the microservices deployed so far.
-Spring Boot, Thorntail and Vert.x all provide out-of-the-box support for creating RESTful endpoints that
-provide details on the health of the application. These endpoints by default provide basic data about the 
-service however they all provide a way to customize the health data and add more meaningful information (e.g. 
-database connection health, backoffice system availability, etc).
-
-http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready[Spring Boot Actuator^] is a 
-sub-project of Spring Boot which adds health and management HTTP endpoints to the application. Enabling Spring Boot 
-Actuator is done via adding **org.springframework.boot:spring-boot-starter-actuator** dependency to the Maven project 
-dependencies which is already done for the **Catalog Service**.
-
-Verify that the health endpoint works for the **Catalog Service** using `*curl*`
-
-----
-$ curl -w "\n" http://catalog.{{PROJECT}}.svc:8080/actuator/health
-
-{"status":"UP"}
-----
-
-https://docs.thorntail.io/2.2.0.Final/#_microprofile_health[Thorntail health endpoints^] function in a similar fashion and are enabled by adding **io.thorntail:microprofile-health** 
-to the Maven project dependencies. 
-This is also already done for the **Inventory Service**.
-
-Verify that the health endpoint works for the **Inventory Service** using `*curl*`
-
-----
-$ curl http://inventory.{{PROJECT}}.svc:8080/node
-
-{
-    "name" : "localhost",
-    "server-state" : "running",
-    "suspend-state" : "RUNNING",
-    "running-mode" : "NORMAL",
-    "uuid" : "79b3ffc5-d98c-4b8e-ae5c-9756ed13944a",
-    "swarm-version" : "2.2.0.Final-redhat-00021"
-}
-----
-
-Expectedly, Eclipse Vert.x also provides a http://vertx.io/docs/vertx-health-check/java[health check module^] 
-which is enabled by adding **io.vertx:vertx-health-check** as a dependency to the Maven project. 
-
-Verify that the health endpoint works for the **Gateway Service** using `*curl*`
-
-----
-$ curl http://gateway.{{PROJECT}}.svc:8080/health
-
-{"status":"UP"}
-----
-
-Last but not least, although you can build more sophisticated health endpoints for the Web UI as well, you 
-can use the root context ("/") of the Web UI in this lab to verify it's up and running.
-
-Health probes are defined on the deployment config for each pod and can be added using OpenShift Web 
-Console or OpenShift CLI. You will try both in this lab.
 
 '''
 

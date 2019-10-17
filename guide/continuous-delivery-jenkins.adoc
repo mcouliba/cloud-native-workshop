@@ -1,0 +1,337 @@
+==  Automating Deployments Using Jenkins Pipelines
+
+_20 MINUTE EXERCISE_
+
+In this lab you will learn about deployment pipelines and you will create a pipeline to 
+automate build and deployment of the Inventory service.
+
+[sidebar]
+.Continuous Delivery
+--
+So far you have been building and deploying each service manually to OpenShift. Although 
+it's convenient for local development, it's an error-prone way of delivering software if 
+extended to test and production environments.
+
+Continuous Delivery (CD) refers to a set of practices with the intention of automating 
+various aspects of delivery software. One of these practices is called **Delivery Pipeline** 
+which is an automated process to define the steps a change in code or configuration has 
+to go through in order to reach upper environments and eventually to production. 
+
+OpenShift simplifies building CI/CD Pipelines by integrating
+the popular https://jenkins.io/doc/book/pipeline/overview/[Jenkins Pipelines^] into
+the platform and enables defining truly complex workflows directly from within OpenShift.
+--
+
+'''
+
+=== What is Gogs?
+
+[sidebar]
+--
+--
+
+'''
+
+=== Create a Git Repository for Inventory
+
+The first step for any deployment pipeline is to store all code and configurations in 
+a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
+Gogs git server.
+
+In {{ GOGS_URL }}[Gogs^], `*Click on 'Register'*` to register a new user with the following details:
+
+
+.Gogs Registration
+[%header,cols=2*]
+|===
+|Parameter
+|Value
+
+|Username 
+|{{OPENSHIFT_USER}}
+
+|Email
+|your email  (Don't worry! Gogs won't send you any emails)
+
+|Password
+|{{OPENSHIFT_PASSWORD}}
+
+| Re-Type
+|{{OPENSHIFT_PASSWORD}}
+
+|===
+
+image:{% image_path cd-gogs-signup.png %}[Sign Up Gogs,700]
+
+`*Click on 'Create New Account'*`. 
+You will be redirected to the sign in page. Sign in using the above username and password.
+
+`*Click on the plus icon*` as below
+
+image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
+
+
+`*Give 'inventory-quarkus' as Repository Name and click on 'Create Repository' button*`
+
+image:{% image_path cd-gogs-new-repo.png %}[Create New Repository,700]
+
+The Git repository is created now. 
+
+`*Click on the copy-to-clipboard icon*` to near the 
+HTTP Git url to copy it to the clipboard which you will need in a few minutes.
+
+image:{% image_path cd-gogs-empty-repo.png %}[Empty Repository,900]
+
+'''
+
+=== Push Inventory Code to the Git Repository
+
+Now that you have a Git repository for the Inventory service, you should push the 
+source code into this Git repository.
+
+In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Quarkus: Generate a Maven project'*`
+
+image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
+
+`*Select the '/projects/workshop/labs/inventory-quarkus' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
+
+In your {{ CHE_URL }}[Workspace^], open a new Terminal with OpenShift tools by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'theia-ide' -> '>_ New terminal'*`:
+
+image:{% image_path che-open-ide-terminal.png %}[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ theia-ide terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ theia-ide terminal
+----
+$ cd /projects/workshop/labs/inventory-quarkus
+$ git remote add origin <PASTE-YOUR-GIT_REPO-URL-HERE>
+----
+
+Open the **Source Code Management (SCM) view** via the shortcut `*Cmd+Shift+G ⌘⇧G on macOS or Ctrl+Shift+G ⌃⇧G on Windows and Linux.*`
+
+`*Click on '...' -> 'Stage All Changes' and select the 'inventory-quarkus' repo*`
+
+image:{% image_path che-scm-stage-all-changes.png %}[Che - SCM Stage All Changes, 500]
+
+`*Enter 'Initial' as commit message, click on the 'check' icon and select the 'inventory-quarkus' repo*`
+
+image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
+
+`*Click on '...' -> 'Push' and select the 'inventory-quarkus' repo*`
+
+image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
+
+`*Click on the 'Yes' button*` to publish the new **master branch**. 
+Finally, `*enter your Gogs credentials ({{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }})*`.
+
+image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
+
+image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
+
+Once done, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
+see the project files in the repository.
+
+image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
+
+'''
+
+=== What is Jenkins?
+
+[sidebar]
+--
+--
+
+'''
+
+=== Define the Deployment Pipeline
+
+OpenShift has built-in support for CI/CD pipelines by allowing developers to define 
+a https://jenkins.io/solutions/pipeline/[Jenkins Pipeline^] for execution by a Jenkins 
+automation engine, which is automatically provisioned on-demand by OpenShift when needed.
+
+The build can get started, monitored, and managed by OpenShift in 
+the same way as any other build types e.g. S2I. Pipeline workflows are defined in 
+a Jenkinsfile, either embedded directly in the build configuration, or supplied in 
+a Git repository and referenced by the build configuration. 
+
+Jenkinsfile is a text file that contains the definition of a Jenkins Pipeline 
+and is created using a https://jenkins.io/doc/book/pipeline/syntax/[scripted or declarative syntax^].
+
+In your {{ CHE_URL }}[Workspace^], `*create a new file called 'Jenkinsfile' under the '/projects/workshop/labs/inventory-quarkus' folder*`
+with the following content:
+
+[source,groovy]
+.Jenkinsfile
+----
+pipeline {
+  agent {
+      label 'maven'
+  }
+  stages {
+    stage('Build JAR') { #<1>
+      steps {
+        sh "mvn clean package -DskipTests"
+        stash name:"jar", includes:"target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar"
+      }
+    }
+    stage('Build Image') { #<2>
+      steps {
+        unstash name:"jar"
+        script {
+          openshift.withCluster() {
+            openshift.startBuild("inventory", "--from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar", "--wait")
+          }
+        }
+      }
+    }
+    stage('Deploy') { #<3>
+      steps {
+        script {
+          openshift.withCluster() {
+            def dc = openshift.selector("dc", "inventory")
+            dc.rollout().latest()
+            dc.rollout().status()
+          }
+        }
+      }
+    }
+  }
+}
+----
+<1> **Build JAR**: to build and test the jar file using Maven
+<2> **Build Image**: to build a container image from the Inventory JAR archive using OpenShift S2I
+<3> **Deploy**: to deploy the Inventory container image in the current project
+
+TIP: The pipeline definition is fully integrated with OpenShift and you can 
+perform operations like image build, image deploy, etc directly from within the *_Jenkinsfile_*.
+
+TIP: When building deployment pipelines, it's important to treat your https://martinfowler.com/bliki/InfrastructureAsCode.html[infrastructure and everything else that needs to be configured (including the pipeline definition) as code^] 
+and store them in a source repository for version control. 
+
+Open the **Source Code Management (SCM) view** via the shortcut `*Cmd+Shift+G ⌘⇧G on macOS or Ctrl+Shift+G ⌃⇧G on Windows and Linux.*`
+
+`*Stage, commit with the message 'Pipeline added', and push*` into your Git repo
+
+The pipeline definition is ready and now you can create a deployment pipeline using 
+this **Jenkinsfile**.
+
+'''
+
+=== Create an OpenShift Jenkins Pipeline
+
+Like mentioned, {{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/builds_and_image_streams.html#pipeline-build[OpenShift Pipelines^] enable creating deployment pipelines using the widely popular *_Jenkinsfile_* format.
+
+OpenShift automates deployments using {{OPENSHIFT_DOCS_BASE}}/dev_guide/deployments/basic_deployment_operations.html#triggers[deployment triggers^] 
+that react to changes to the container image or configuration. Since you want to control the deployments instead from the pipeline, 
+you should remove the Inventory deploy triggers so that building a new Inventory container image wouldn't automatically result in a 
+new deployment. That would allow the pipeline to decide when a deployment should occur.
+
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ oc set triggers dc/inventory --manual #<1>
+$ oc new-app jenkins-ephemeral --param=MEMORY_LIMIT="2Gi" #<2>
+$ oc new-app jenkins-ephemeral --param=MEMORY_LIMIT="2Gi" #<3>
+$ oc new-app /projects/workshop/labs/inventory-quarkus --name=inventory-pipeline --strategy=pipeline #<4>
+----
+<1> Disable automatic rollout trigger
+<2> Deploy a Jenkins server using the provided template and container image that 
+comes out-of-the-box with OpenShift
+<3> Change the CPU Limit of Jenkins Pod to 2Gi
+<4> Create a deployment pipeline. It creates a new build config of type pipeline 
+which is automatically configured to fetch the **Jenkinsfile** from the Git repository 
+and execute it on Jenkins
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on 'DC inventory' -> 'RT inventory'*`
+
+image:{% image_path openshift-jenkins-topology.png %}[OpenShift - Inventory Topology, 700]
+
+Your browser will be redirect on your **Jenkins Server** running on OpenShift.
+
+`*Log in as {{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }}*`
+
+After Jenkins is deployed and is running, create a deployment pipeline by running the following command:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ cd /projects/workshop/labs/inventory-quarkus
+$ oc new-app . --name=inventory-pipeline --strategy=pipeline #<1>
+----
+<1> It creates a new build config of type pipeline 
+which is automatically configured to fetch the **Jenkinsfile** from the Git repository 
+and execute it on Jenkins
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], 
+`*click on 'Builds -> 'BC inventory-pipeline' -> 'Builds' -> 'B inventory-pipeline'*`
+
+image:{% image_path cd-pipeline-inprogress.png %}[OpenShift Pipeline,900]
+
+TIP: Pipeline syntax allows creating complex deployment scenarios with the possibility of defining 
+checkpoint for manual interaction and approval process using 
+https://jenkins.io/doc/pipeline/steps/[the large set of steps and plugins that Jenkins provide^] in 
+order to adapt the pipeline to the process used in your team. You can see a few examples of 
+advanced pipelines in the 
+https://github.com/openshift/origin/tree/master/examples/jenkins/pipeline[OpenShift GitHub Repository^].
+
+TIP: In order to update the deployment pipeline, all you need to do is to update the *_Jenkinsfile_* 
+in the **inventory-quarkus** Git repository. OpenShift pipeline automatically executes the 
+updated pipeline next time it runs.
+
+'''
+
+=== Run the Pipeline on Every Code Change
+
+Manually triggering the deployment pipeline to run is useful but the real goal is to be able 
+to build and deploy every change in code or configuration at least to lower environments 
+(e.g. dev and test) and ideally all the way to production with some manual approvals in-place.
+
+In order to automate triggering the pipeline, you can define a *_Webhook_* on your Git repository 
+to notify OpenShift on every commit that is made to the Git repository and trigger a pipeline 
+execution.
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], 
+`*click on 'Builds -> 'BC inventory-pipeline' and copy the 'Generic Webhook' URL*` which you will need in the next steps.
+
+image:{% image_path openshift-pipeline-webhook.png %}[OpenShift - Pipeline Webhook, 700]
+
+In {{ GOGS_URL }}[Gogs^], `*go to your 'inventory-quarkus' repository and click on 'Settings'*`
+
+image:{% image_path cd-gogs-settings.png %}[Repository Settings,900]
+
+Then, `*click on 'Webhooks' -> 'Add Webhook' -> 'Gogs'*`. Create a webhook with the following details:
+
+* **Payload URL**: paste the Generic webhook url you copied from the *_inventory-pipeline_*
+* **Content type**: *_application/json_*
+
+.Webhook Settings
+[%header,cols=2*]
+|===
+|Parameter
+|Value
+
+|Payload URL
+|Paste the Generic Webhook URL you copied from the **inventory-pipeline**
+
+|===
+
+image:{% image_path cd-gogs-webhook-add.png %}[Repository Webhook,660]
+
+`*Click on 'Add Webhook'*`
+
+All done. You can click on the newly defined webhook to see the list of *Recent Delivery*. 
+
+`*Click on the 'Test Delivery' button*` and verify that the **inventory-pipeline** starts running 
+immediately. This button allows you to manually trigger the webhook for testing purposes.
+
+Well done! You are ready for the next lab.

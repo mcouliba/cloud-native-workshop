@@ -34,10 +34,10 @@ modules:
     name:  Application Configuration
   app-config-vertx:
     name:  Application Configuration
-  app-config-quarkus:
+  app-config:
     name:  Externalize Application Configuration
-  continuous-delivery:
-    name:  Continuous Delivery
+  continuous-delivery-jenkins:
+    name:  Continuous Delivery with Jenkins
   debug:
     name:  Debugging Applications
   service-mesh:

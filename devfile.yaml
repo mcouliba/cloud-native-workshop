@@ -78,3 +78,15 @@ commands:
         type: exec
         command: mvn clean fabric8:deploy
         component: workshop-tools
+  - name: 'Service Mesh - Deploy'
+    actions:
+      - type: exec
+        command: >-
+          oc patch dc/inventory --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' &&
+          oc patch dc/inventory --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' &&
+          oc rollout latest dc/inventory &&
+          oc rollout pause dc/gateway &&
+          oc patch dc/gateway --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' &&
+          oc patch dc/gateway --patch '{"spec": {"template": {"spec": {"containers": [{"name": "vertx", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' &&
+          oc rollout resume dc/gateway
+        component: workshop-tools
