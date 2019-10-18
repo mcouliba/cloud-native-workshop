@@ -1,6 +1,6 @@
 apiVersion: 1.0.0
 metadata:
-  generateName: wksp-cloud-native
+  name: wksp-cloud-native
 projects:
   - name: workshop
     source:
