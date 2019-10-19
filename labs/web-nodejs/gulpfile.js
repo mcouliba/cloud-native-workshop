@@ -12,8 +12,7 @@ var configureSetup  = {
 };
 
 gulp.task('config', function() {
-    console.log(configureSetup);
-  return gulp.src('./config/coolstore.config.json')
-      .pipe(gulpNgConfig('webapp', configureSetup))
+   gulp.src('./config/coolstore.config.json')
+      .pipe(gulpNgConfig('app', configureSetup))
       .pipe(gulp.dest('app')); 
 });
