@@ -13,6 +13,13 @@ const Keycloak = require('keycloak-connect');
 const cors = require('cors');
 const probe = require('kube-probe');
 
+// Environment Variables
+const gulp = require('gulp'); // Load gulp
+const gulpfile = require('./gulpfile'); // Loads our config task
+// Kick of gulp 'config' task, which generates angular const configuration
+// gulp.series(gulpfile.coolstoreConfig); 
+gulp.series(gulp.task('config'))();
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 

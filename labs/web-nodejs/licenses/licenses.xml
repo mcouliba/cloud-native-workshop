@@ -5,28 +5,8 @@
     <license>Apache-2.0</license>
     <dependencies>
         <dependency>
-            <packageName>body-parser</packageName>
-            <version>1.19.0</version>
-            <licenses>
-                <license>
-                    <name>MIT License</name>
-                    <url>http://www.opensource.org/licenses/MIT</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <packageName>express</packageName>
-            <version>4.16.4</version>
-            <licenses>
-                <license>
-                    <name>MIT License</name>
-                    <url>http://www.opensource.org/licenses/MIT</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <packageName>angular-bootstrap</packageName>
-            <version>0.12.2</version>
+            <packageName>angular-patternfly</packageName>
+            <version>5.0.3</version>
             <licenses>
                 <license>
                     <name>MIT License</name>
@@ -45,18 +25,48 @@
             </licenses>
         </dependency>
         <dependency>
-            <packageName>keycloak-connect</packageName>
-            <version>7.0.0</version>
+            <packageName>body-parser</packageName>
+            <version>1.19.0</version>
             <licenses>
                 <license>
-                    <name>Apache License 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+                    <name>MIT License</name>
+                    <url>http://www.opensource.org/licenses/MIT</url>
                 </license>
             </licenses>
         </dependency>
         <dependency>
-            <packageName>isotope</packageName>
-            <version>1.0.0-alpha.3</version>
+            <packageName>cors</packageName>
+            <version>2.8.5</version>
+            <licenses>
+                <license>
+                    <name>MIT License</name>
+                    <url>http://www.opensource.org/licenses/MIT</url>
+                </license>
+            </licenses>
+        </dependency>
+        <dependency>
+            <packageName>express</packageName>
+            <version>4.16.4</version>
+            <licenses>
+                <license>
+                    <name>MIT License</name>
+                    <url>http://www.opensource.org/licenses/MIT</url>
+                </license>
+            </licenses>
+        </dependency>
+        <dependency>
+            <packageName>gulp</packageName>
+            <version>4.0.2</version>
+            <licenses>
+                <license>
+                    <name>MIT License</name>
+                    <url>http://www.opensource.org/licenses/MIT</url>
+                </license>
+            </licenses>
+        </dependency>
+        <dependency>
+            <packageName>gulp-ng-config</packageName>
+            <version>1.5.1</version>
             <licenses>
                 <license>
                     <name>MIT License</name>
@@ -75,12 +85,22 @@
             </licenses>
         </dependency>
         <dependency>
-            <packageName>cors</packageName>
-            <version>2.8.5</version>
+            <packageName>isotope</packageName>
+            <version>1.0.0-alpha.3</version>
             <licenses>
                 <license>
                     <name>MIT License</name>
                     <url>http://www.opensource.org/licenses/MIT</url>
+                </license>
+            </licenses>
+        </dependency>
+        <dependency>
+            <packageName>keycloak-connect</packageName>
+            <version>7.0.0</version>
+            <licenses>
+                <license>
+                    <name>Apache License 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0</url>
                 </license>
             </licenses>
         </dependency>
