@@ -62,7 +62,7 @@ Then, enter the following information:
 |Node.js
 
 |Builder Image Version
-|8-RHOAR
+|10
 
 |Application Name
 |web

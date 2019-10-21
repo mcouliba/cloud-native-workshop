@@ -5,11 +5,12 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "PRODUCT", uniqueConstraints = @UniqueConstraint(columnNames = "itemId"))
+@Table(name = "PRODUCT")
 public class Product implements Serializable {
+  
+  private static final long serialVersionUID = 1L;
   
   @Id
   private String itemId;

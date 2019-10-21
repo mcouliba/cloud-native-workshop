@@ -73,11 +73,11 @@ image:{% image_path che-workspace.png %}[Che - Workspace, 800]
 First, you need to connect your {{ CHE_URL }}[Che Workspace^] to the OpenShift cluster.
 
 In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: oc login'*`
+`*run 'Task: Run Task...' ->  'che: OpenShift - Login'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
-image:{% image_path che-oclogin.png %}[Che - oc login, 500]
+image:{% image_path che-openshift-login.png %}[Che - OpenShift Login, 500]
 
 [NOTE]
 .Command Info
@@ -108,11 +108,11 @@ OpenShift ships with a web-based console that will allow users to
 perform various tasks via a browser.  To get a feel for how the web console
 works, open your browser and `*go to {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]*`.
 
-The first screen you will see is the authentication screen. Enter your username and password (`*{{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}}*`) and 
+`*Enter your username and password ({{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}})*` and 
 then log in. After you have authenticated to the web console, you will be presented with a
 list of projects that your user has permission to work with. 
 
-`*Click on '{{PROJECT}}'*` project to be taken to the project overview page
+`*Select the 'Developer View' then your '{{PROJECT}}'*` to be taken to the project overview page
 which will list all of the routes, services, deployments, and pods that you have
 running as part of your project. There's nothing there now, but that's about to
 change.

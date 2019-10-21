@@ -119,6 +119,18 @@
                           <name>app</name>
                           <value>catalog</value>
                       </property>
+                      <property>
+                          <name>app.kubernetes.io/instance</name>
+                          <value>catalog</value>
+                      </property>
+                      <property>
+                          <name> app.kubernetes.io/part-of</name>
+                          <value>coolstore</value>
+                      </property>
+                      <property>
+                          <name>app.kubernetes.io/name</name>
+                          <value>java</value>
+                      </property>
                   </all>
               </labels>
           </resources>

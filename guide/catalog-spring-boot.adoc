@@ -95,7 +95,7 @@ image:{% image_path springboot-catalog-arch.png %}[Catalog RESTful Service,640]
 
 === Create the Domain Model
 
-In your {{ CHE_URL }}[Workspace^], `*Create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/Product.java' file`* 
+In your {{ CHE_URL }}[Workspace^], `*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/Product.java' file`* 
 
 [source,java]
 .Product.java
@@ -184,7 +184,7 @@ Create a new Java interface named **ProductRepository** in **com.redhat.cloudnat
 and extend https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html[CrudRepository^] interface in order to indicate to Spring that you want to expose a complete set of methods to manipulate the entity.
 
 In your {{ CHE_URL }}[Workspace^], 
-`*Create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/ProductRepository.java' file`*.
+`*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/ProductRepository.java' file`*.
 
 [source,java]
 .ProductRepository.java
@@ -210,7 +210,7 @@ Spring Boot uses Spring Web MVC as the default RESTful stack in Spring applicati
 a new Java class named **CatalogController** in **com.redhat.cloudnative.catalog** package.
 
 In your {{ CHE_URL }}[Workspace^], 
-`*Create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/CatalogController.java' file`*.
+`*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/CatalogController.java' file`*.
 
 [source,java]
 .CatalogController.java
@@ -266,11 +266,20 @@ image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 image:{% image_path che-catalog-run.png %}[Che - Catalog Run, 500]
 
 When you see **Started CatalogApplication** in the logs, you can access the 
-Catalog REST API. Let’s test it out using `*curl*` in a new terminal window:
+Catalog REST API.
 
+`*Click on the 'My Workspace' white box in the right menu, then 'User Runtimes' -> 'maven' -> 'localhost-9000'*`.
+
+image:{% image_path che-localhost.png %}[Che - Localhost, 500]
+
+Your browser will be redirect on your **Catalog Service** running from your Workspace.
+
+image:{% image_path catalog-service.png %}[Catalog Service,500]
+
+Then `*click on 'Test it'*`. You should have the following output:
+
+[source,json]
 ----
-$ curl http://localhost:9000/api/catalog
-
 [{"itemId":"329299","name":"Red Fedora","desc":"Official Red Hat Fedora","price":34.99},...]
 ----
 

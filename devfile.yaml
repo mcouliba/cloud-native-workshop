@@ -8,9 +8,16 @@ projects:
       type: git
       branch: master
 components:
-  - id: redhat/java/latest
-    type: chePlugin
-    alias: java
+  - type: dockerimage
+    alias: maven
+    image: 'quay.io/eclipse/che-java11-maven:7.3.0'
+    memoryLimit: 256Mi
+    mountSources: true
+    endpoints:
+      - name: localhost-8080
+        port: 8080
+      - name: localhost-9000
+        port: 9000
   - id: redhat/workshop-tools/latest
     type: chePlugin
     alias: workshop-tools
@@ -29,24 +36,25 @@ commands:
         type: exec
         command: 'mvn compile quarkus:dev'
         component: workshop-tools
-  - name: 'Inventory - Deploy on OpenShift'
-    actions:
-      - workdir: /projects/workshop/labs/inventory-quarkus
-        type: exec
-        command: >-
-          mvn clean package -DskipTests && 
-          oc new-build --name=inventory java --binary=true && oc start-build
-          inventory --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar
-          --follow && oc new-app inventory &&  oc expose svc inventory
-        component: workshop-tools
   - name: 'Inventory - Build on OpenShift'
     actions:
       - workdir: /projects/workshop/labs/inventory-quarkus
         type: exec
         command: >-
           mvn clean package -DskipTests &&
-          oc start-build inventory
-          --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow
+          oc start-build inventory-s2i --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow
+        component: workshop-tools
+  - name: 'Inventory - Deploy on OpenShift'
+    actions:
+      - workdir: /projects/workshop/labs/inventory-quarkus
+        type: exec
+        command: >-
+          mvn clean package -DskipTests && 
+          oc new-build --name=inventory-s2i java --binary=true --labels=app.kubernetes.io/instance=inventory && 
+          oc start-build inventory-s2i --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow && 
+          oc new-app inventory &&  
+          oc label dc/inventory app.kubernetes.io/part-of=coolstore app.kubernetes.io/name=java app.kubernetes.io/instance=inventory && 
+          oc expose svc inventory
         component: workshop-tools
   - name: 'Catalog - Build'
     actions:
@@ -64,7 +72,8 @@ commands:
     actions:
       - workdir: /projects/workshop/labs/catalog-spring-boot
         type: exec
-        command: mvn clean fabric8:deploy
+        command: >- 
+          mvn clean fabric8:deploy
         component: workshop-tools
   - name: 'Gateway - Build'
     actions:
@@ -76,7 +85,9 @@ commands:
     actions:
       - workdir: /projects/workshop/labs/gateway-vertx
         type: exec
-        command: mvn clean fabric8:deploy
+        command: >- 
+          mvn clean fabric8:deploy &&
+          oc annotate dc/gateway "app.openshift.io/connects-to"="inventory,catalog"
         component: workshop-tools
   - name: 'Service Mesh - Deploy'
     actions:

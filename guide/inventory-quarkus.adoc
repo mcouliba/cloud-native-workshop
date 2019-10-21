@@ -181,6 +181,12 @@ image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
 image:{% image_path che-inventory-compile.png %}[Che - Inventory Development Mode, 500]
 
+Then, `*click on the 'My Workspace' white box in the right menu, then 'User Runtimes' -> 'maven' -> 'localhost-8080'*`.
+
+image:{% image_path che-localhost-8080.png %}[Che - Localhost 8080, 500]
+
+A new tab will be opened in your browser pointing to the service running on your Workspace.
+
 image:{% image_path che-quarkus-preview.png %}[Che - Quarkus Preview, 500]
 
 `*Modify the 'src/main/resources/META-INF/resources/index.html' file*` as following
@@ -231,32 +237,20 @@ https://quarkus.io/guides/hibernate-orm-guide[Hibernate ORM^] is the de facto JP
 the full breath of an Object Relational Mapper. It works beautifully in Quarkus.
 
 Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus/pom.xml**. 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Quarkus: Add extensions to current project'*`
+In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file:
 
-image:{% image_path che-quarkus-addextensions.png %}[Che - Quarkus Add Extensions, 600]
-
-.Quarkus Extensions
-[%header,cols=3*]
-|===
-|Name 
-|ArtificatID
-|Maven Syntax
-
-|Hibernate ORM
-|quarkus-hibernate-orm
-|<dependency>
-<groupId>io.quarkus</groupId>
-<artifactId>quarkus-hibernate-orm</artifactId>
-</dependency>
-
-|JDBC Driver - H2
-|quarkus-jdbc-h2
-|<dependency>
-<groupId>io.quarkus</groupId>
-<artifactId>quarkus-jdbc-h2</artifactId>
-</dependency>
-|===
+[source,xml]
+.pom.xml
+----
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-hibernate-orm</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+----
 
 Once done, `*create the 'src/main/java/com/redhat/cloudnative/Inventory.java' file`* as following:
 
@@ -439,11 +433,11 @@ To enable it, `*specify an <uberJar> configuration option in your pom.xml*`
 <1> uberJar configuration option
 
 Then, in your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Inventory - Initialize on OpenShift'*`
+`*run 'Task: Run Task...' ->  'Inventory - Deploy on OpenShift'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
-image:{% image_path che-inventory-initialize.png %}[Che - Initialize Inventory Service, 500]
+image:{% image_path che-inventory-deploy.png %}[Che - Deploy Inventory, 500]
 
 Once this completes, your application should be up and running. OpenShift runs the different components of 
 the application in one or more pods which are the unit of runtime deployment and consists of the running 
