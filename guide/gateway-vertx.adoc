@@ -93,16 +93,8 @@ image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
 image:{% image_path che-gateway-build.png %}[Che - Catalog Build, 500]
 
-Once successfully built, the resulting *_jar_* is located in the **target/** directory:
-
-----
-$ ls /projects/workshop/labs/gateway-vertx/target/*.jar
-
-/projects/workshop/labs/gateway-vertx/target/gateway-1.0-SNAPSHOT.jar
-----
-
-This is an uber-jar with all the dependencies required packaged in the *jar* to enable running the 
-application with `*java -jar*`.
+Once successfully built, the resulting **gateway-1.0-SNAPSHOT.jar** is located in the **/projects/workshop/labs/gateway-vertx/target/** directory.
+This is an uber-jar with all the dependencies required packaged in the **jar** to enable running the application with **java -jar**.
 
 '''
 
@@ -300,11 +292,12 @@ containers for the project.
 
 === Test your Service
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on 'DC gateway' -> 'RT gateway'*`
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on the 'Open URL' icon of the Gateway Service*`
 
 image:{% image_path openshift-gateway-topology.png %}[OpenShift - Gateway Topology, 700]
 
-Your browser will be redirect on your **Gateway Service** running on OpenShift.
+Your browser will be redirect on **your Gateway Service running on OpenShift**.
 
 image:{% image_path gateway-service.png %}[Gateway Service,500]
 

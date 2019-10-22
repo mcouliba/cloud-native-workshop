@@ -42,7 +42,7 @@ commands:
         type: exec
         command: >-
           mvn clean package -DskipTests &&
-          oc start-build inventory-s2i --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow
+          oc start-build inventory --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow
         component: workshop-tools
   - name: 'Inventory - Deploy on OpenShift'
     actions:
@@ -50,8 +50,8 @@ commands:
         type: exec
         command: >-
           mvn clean package -DskipTests && 
-          oc new-build --name=inventory-s2i java --binary=true --labels=app.kubernetes.io/instance=inventory && 
-          oc start-build inventory-s2i --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow && 
+          oc new-build --name=inventory java --binary=true --labels=app.kubernetes.io/instance=inventory && 
+          oc start-build inventory --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow && 
           oc new-app inventory &&  
           oc label dc/inventory app.kubernetes.io/part-of=coolstore app.kubernetes.io/name=java app.kubernetes.io/instance=inventory && 
           oc expose svc inventory
@@ -73,7 +73,8 @@ commands:
       - workdir: /projects/workshop/labs/catalog-spring-boot
         type: exec
         command: >- 
-          mvn clean fabric8:deploy
+          mvn clean fabric8:deploy &&
+          oc label bc/catalog-s2i app.kubernetes.io/instance=catalog
         component: workshop-tools
   - name: 'Gateway - Build'
     actions:
@@ -87,6 +88,7 @@ commands:
         type: exec
         command: >- 
           mvn clean fabric8:deploy &&
+          oc label bc/gateway-s2i app.kubernetes.io/instance=gateway &&
           oc annotate dc/gateway "app.openshift.io/connects-to"="inventory,catalog"
         component: workshop-tools
   - name: 'Service Mesh - Deploy'

@@ -8,6 +8,8 @@ in previous labs.
 
 image:{% image_path coolstore-arch-webui-nodejs.png %}[API Gateway Pattern,400]
 
+'''
+
 === What is Node.js?
 
 [sidebar]
@@ -24,6 +26,8 @@ requests (tens of thousands) using a single thread which makes it desirable choi
 scalable web applications.
 --
 
+'''
+
 === Deploy on OpenShift
 
 The Web UI is built using Node.js for server-side JavaScript and AngularJS for client-side 
@@ -37,7 +41,8 @@ source code on your laptop. In this lab, you will still use S2I but instead inst
 to obtain the application code directly from the source repository and build and deploy a 
 container image of it.
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on '+ Add' and select 'From Git'*`
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on '+ Add' and select 'From Git'*`
 
 image:{% image_path openshift-add-from-git.png %}[OpenShift - Add from Git, 700]
 
@@ -65,7 +70,7 @@ Then, enter the following information:
 |10
 
 |Application Name
-|web
+|coolstore
 
 |Name
 |web
@@ -74,61 +79,40 @@ Then, enter the following information:
 |Checked
 |===
 
-`*Click on 'Create' button*`
+`*Click on 'Create' button*` 
+
+'''
+
+=== Link graphically your service
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'DC web' -> 'Actions' -> 'Edit Annotations'*`
+
+image:{% image_path openshift-web-annotate.png %}[OpenShift - Web Annotate, 700]
+
+`*Add the new annotation*` in order to have a graphical link between **Web Service** and **Gateway Service**.
+
+.Web Annotations
+[%header,cols=2*]
+|===
+|Key 
+|Value
+
+|app.openshift.io/connects-to
+|gateway
+
+|===
+
+'''
+
+=== Test your Service
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on the 'Open URL' icon of the Web Service*`
 
 image:{% image_path openshift-web-topology.png %}[OpenShift - Web Topology, 700]
 
-The source code for the Node.js Web front-end is available in this Git repository: 
-
-<{{WEB_NODEJS_GIT_REPO}}>
-
-Use the OpenShift CLI command to create a new build and deployment for the Web component:
-
-  * Name: **web**
-  * Version: **Nodejs 8**
-  * Git Repository URL: **{{LABS_GIT_REPO}}**
-  * Context Dir: **web-nodejs**
-  * Labels: **app=web,version=1.0**
-
-TIP: Feeling adventurous? Build and deploy the Web front-end via the OpenShift Web Console 
-instead. To give you a hint, start by clicking on **Add to project** within the 
-**{{PROJECT}}** project and pick **JavaScript** and then **Node.js** in the service 
-catalog. Don't forget to click on **advanced options** and set **Context Dir** to **web-nodejs** 
-which is the sub-folder of the Git repository where the source code for Web resides.
-
-----
-$ oc new-app nodejs:8~{{LABS_GIT_REPO}} \
-        --context-dir=web-nodejs \
-        --name=web \
-        --labels=app=web,version=1.0
-----
-
-The ***--context-dir*** option specifies the sub-directly of the Git repository which contains 
-the source code for the application to be built and deployed. The ***--labels*** allows 
-assigning arbitrary key-value labels to the application objects in order to make it easier to 
-find them later on when you have many applications in the same project.
-
-A build gets created and starts building the Node.js Web UI container image. You can see the build 
-logs using OpenShift Web Console or OpenShift CLI:
-
-----
-$ oc logs -f bc/web
-----
-
-The ***-f*** option is to follow the logs as the build progresses. After the building the Node.js Web UI 
-completes, it gets pushed into the internal image registry in OpenShift and then deployed within 
-your project.
-
-In order to access the Web UI from outside (e.g. from a browser), it needs to get added to the load 
-balancer. Run the following command to add the Web UI service to the built-in HAProxy load balancer 
-in OpenShift.
-
-----
-$ oc expose svc/web
-$ oc get route web
-----
-
-`*Click on the OpenShift Route of _'Web Service'_*` from the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^].
+Your browser will be redirect on **your Web Service running on OpenShift**.
 You should be able to see the CoolStore with all products and their inventory status.
 
 image:{% image_path coolstore-web.png %}[CoolStore Shop,840]

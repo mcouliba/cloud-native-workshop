@@ -183,9 +183,9 @@ image:{% image_path che-inventory-compile.png %}[Che - Inventory Development Mod
 
 Then, `*click on the 'My Workspace' white box in the right menu, then 'User Runtimes' -> 'maven' -> 'localhost-8080'*`.
 
-image:{% image_path che-localhost-8080.png %}[Che - Localhost 8080, 500]
+image:{% image_path che-localhost.png %}[Che - Localhost, 500]
 
-A new tab will be opened in your browser pointing to the service running on your Workspace.
+Your browser will be redirect on **your Inventory Service running inside your Workspace**.
 
 image:{% image_path che-quarkus-preview.png %}[Che - Quarkus Preview, 500]
 
@@ -223,9 +223,9 @@ image:{% image_path che-quarkus-preview.png %}[Che - Quarkus Preview, 500]
 </html>
 ----
 
-`*Refresh the 'PREVIEW' Window*` and you should have the following content **without rebuilding your JAR file**
+`*Refresh your browser*` and you should have the following content **without rebuilding your JAR file**
 
-image:{% image_path che-quarkus-homepage.png %}[Che - Quarkus - Home Page, 500]
+image:{% image_path inventory-quarkus.png %}[Inventory Quarkus,500]
 
 Now let's write some code and create a domain model and a RESTful endpoint to create the Inventory service
 
@@ -380,7 +380,7 @@ The above REST service defines an endpoint that is accessible via **HTTP GET** a
 for example **/api/inventory/329299** with 
 the last path param being the product id which we want to check its inventory status.
 
-`*Refresh the 'PREVIEW' Window and click on 'Test it'*`. You should have the following output:
+`*Refresh your browser and click on 'Test it'*`. You should have the following output:
 
 [source,json]
 ----
@@ -389,7 +389,7 @@ the last path param being the product id which we want to check its inventory st
 
 The REST API returned a JSON object representing the inventory count for this product. Congratulations!
 
-In your {{ CHE_URL }}[Workspace^], stop the Inventory service by `*hitting Ctrl-c in the Terminal*`
+In your {{ CHE_URL }}[Workspace^], stop the service by `*hitting Ctrl+c in the '>_ Inventory Compile (Dev Mode)' Terminal*`
 
 '''
 
@@ -447,11 +447,12 @@ containers for the project.
 
 === Test your Service
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on 'DC inventory' -> 'RT inventory'*`
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on the 'Open URL' icon of the Inventory Service*`
 
 image:{% image_path openshift-inventory-topology.png %}[OpenShift - Inventory Topology, 700]
 
-Your browser will be redirect on your **Inventory Service** running on OpenShift.
+Your browser will be redirect on **your Inventory Service running on OpenShift**.
 
 image:{% image_path inventory-quarkus.png %}[Inventory Quarkus,500]
 

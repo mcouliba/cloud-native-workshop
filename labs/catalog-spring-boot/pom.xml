@@ -136,7 +136,7 @@
           </resources>
           <enricher>
             <excludes>
-              <exclude>spring-boot-health-check</exclude>
+              <exclude>f8-healthcheck-spring-boot</exclude>
             </excludes>
           </enricher>
           <generator>
