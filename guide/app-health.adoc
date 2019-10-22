@@ -72,8 +72,8 @@ $ curl -w "\n" http://catalog.{{PROJECT}}.svc:8080/actuator/health
 {"status":"UP"}
 ----
 
-Like mentioned, health probes are defined on a deployment config for each pod. Review the available 
-deployment configs in the project. 
+Like mentioned, health probes are defined on a deployment config for each pod. Add liveness and readiness probes can be done at the same time 
+if you want to define the same health endpoint and parameters for both liveness and readiness probes.
 
 [source,shell]
 .>_ workshop-tools terminal
@@ -86,7 +86,7 @@ $ oc set probe dc/catalog \
     --get-url=http://:8080/actuator/health # <5>
 ----
 <1> **--liveness** is the option to setup a liveness probe to verify this container is running
-<2> **--liveness** is the option to setup a readiness probe to indicate when this container should receive traffic
+<2> **--readiness** is the option to setup a readiness probe to indicate when this container should receive traffic
 <3> **--initial-delay-seconds** is the option to specify how long 
 to wait after the container starts and before to begin checking the probes
 <4> **--failure-threshold** is the number of failures before the probe is considered to have failed
@@ -122,7 +122,7 @@ It allows applications to provide information about their state to external view
 in cloud environments where automated processes must be able to determine whether the application should be discarded or restarted.
 
 Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus/pom.xml**. 
-In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file:
+In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
 
 [source,xml]
 .pom.xml
@@ -140,7 +140,7 @@ image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
 image:{% image_path che-inventory-build-openshift.png %}[Che - Inventory Build On OpenShift, 500]
 
-Verify that the health endpoint works for the **Inventory Service** using `*curl*`
+Once completed, verify that the health endpoint works for the **Inventory Service** using `*curl*`
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
@@ -162,6 +162,8 @@ $ curl -w "\n" http://inventory.{{PROJECT}}.svc:8080/health
 
 Finally, `*Add the Liveness and Readiness Probes*` to the Service
 
+[source,shell]
+.>_ workshop-tools terminal
 ----
 $ oc rollout pause dc/inventory
 $ oc set probe dc/inventory --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready
@@ -180,6 +182,8 @@ which is enabled by adding **io.vertx:vertx-health-check** as a dependency to th
 
 Verify that the health endpoint works for the **Gateway Service** using `*curl*`
 
+[source,shell]
+.>_ workshop-tools terminal
 ----
 $ curl -w "\n" http://gateway.{{PROJECT}}.svc:8080/health
 

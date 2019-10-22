@@ -42,12 +42,12 @@ down arrows on the right side of each pods blue circle.
 
 First, get list of deployment configs available in the project.
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by **clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'**:
 
 image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+In the window called **'>_ workshop-tools terminal'**, **execute the following commands**:
 
 [source,shell]
 .>_ workshop-tools terminal
@@ -61,7 +61,7 @@ inventory   1          1         1         config,image(inventory:latest)
 web         1          1         1         config,image(web:latest)
 ----
 
-And then, scale the `*web*` deployment config to 2 pods:
+And then, scale the **Web Service** deployment config to 2 pods:
 
 [source,shell]
 .>_ workshop-tools terminal
@@ -69,7 +69,7 @@ And then, scale the `*web*` deployment config to 2 pods:
 $ oc scale dc/web --replicas=2
 ----
 
-The `*--replicas*` option specified the number of Web UI pods that should be running. If you look 
+The **--replicas** option specified the number of Web UI pods that should be running. If you look 
 at the OpenShift Web Console, you can see a new pod is being started for the Web UI and as soon 
 as the health probes pass, it will be automatically added to the load-balancer.
 
@@ -136,10 +136,31 @@ in {{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#quality-of-service-t
 
 Set the following resource constraints on the Web UI pod:
 
-* Memory Request: 256 Mi
-* Memory Limit: 512 Mi
-* CPU Request: 200 millicore
-* CPU Limit: 400 millicore
+.Web Resource Constraints
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Memory Request
+|256 Mi
+
+|Memory Limit
+|512 Mi
+
+|CPU Request
+|200 millicore
+
+|CPU Limit
+|400 millicore
+
+|===
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ oc set resources dc/web --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi
+----
 
 TIP: CPU is measured in units called millicores. Each node in a cluster inspects the 
 operating system to determine the amount of CPU cores on the node, then multiplies 
@@ -149,25 +170,9 @@ a single core, it would be represented as 100m. Memory is measured in
 bytes and is specified with {{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#dev-compute-resources[SI suffices^] 
 (E, P, T, G, M, K) or their power-of-two-equivalents (Ei, Pi, Ti, Gi, Mi, Ki).
 
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ oc set resources dc/web --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi
-----
-
-TIP: You can also use the OpenShift Web Console by clicking on **Applications** >> **Deployments** within 
-the **{{PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
-the top-right, choose **Edit Resource Limits**.
-
 The pods get restarted automatically setting the new resource limits in effect. Now you can define an 
 autoscaler using `*oc autoscale*` command to scale the Web UI pods up to 5 instances whenever 
-the CPU consumption passes 50% utilization:
-
-TIP: You can configure an autoscaler using OpenShift Web Console by clicking 
-on **Applications** >> **Deployments** within 
-the **{{PROJECT}}** project. Click then on **web** and from the **Actions** menu on 
-the top-right, choose **Add Autoscaler** or **Edit Autoscaler**, depending on whether or not 
-you already have an autoscaler configured.
+the CPU consumption passes 40% utilization:
 
 [source,shell]
 .>_ workshop-tools terminal
@@ -176,11 +181,9 @@ $ oc autoscale dc/web --min 1 --max 5 --cpu-percent=40
 ----
 
 All set! Now the Web UI can scale automatically to multiple instances if the load on the CoolStore 
-online store increases. You can verify that using for example the `*siege*` command-line utility, which 
+online store increases. You can verify that using for example the **siege** command-line utility, which 
 is a handy tool for running load tests against web endpoints and is already 
-installed within your CodeReady Workspaces workspace. 
-
-Run the following command in the **Terminal** window.
+installed within your workspace. 
 
 [source,shell]
 .>_ workshop-tools terminal
@@ -188,11 +191,15 @@ Run the following command in the **Terminal** window.
 $ siege -c80 -d2 -t5M http://web.{{PROJECT}}.svc.cluster.local:8080
 ----
 
-Note that you are using the internal url of the Web UI in this command. Since CodeReady Workspaces is running on 
+[NOTE]
+.Networking
+====
+You are using the internal url of the Web UI in this command. Since your Workspace is running on 
 the same OpenShift cluster as Web UI, you can choose to use the external URL that is exposed on the load balancer 
 or the internal user which goes directly to the Web UI pod and bypasses the load balancer. You can 
 read more about internal service dns names in 
 {{OPENSHIFT_DOCS_BASE}}/architecture/networking/networking.html[OpenShift Docs^].
+====
 
 As the load is generated, you will notice that it will create a spike in the 
 Web UI cpu usage and trigger the autoscaler to scale the Web UI container to 5 pods (as configured 
@@ -204,13 +211,10 @@ to generate more load.
 
 image:{% image_path fault-autoscale-web.gif %}[Web UI Automatically Scaled,740]
 
-You can see the aggregated cpu metrics graph of all 5 Web UI pods by going to the OpenShift Web Console and clicking on 
-**Monitoring** and then the arrow (**>**) on the left side of **web-n** under **Deployments**.
-
-image:{% image_path fault-autoscale-metrics.png %}[Web UI Aggregated CPU Metrics,740]
-
 When the load on Web UI disappears, after a while OpenShift scales the Web UI pods down to the minimum 
 or whatever this needed to cope with the load at that point.
+
+'''
 
 === Self-healing Failed Application Pods
 
@@ -247,31 +251,29 @@ config.
 All of the above comes out-of-the-box and doesn't need any extra configuration. Remove the Catalog 
 pod to verify how OpenShift starts the pod again. First, check the Catalog pod that is running:
 
+[source,shell]
+.>_ workshop-tools terminal
 ----
-$ oc get pods -l deploymentconfig=catalog
+$ oc get pods -l deploymentconfig=catalog #<1>
 
 NAME              READY     STATUS    RESTARTS   AGE
 catalog-3-xf111   1/1       Running   0          42m
 ----
+<1> The **-l** options tells the command to list pods that have the **deploymentconfig=catalog** label 
+assigned to them. You can see pods labels using **oc get pods --show-labels** command.
 
-The `*-l*` options tells the command to list pods that have the `*deploymentconfig=catalog*` label 
-assigned to them. You can see pods labels using `*oc get pods --show-labels*` command.
+`*Delete the Catalog pod*` with the following command: 
 
-Delete the Catalog pod. 
-
+[source,shell]
+.>_ workshop-tools terminal
 ----
-oc delete pods -l deploymentconfig=catalog
+$ oc delete pods -l deploymentconfig=catalog
 ----
 
-You need to be fast for this one! List the Catalog pods again immediately:
+You need to be fast for this one! 
+`*Switch on the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the 'Developer view', and click on 'DC catalog'*` 
 
-----
-$ oc get pods -l deploymentconfig=catalog
-
-NAME              READY     STATUS              RESTARTS   AGE
-catalog-3-5dx5d   0/1       ContainerCreating   0          1s
-catalog-3-xf111   0/1       Terminating         0          4m
-----
+image:{% image_path openshift-catalog-failed.png %}[Che - OpenShift Catalog Failed, 700]
 
 As the Catalog pod is being deleted, OpenShift notices the lack of 1 pod and starts a new Catalog 
 pod automatically.
