@@ -53,7 +53,7 @@ The **'/projects/workshop/labs/inventory-quarkus'** folder contents:
 * example Dockerfile files for both native and jvm modes in src/main/docker
 * the application configuration file
 
-Once generated, `*look at the pom.xml*`. You will find the import of the Quarkus BOM, allowing you to omit the version 
+`*Look at the pom.xml*`. You will find the import of the Quarkus BOM, allowing you to omit the version 
 on the different Quarkus dependencies. In addition, you can see the **quarkus-maven-plugin** responsible of the packaging 
 of the application and also providing the development mode.
 

@@ -91,6 +91,12 @@ commands:
           oc label bc/gateway-s2i app.kubernetes.io/instance=gateway &&
           oc annotate dc/gateway "app.openshift.io/connects-to"="inventory,catalog"
         component: workshop-tools
+  - name: 'Gateway - Generate Traffic'
+    actions:
+      - workdir: /projects/workshop/labs/scripts
+        type: exec
+        command: ./runGatewayService.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}
+        component: workshop-tools
   - name: 'Service Mesh - Deploy'
     actions:
       - type: exec

@@ -28,6 +28,13 @@ the platform and enables defining truly complex workflows directly from within O
 
 [sidebar]
 --
+image:{% image_path gogs-logo.png %}[Gogs, 150]
+
+https://gogs.io[Gogs^] is a painless self-hosted Git service.
+
+The goal of this project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. 
+With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, 
+Mac OS X, Windows and ARM.
 --
 
 '''
@@ -90,41 +97,47 @@ Now that you have a Git repository for the Inventory service, you should push th
 source code into this Git repository.
 
 In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Quarkus: Generate a Maven project'*`
+`*run 'Git: Initialize Repository'*`
 
 image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
 
 `*Select the '/projects/workshop/labs/inventory-quarkus' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal with OpenShift tools by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'theia-ide' -> '>_ New terminal'*`:
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-ide-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
 
-In the window called **'>_ theia-ide terminal'**, `*execute the following commands*`:
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell]
-.>_ theia-ide terminal
+.>_ workshop-tools terminal
 ----
 $ cd /projects/workshop/labs/inventory-quarkus
 $ git remote add origin <PASTE-YOUR-GIT_REPO-URL-HERE>
 ----
 
+Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Git: Close Repository'*`
+
+Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Git: Open Repository' and select the '/projects/workshop/labs/inventory-quarkus' folder*`
+
 Open the **Source Code Management (SCM) view** via the shortcut `*Cmd+Shift+G ⌘⇧G on macOS or Ctrl+Shift+G ⌃⇧G on Windows and Linux.*`
 
-`*Click on '...' -> 'Stage All Changes' and select the 'inventory-quarkus' repo*`
+`*Click on '...' -> 'Stage All Changes'*`
 
 image:{% image_path che-scm-stage-all-changes.png %}[Che - SCM Stage All Changes, 500]
 
-`*Enter 'Initial' as commit message, click on the 'check' icon and select the 'inventory-quarkus' repo*`
+`*Click on the 'check' icon and enter 'Initial' as commit message*`
 
 image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
 
-`*Click on '...' -> 'Push' and select the 'inventory-quarkus' repo*`
+`*Click on '...' -> 'Push'*`
 
 image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
 
-`*Click on the 'Yes' button*` to publish the new **master branch**. 
+`*Click on the 'OK' button*` to publish the new **master branch**. 
 Finally, `*enter your Gogs credentials ({{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }})*`.
 
 image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
@@ -142,6 +155,14 @@ image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
 
 [sidebar]
 --
+image:{% image_path jenkins-logo.png %}[Gogs, 200]
+
+Jenkins is a self-contained, open source automation server which can be used to automate all sorts of tasks related to building, 
+testing, and delivering or deploying software.
+
+Jenkins can be installed through native system packages, Docker, or even run standalone by any machine with a 
+Java Runtime Environment (JRE) installed.
+
 --
 
 '''
@@ -241,25 +262,20 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 ----
 $ oc set triggers dc/inventory --manual #<1>
 $ oc new-app jenkins-ephemeral --param=MEMORY_LIMIT="2Gi" #<2>
-$ oc new-app jenkins-ephemeral --param=MEMORY_LIMIT="2Gi" #<3>
-$ oc new-app /projects/workshop/labs/inventory-quarkus --name=inventory-pipeline --strategy=pipeline #<4>
+$ oc patch dc/jenkins -p '{"spec":{"template":{"spec":{"containers":[{"name":"jenkins","resources":{"limits":{"cpu":"2"}}}]}}}}' #<3>
 ----
 <1> Disable automatic rollout trigger
 <2> Deploy a Jenkins server using the provided template and container image that 
 comes out-of-the-box with OpenShift
 <3> Change the CPU Limit of Jenkins Pod to 2Gi
-<4> Create a deployment pipeline. It creates a new build config of type pipeline 
-which is automatically configured to fetch the **Jenkinsfile** from the Git repository 
-and execute it on Jenkins
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on 'DC inventory' -> 'RT inventory'*`
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on the 'Open URL' icon of the Jenkins Server*`
 
 image:{% image_path openshift-jenkins-topology.png %}[OpenShift - Inventory Topology, 700]
 
-Your browser will be redirect on your **Jenkins Server** running on OpenShift.
-
-`*Log in as {{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }}*`
-
+Your browser will be redirect on your **Jenkins Server** running on OpenShift. 
+`*Log in as {{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }}*`.
 After Jenkins is deployed and is running, create a deployment pipeline by running the following command:
 
 [source,shell]
@@ -272,7 +288,7 @@ $ oc new-app . --name=inventory-pipeline --strategy=pipeline #<1>
 which is automatically configured to fetch the **Jenkinsfile** from the Git repository 
 and execute it on Jenkins
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], 
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Builds -> 'BC inventory-pipeline' -> 'Builds' -> 'B inventory-pipeline'*`
 
 image:{% image_path cd-pipeline-inprogress.png %}[OpenShift Pipeline,900]

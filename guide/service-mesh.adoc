@@ -180,7 +180,7 @@ from abstract Applications to Services and Workloads.
 
 Kiali provides an interactive graph view of your namespace in real time, being able to display the interactions at several levels (applications, versions, workloads), with contextual information and charts on the selected graph node or edge.
 
-In {{ KIALI_URL }}[Kiali Console^], `*Log in with OpenShift as {{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}}'*`
+In {{ KIALI_URL }}[Kiali Console^], `*log in with OpenShift as {{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}}'*`
 
 image:{% image_path kiali-login.png %}[Kiali- Log In,300]`
 
@@ -200,23 +200,19 @@ From the **'Graph' view**, `*enter the following configuration*`:
 
 |===
 
-image:{% image_path kiali-graph-param.png %}[Kiali- Graph,300]
-
 The outcome is a graph with all the services, connected by the requests going through them. 
 You can see how the services interact with each other. 
 
-image:{% image_path kiali-graph.png %}[Kiali- Graph,700]
-
-WARNING: Please ignore the error for the **Gateway Service**. 
-It is because the **Cart Service** is missing and its deployment is not a part of this lab.
+image:{% image_path kiali-graph.png %}[Kiali- Graph,900]
 
 '''
 
 === Tracing with Kiali and Jaeger
 
 [sidebar]
-.Jaeger, Distributed Tracing
 --
+image:{% image_path jaeger-logo.png %}[Jaeger,400]
+
 Jaeger, inspired by Dapper and OpenZipkin, is a distributed tracing system released as open source by Uber Technologies. 
 It is used for monitoring and troubleshooting microservices-based distributed systems, including:
 
