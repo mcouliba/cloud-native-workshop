@@ -5,18 +5,8 @@
     <license>Apache-2.0</license>
     <dependencies>
         <dependency>
-            <packageName>angular-patternfly</packageName>
-            <version>5.0.3</version>
-            <licenses>
-                <license>
-                    <name>MIT License</name>
-                    <url>http://www.opensource.org/licenses/MIT</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <packageName>angular-route</packageName>
-            <version>1.7.8</version>
+            <packageName>@patternfly/patternfly</packageName>
+            <version>2.36.2</version>
             <licenses>
                 <license>
                     <name>MIT License</name>
@@ -71,36 +61,6 @@
                 <license>
                     <name>MIT License</name>
                     <url>http://www.opensource.org/licenses/MIT</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <packageName>imagesloaded</packageName>
-            <version>4.1.1</version>
-            <licenses>
-                <license>
-                    <name>MIT License</name>
-                    <url>http://www.opensource.org/licenses/MIT</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <packageName>isotope-layout</packageName>
-            <version>3.0.6</version>
-            <licenses>
-                <license>
-                    <name>GNU General Public License v3.0 only</name>
-                    <url>http://www.gnu.org/licenses/gpl-3.0-standalone.html</url>
-                </license>
-            </licenses>
-        </dependency>
-        <dependency>
-            <packageName>keycloak-connect</packageName>
-            <version>7.0.0</version>
-            <licenses>
-                <license>
-                    <name>Apache License 2.0</name>
-                    <url>http://www.apache.org/licenses/LICENSE-2.0</url>
                 </license>
             </licenses>
         </dependency>

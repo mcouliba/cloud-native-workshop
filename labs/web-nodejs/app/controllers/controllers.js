@@ -3,15 +3,15 @@
 angular.module('app')
 
     .controller("HomeController",
-        ['$scope', '$http', '$filter', 'Notifications', 'cart', 'catalog', 'Auth',
-            function ($scope, $http, $filter, Notifications, cart, catalog, $auth) {
+        ['$scope', '$http', '$filter', /*'Notifications',*/ 'cart', 'catalog', 'Auth',
+            function ($scope, $http, $filter, /*Notifications,*/ cart, catalog, $auth) {
 
                 $scope.products = [];
                 $scope.addToCart = function (item) {
                     cart.addToCart(item.product, parseInt(item.quantity)).then(function (data) {
-                        Notifications.success("Added! Your total is " + $filter('currency')(data.cartTotal));
+                        // Notifications.success("Added! Your total is " + $filter('currency')(data.cartTotal));
                     }, function (err) {
-                        Notifications.error("Error adding to cart: " + err.statusText);
+                        // Notifications.error("Error adding to cart: " + err.statusText);
                     });
                 };
 
@@ -30,7 +30,7 @@ angular.module('app')
                 // initialize products
                 catalog.getProducts().then(function (data) {
                     if (data.error != undefined && data.error != "") {
-                        Notifications.error("Error retrieving products: " + data.error);
+                        // Notifications.error("Error retrieving products: " + data.error);
                         return;
                     }
                     $scope.products = data.map(function (el) {
@@ -40,7 +40,7 @@ angular.module('app')
                         }
                     })
                 }, function (err) {
-                    Notifications.error("Error retrieving products: " + err.statusText);
+                    // Notifications.error("Error retrieving products: " + err.statusText);
                 });
 
 
@@ -114,8 +114,8 @@ angular.module('app')
             }])
 
     .controller("HeaderController",
-        ['$scope', '$location', '$http', 'Notifications', 'cart', 'Auth',
-            function ($scope, $location, $http, Notifications, cart, $auth) {
+        ['$scope', '$location', '$http', 'cart', 'Auth',
+            function ($scope, $location, $http, cart, $auth) {
                 $scope.userInfo = $auth.userInfo;
 
                 $scope.cartTotal = 0.0;
