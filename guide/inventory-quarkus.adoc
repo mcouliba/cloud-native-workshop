@@ -37,44 +37,14 @@ love and use wired on a https://quarkus.io/vision/standards[standard backbone^].
 
 '''
 
-=== Bootstrap the Inventory Project
+=== Quarkus Maven Project
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Quarkus: Generate a Maven project'*`
+The **inventory-quarkus** project has the following structure which shows the components of 
+the Spring Boot project laid out in different subdirectories according to Maven best practices:
 
-image:{% image_path che-quarkus-generateproject.png %}[Che - Quarkus Generate Project, 600]
+image:{% image_path inventory-quarkus-project.png %}[Inventory Project,300]
 
-Then, enter the following information:
-
-.Quarkus Project
-[%header,cols=2*]
-|===
-|Parameter 
-|Value
-
-|GroupID
-|com.redhat.cloudnative
-
-|ArtificatID
-|inventory-quarkus
-
-|Version
-|1.0.0-SNAPSHOT
-
-|Package Name
-|com.redhat.cloudnative
-
-|Resource Name
-|InventoryResource
-
-|Extensions
-|RESTEasy JSONB (quarkus-resteasy-jsonb)
-
-|Project Path
-|/projects/workshop/labs
-|===
-
-This generates the **'/projects/workshop/labs/inventory-quarkus'** folder with the following content:
+The **'/projects/workshop/labs/inventory-quarkus'** folder contents:
 
 * the Maven structure
 * a com.redhat.cloudnative.InventoryResource resource exposed on /hello

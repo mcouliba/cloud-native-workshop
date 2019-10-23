@@ -32,9 +32,6 @@ are already made by Spring Boot so that you can get started with minimum effort 
 The **catalog-spring-boot** project has the following structure which shows the components of 
 the Spring Boot project laid out in different subdirectories according to Maven best practices:
 
-Once loaded, you should see the following files and be able to navigate amongst the files. The 
-components of the Spring Boot project are laid out in different subdirectories according to Maven best practices:
-
 image:{% image_path springboot-catalog-project.png %}[Catalog Project,300]
 
 This is a minimal Spring Boot project with support for RESTful services and Spring Data with JPA for connecting
