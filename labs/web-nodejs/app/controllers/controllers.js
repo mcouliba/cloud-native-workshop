@@ -3,17 +3,10 @@
 angular.module('app')
 
     .controller("HomeController",
-        ['$scope', '$http', '$filter', /*'Notifications',*/ 'cart', 'catalog', 'Auth',
-            function ($scope, $http, $filter, /*Notifications,*/ cart, catalog, $auth) {
+        ['$scope', '$http', '$filter', /*'Notifications',*/ 'catalog', 'Auth',
+            function ($scope, $http, $filter, /*Notifications,*/ catalog, $auth) {
 
                 $scope.products = [];
-                $scope.addToCart = function (item) {
-                    cart.addToCart(item.product, parseInt(item.quantity)).then(function (data) {
-                        // Notifications.success("Added! Your total is " + $filter('currency')(data.cartTotal));
-                    }, function (err) {
-                        // Notifications.error("Error adding to cart: " + err.statusText);
-                    });
-                };
 
                 $scope.isLoggedIn = function () {
                     return $auth.loggedIn;
@@ -46,76 +39,9 @@ angular.module('app')
 
             }])
 
-    .controller("CartController",
-        ['$scope', '$http', 'Notifications', 'cart', 'Auth',
-            function ($scope, $http, Notifications, cart, $auth) {
-
-                function reset() {
-                    $scope.cart = cart.getCart();
-                    $scope.items = $scope.cart.shoppingCartItemList;
-
-                    $scope.subtotal = 0;
-                    $scope.cart.shoppingCartItemList.forEach(function (item) {
-                        $scope.subtotal += (item.quantity * item.product.price);
-                    });
-                }
-
-                $scope.config = {
-                    selectItems: false,
-                    multiSelect: false,
-                    dblClick: false,
-                    showSelectBox: false
-                };
-
-                function performAction(action, item) {
-                    cart.removeFromCart(item.product, item.quantity).then(function (newCart) {
-                        reset();
-                    }, function (err) {
-                        Notifications.error("Error removing from cart: " + err.statusText);
-                    });
-                };
-
-                $scope.actionButtons = [
-                    {
-                        name: 'Remove',
-                        title: 'Remove',
-                        actionFn: performAction
-                    }
-                ];
-
-
-                $scope.$watch(function () {
-                    return cart.getCart();
-                }, function (newValue) {
-                    reset();
-                });
-
-                $scope.$watch(function () {
-                    return $auth.userInfo;
-                }, function (newValue) {
-                    cart.reset();
-                });
-
-                $scope.checkout = function () {
-                    cart.checkout().then(function (cartData) {
-                    }, function (err) {
-                        Notifications.error("Error checking out: " + err.statusText);
-                    });
-                };
-
-                $scope.isLoggedIn = function () {
-                    return $auth.loggedIn;
-                };
-                $scope.ssoEnabled = function () {
-                    return $auth.ssoEnabled;
-                };
-
-                reset();
-            }])
-
     .controller("HeaderController",
-        ['$scope', '$location', '$http', 'cart', 'Auth',
-            function ($scope, $location, $http, cart, $auth) {
+        ['$scope', '$location', '$http', 'Auth',
+            function ($scope, $location, $http, $auth) {
                 $scope.userInfo = $auth.userInfo;
 
                 $scope.cartTotal = 0.0;
@@ -140,21 +66,6 @@ angular.module('app')
                 $scope.profile = function () {
                     $auth.authz.accountManagement();
                 };
-                $scope.$watch(function () {
-                    return cart.getCart().cartTotal || 0.0;
-                }, function (newValue) {
-                    $scope.cartTotal = newValue;
-                });
-
-                $scope.$watch(function () {
-                    var totalItems = 0;
-                    cart.getCart().shoppingCartItemList.forEach(function (el) {
-                        totalItems += el.quantity;
-                    });
-                    return totalItems;
-                }, function (newValue) {
-                    $scope.itemCount = newValue;
-                });
 
                 $scope.$watch(function () {
                     return $auth.userInfo;
