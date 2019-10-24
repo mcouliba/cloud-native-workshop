@@ -181,14 +181,14 @@ $ oc autoscale dc/web --min 1 --max 5 --cpu-percent=40
 ----
 
 All set! Now the Web UI can scale automatically to multiple instances if the load on the CoolStore 
-online store increases. You can verify that using for example the **siege** command-line utility, which 
+online store increases. You can verify that using for example the **httperf** command-line utility, which 
 is a handy tool for running load tests against web endpoints and is already 
 installed within your workspace. 
 
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ siege -c80 -d2 -t5M http://web.{{PROJECT}}.svc.cluster.local:8080
+$ httperf --server web-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}} --num-conn 100 --num-calls 800 --rate 10 --timeout 5 --verbose
 ----
 
 [NOTE]
@@ -209,7 +209,7 @@ TIP: Depending on the resources available on the OpenShift cluster in the lab en
 the Web UI might scale to fewer than 5 pods to handle the extra load. Run the command again 
 to generate more load.
 
-image:{% image_path fault-autoscale-web.gif %}[Web UI Automatically Scaled,740]
+image:{% image_path fault-autoscale-web.png %}[Web UI Automatically Scaled,740]
 
 When the load on Web UI disappears, after a while OpenShift scales the Web UI pods down to the minimum 
 or whatever this needed to cope with the load at that point.
