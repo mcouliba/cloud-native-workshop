@@ -18,13 +18,14 @@ vars:
   LABS_GIT_REPO: https://github.com/openshift-labs/cloud-native-labs.git#ocp-3.11
   LABS_DOWNLOAD_URL: https://github.com/openshift-labs/cloud-native-labs/archive/ocp-3.11.zip
   WEB_NODEJS_GIT_REPO: https://github.com/openshift-labs/cloud-native-labs/tree/ocp-3.11/web-nodejs
-  WORKSHOP_GIT_REPO: 
+  WORKSHOP_GIT_REPO: http://WORKSHOP_GIT_REPO
   WORKSHOP_GIT_REF: master
   OPENSHIFT_CONSOLE_URL: OPENSHIFT-CONSOLE-URL
   INVENTORY_ROUTE_HOST: INVENTORY-ROUTE-HOST
   CATALOG_ROUTE_HOST: CATALOG-ROUTE-HOST
   API_GATEWAY_ROUTE_HOST: API-GATEWAY-ROUTE-HOST
   CHE_URL: http://che-eclipse-che.apps.192.168.99.100.nip.io
+  GOGS_URL: http://gogs-gogs-server-workshop-infra.apps.192.168.99.100.nip.io
   JAEGER_URL: http://jaeger-istio-system.apps.192.168.99.100.nip.io
   NEXUS_URL: http://nexus.workshop-infra.apps.192.168.99.100.nip.io
   KIALI_URL: http://kiali-istio-system.apps.192.168.99.100.nip.io
