@@ -19,7 +19,7 @@ vars:
   LABS_DOWNLOAD_URL: https://github.com/openshift-labs/cloud-native-labs/archive/ocp-3.11.zip
   WEB_NODEJS_GIT_REPO: https://github.com/openshift-labs/cloud-native-labs/tree/ocp-3.11/web-nodejs
   WORKSHOP_GIT_REPO: 
-  WORKSHOP_GIT_REF:
+  WORKSHOP_GIT_REF: master
   OPENSHIFT_CONSOLE_URL: OPENSHIFT-CONSOLE-URL
   INVENTORY_ROUTE_HOST: INVENTORY-ROUTE-HOST
   CATALOG_ROUTE_HOST: CATALOG-ROUTE-HOST
