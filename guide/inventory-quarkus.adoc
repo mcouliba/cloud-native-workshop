@@ -207,7 +207,7 @@ https://quarkus.io/guides/hibernate-orm-guide[Hibernate ORM^] is the de facto JP
 the full breath of an Object Relational Mapper. It works beautifully in Quarkus.
 
 Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus/pom.xml**. 
-In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file:
+In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
 
 [source,xml]
 .pom.xml
