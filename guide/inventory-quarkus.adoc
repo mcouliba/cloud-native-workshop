@@ -90,7 +90,7 @@ of the application and also providing the development mode.
 </build>
 ----
 
-If we focus on the dependencies section, you can see the extension allowing the development of REST applications:
+If we focus on the dependencies section, you can see the following extensions:
 
 [source,xml]
 .pom.xml
@@ -99,7 +99,32 @@ If we focus on the dependencies section, you can see the extension allowing the 
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-resteasy-jsonb</artifactId>
     </dependency>
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-hibernate-orm</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
 ----
+
+.Quarkus Extensions
+[%header,cols=2*]
+|===
+|Name 
+|Description
+
+|https://quarkus.io/guides/rest-json-guide[JSON REST Services^]
+|It allows you to develop REST services to consume and produce JSON payloads
+
+|https://quarkus.io/guides/hibernate-orm-guide[Hibernate ORM^]
+|The de facto JPA implementation and offers you the full breath of an Object Relational Mapper. 
+
+|https://quarkus.io/guides/datasource-guide#h2[Datasources (H2)^]
+|Using datasources is the main way of obtaining connections to a database.
+
+|===
 
 `*Examine 'src/main/java/com/redhat/cloudnative/InventoryResource.java' file*`:
 
@@ -203,26 +228,7 @@ Now let's write some code and create a domain model and a RESTful endpoint to cr
 
 === Create a Domain Model
 
-https://quarkus.io/guides/hibernate-orm-guide[Hibernate ORM^] is the de facto JPA implementation and offers you 
-the full breath of an Object Relational Mapper. It works beautifully in Quarkus.
-
-Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus/pom.xml**. 
-In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
-
-[source,xml]
-.pom.xml
-----
-    <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-hibernate-orm</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-jdbc-h2</artifactId>
-    </dependency>
-----
-
-Once done, `*create the 'src/main/java/com/redhat/cloudnative/Inventory.java' file`* as following:
+`*Create the 'src/main/java/com/redhat/cloudnative/Inventory.java' file`* as following:
 
 [source,java]
 .Inventory.java

@@ -1,0 +1,59 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: increment-version
+spec:
+  inputs:
+    resources:
+      - name: source-repo
+        type: git
+      params:
+      - name: appName
+        default: sample
+        description: The name of the application
+  outputs:
+    resources:
+      - name: source-repo
+        type: git 
+  steps:
+    - name: get-current-version
+      image: 'quay.io/openshift/origin-cli:latest'
+      command:
+        - /usr/bin/bash
+      args:
+        - '-c'
+        - >-
+          oc get imagestream $(inputs.params.appName) -o=jsonpath='{range
+          .status.tags[*]}{.tag}{"\n"}{end}' | grep -v latest | sort -r | head
+          -1 > /workspace/source-repo/version.txt && cat
+          /workspace/source-repo/version.txt
+    - name: get-next-version
+      image: 'perl:5.30'
+      command:
+        - perl
+      args:
+        - '-e'
+        - >-
+          open my $fh_version, '<', '/workspace/source-repo/version.txt' or die
+          "Can't open file $!";
+
+          my $current_version = do { local $/; <$fh_version> };
+
+          close $fh_version;
+
+          if ($current_version eq "") {
+              $next_version = "1.0\n";
+          } else {
+              $next_version = $current_version;
+              $next_version =~ s/^(.*)(\d+\.)*(\d+)(.*)/$1.$2.($3+1).$4/e;
+          }
+
+          open(my $fh_next_version, '>',
+          '/workspace/output/source-repo/next_version.txt');
+
+          print $fh_next_version $next_version;
+
+          close $fh_next_version;
+
+          print $next_version

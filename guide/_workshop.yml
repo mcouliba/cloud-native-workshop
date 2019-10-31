@@ -42,7 +42,7 @@ modules:
   - app-health
   - fault-tolerance
   - app-config
-  - continuous-delivery-jenkins
+  - continuous-delivery-tekton
   - service-mesh
   - abtesting
   - env-info

@@ -38,6 +38,8 @@ modules:
     name:  Externalize Application Configuration
   continuous-delivery-jenkins:
     name:  Continuous Delivery with Jenkins
+  continuous-delivery-tekton:
+    name:  Continuous Delivery with Openshift Pipelines
   debug:
     name:  Debugging Applications
   service-mesh:

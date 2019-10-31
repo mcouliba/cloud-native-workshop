@@ -1,0 +1,398 @@
+==  Automating Deployments Using OpenShift Pipelines
+
+_20 MINUTE EXERCISE_
+
+In this lab you will learn about deployment pipelines and you will create a pipeline to 
+automate build and deployment of the Inventory service.
+
+[sidebar]
+.Continuous Delivery
+--
+So far you have been building and deploying each service manually to OpenShift. Although 
+it's convenient for local development, it's an error-prone way of delivering software if 
+extended to test and production environments.
+
+Continuous Delivery (CD) refers to a set of practices with the intention of automating 
+various aspects of delivery software. One of these practices is called **Delivery Pipeline** 
+which is an automated process to define the steps a change in code or configuration has 
+to go through in order to reach upper environments and eventually to production. 
+
+OpenShift simplifies building CI/CD Pipelines by integrating
+the popular https://jenkins.io/doc/book/pipeline/overview/[Jenkins Pipelines^] into
+the platform and enables defining truly complex workflows directly from within OpenShift.
+--
+
+'''
+
+=== What is Gogs?
+
+[sidebar]
+--
+image:{% image_path gogs-logo.png %}[Gogs, 150]
+
+https://gogs.io[Gogs^] is a painless self-hosted Git service.
+
+The goal of this project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. 
+With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, 
+Mac OS X, Windows and ARM.
+--
+
+'''
+
+=== Create a Git Repository for Inventory
+
+The first step for any deployment pipeline is to store all code and configurations in 
+a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
+Gogs git server.
+
+In {{ GOGS_URL }}[Gogs^], `*Click on 'Register'*` to register a new user with the following details:
+
+
+.Gogs Registration
+[%header,cols=2*]
+|===
+|Parameter
+|Value
+
+|Username 
+|{{OPENSHIFT_USER}}
+
+|Email
+|your email  (Don't worry! Gogs won't send you any emails)
+
+|Password
+|{{OPENSHIFT_PASSWORD}}
+
+| Re-Type
+|{{OPENSHIFT_PASSWORD}}
+
+|===
+
+image:{% image_path cd-gogs-signup.png %}[Sign Up Gogs,700]
+
+`*Click on 'Create New Account'*`. 
+You will be redirected to the sign in page. Sign in using the above username and password.
+
+`*Click on the plus icon*` as below
+
+image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
+
+
+`*Give 'inventory-quarkus' as Repository Name and click on 'Create Repository' button*`
+
+image:{% image_path cd-gogs-new-repo.png %}[Create New Repository,700]
+
+The Git repository is created now. 
+
+`*Click on the copy-to-clipboard icon*` to near the 
+HTTP Git url to copy it to the clipboard which you will need in a few minutes.
+
+image:{% image_path cd-gogs-empty-repo.png %}[Empty Repository,900]
+
+'''
+
+=== Push Inventory Code to the Git Repository
+
+Now that you have a Git repository for the Inventory service, you should push the 
+source code into this Git repository.
+
+In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Git: Initialize Repository'*`
+
+image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
+
+`*Select the '/projects/workshop/labs/inventory-quarkus' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
+
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ cd /projects/workshop/labs/inventory-quarkus
+$ git remote add origin {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/inventory-quarkus
+----
+
+Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Git: Close Repository'*`
+
+Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Git: Open Repository' and select the '/projects/workshop/labs/inventory-quarkus' folder*`
+
+Open the **Source Code Management (SCM) view** via the shortcut `*Cmd+Shift+G ⌘⇧G on macOS or Ctrl+Shift+G ⌃⇧G on Windows and Linux.*`
+
+`*Click on '...' -> 'Stage All Changes'*`
+
+image:{% image_path che-scm-stage-all-changes.png %}[Che - SCM Stage All Changes, 500]
+
+`*Click on the 'check' icon and enter 'Initial' as commit message*`
+
+image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
+
+`*Click on '...' -> 'Push'*`
+
+image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
+
+`*Click on the 'OK' button*` to publish the new **master branch**. 
+Finally, `*enter your Gogs credentials ({{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }})*`.
+
+image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
+
+image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
+
+Once done, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
+see the project files in the repository.
+
+image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
+
+'''
+
+=== What is OpenShift Pipelines?
+
+[sidebar]
+--
+image:{% image_path tekton-logo.png %}[Tekton, 300]
+
+OpenShift Pipelines is a cloud-native, continuous integration and continuous delivery (CI/CD) solution 
+for building pipelines based on  https://github.com/tektoncd/pipeline[Tekton Pipelines^] project.
+
+* Standard CI/CD pipeline definition based on Tekton
+* Build images with Kubernetes tools such as S2I, Buildah, Buildpacks, Kaniko, etc
+* Deploy applications to multiple platforms such as Kubernetes, serverless and VMs
+* Easy to extend and integrate with existing tools
+* Scale pipelines on-demand
+* Portable across any Kubernetes platform
+* Designed for microservices and decentralized teams
+* Integrated with the OpenShift Developer Console
+
+https://github.com/tektoncd/pipeline[Tekton Pipelines^] provides Kubernetes-style resources for creating serverless 
+CI/CD-style pipelines on Kubernetes.
+
+The custom resources needed to define a pipeline are:
+
+* **Task** - a reusable, loosely coupled number of steps that perform a specific task (e.g., building a container image)
+* **Pipeline** - the definition of the pipeline and the **Task** that it should perform
+* **PipelineResource** - inputs (e.g., git repository) and outputs (e.g., image registry) to and out of a **Pipeline** or **Task**
+* **TaskRun** - the result of running an instance of **Task**
+* **PipelineRun** - the result of running an instance of **Pipeline**, which includes a number of **TaskRun**
+
+image:{% image_path tekton-architecture.png %}[Tekton Architecture, 600]
+
+--
+
+'''
+
+=== Disable Automatic Deployment Trigger
+
+OpenShift automates deployments using {{OPENSHIFT_DOCS_BASE}}/dev_guide/deployments/basic_deployment_operations.html#triggers[deployment triggers^] 
+that react to changes to the container image or configuration. 
+Since you want to control the deployments instead from the pipeline, 
+you should remove the Inventory deploy triggers so that building a new Inventory container 
+image wouldn't automatically result in a new deployment. That would allow the pipeline to decide when a 
+deployment should occur.
+
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ oc set triggers dc/inventory --manual
+----
+
+'''
+
+=== Create a Task
+
+A **Task** consists of a collection of steps that are executed sequentially. 
+Each **Task** is executed in a separate container within the same pod. 
+They can also have inputs and outputs in order to interact with other tasks in the pipeline.
+
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ cat <<EOF | oc create -f -
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: maven-build
+spec:
+  inputs:
+    resources:
+    - name: source-repo
+      type: git
+  outputs:
+    resources:
+    - name: source-repo
+      type: git    
+  steps:
+  - name: build
+    image: 'maven:3.6.0-jdk-8-slim'
+    workingdir: /workspace/source-repo
+    command:
+    - /usr/bin/mvn
+    args:
+    - clean 
+    - package 
+    - '-DskipTests' 
+    volumeMounts:
+    - mountPath: /.m2
+      name: m2-folder
+  - name: copy-jar
+    image: 'registry.access.redhat.com/ubi8/ubi-minimal:latest'
+    command:
+    - /usr/bin/bash
+    args: 
+    - '-c'
+    - 'cp /workspace/source-repo/target/*.jar /workspace/output/source-repo/ROOT.jar'
+  volumes:
+  - name: m2-folder
+    emptyDir: {}
+EOF
+----
+
+'''
+
+=== Create a Pipeline
+
+A **Pipeline** defines a number of **Task** that should be executed and how they interact 
+with each other via their inputs and outputs.
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ cat <<EOF | oc create -f -
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: my-pipeline
+spec:
+  resources:
+  - name: app-git
+    type: git
+  tasks:
+  - name: build-jar
+    taskRef:
+      name: maven-build
+    resources:
+      inputs:
+      - name: source-repo
+        resource: app-git
+      outputs:
+      - name: source-repo
+        resource: app-git
+EOF
+----
+
+'''
+
+=== Create a Pipeline Resource
+
+A **PipelineResource** in a pipeline are the set of objects that are going to be used as inputs to a **Task** 
+and can be output by a **Task**.
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ cat <<EOF | oc create -f -
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: inventory-git
+spec:
+  type: git
+  params:
+  - name: url
+    value: {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/inventory-quarkus.git
+  - name: revision
+    value: master
+EOF
+----
+
+'''
+
+=== Run the Pipeline
+
+Now that your pipeline is created and configured, let's trigger it.
+
+In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Task: Run Task...' ->  'che: Pipeline - Start Mine'*`
+
+image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+
+image:{% image_path che-pipeline-start-mine.png %}[Che - Pipeline Start Mine, 500]
+
+Once done, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'Last Run - my-pipeline-run'*`
+
+image:{% image_path openshift-pipeline-mine.png %}[OpenShift Pipeline,400]
+
+Congratulations!! You have created and run your first **OpenShift Pipeline with Tekton**!!
+
+'''
+
+=== Expand your Pipeline
+
+Now, you have learnt and understood how to create a simple **Pipeline** with **Task** and **PipelineResource**.
+Let's create more tasks and expand the existing pipeline.
+
+In your {{ CHE_URL }}[Workspace^], `*double click on the following files*` then 
+via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Kubernetes: Create'*`
+
+image:{% image_path che-kubernetes-create.png %}[Che - Kubernetes Create, 500]
+
+.OpenShift Pipeline
+[%header,cols=2*]
+|===
+|OpenShift Resource
+|Description
+
+|/projects/workshop/labs/pipelines/increment-version-task.yaml
+|
+
+|/projects/workshop/labs/pipelines/s2i-jar-task.yaml
+|
+
+|/projects/workshop/labs/pipelines/oc-tag-image-task.yaml
+|
+
+|/projects/workshop/labs/pipelines/oc-deploy-task.yaml 
+|
+
+|/projects/workshop/labs/pipelines/application-pipeline.yaml
+|
+
+|===
+
+Once created, via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+`*run 'Task: Run Task...' ->  'che: Pipeline - Start Full'*`
+
+image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+
+image:{% image_path che-pipeline-start-full.png %}[Che - Pipeline Start Full, 500]
+
+Back into the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'Last Run - application-pipeline-run'*`
+
+image:{% image_path openshift-pipeline-full.png %}[OpenShift Pipeline,900]
+
+Well done! You are ready for the next lab.

@@ -1,0 +1,31 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: oc-tag-image
+spec:
+  inputs:
+    resources:
+      - name: source-repo
+        type: git
+    params:
+      - name: appName
+        default: sample
+        description: The name of the application
+  steps:
+    - name: tag
+      image: 'quay.io/openshift/origin-cli:latest'
+      command:
+        - /usr/bin/bash
+      args:
+        - '-c'
+        - >-
+          oc tag $(inputs.params.appName):latest $(inputs.params.appName):$(cat /workspace/source-repo/next_version.txt)
+    - name: update-deployment-config
+      image: 'quay.io/openshift/origin-cli:latest'
+      command:
+        - /usr/bin/bash
+      args:
+        - '-c'
+        - >-
+          oc patch dc $(inputs.params.appName) --patch '{"spec": {"template": {"spec": {"containers": [{"name": "$(inputs.params.appName)", "image": "$(inputs.params.appName):$(cat /workspace/source-repo/next_version.txt)"}]}}}}'

@@ -289,7 +289,7 @@ which is automatically configured to fetch the **Jenkinsfile** from the Git repo
 and execute it on Jenkins
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Builds -> 'BC inventory-pipeline' -> 'Builds' -> 'B inventory-pipeline'*`
+`*click on 'Builds' -> 'BC inventory-pipeline' -> 'Builds' -> 'B inventory-pipeline'*`
 
 image:{% image_path cd-pipeline-inprogress.png %}[OpenShift Pipeline,900]
 

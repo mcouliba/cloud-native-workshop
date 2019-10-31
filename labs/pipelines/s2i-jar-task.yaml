@@ -1,0 +1,24 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: s2i-jar
+spec:
+  inputs:
+    resources:
+      - name: source-repo
+        type: git
+    params:
+      - name: appName
+        default: sample
+        description: The name of the application 
+  steps:
+    - name: build-image
+      image: 'quay.io/openshift/origin-cli:latest'
+      command:
+        - /usr/bin/oc 
+      args:
+        - start-build
+        - $(inputs.params.appName)
+        - '--from-file=/workspace/source-repo/ROOT.jar'
+        - '--follow'

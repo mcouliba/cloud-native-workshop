@@ -1,0 +1,78 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: application-pipeline
+spec:
+  resources:
+  - name: app-git
+    type: git
+  params:
+  - name: appName
+    default: todefine
+    description: The name of the application
+  tasks:
+  - name: build-jar
+    taskRef:
+      name: maven-build
+    resources:
+      inputs:
+      - name: source-repo
+        resource: app-git
+      outputs:
+      - name: source-repo
+        resource: app-git
+  - name: build-image
+    taskRef:
+      name: s2i-jar
+    runAfter:
+      - build-jar
+    resources:
+      inputs:
+      - name: source-repo
+        resource: app-git
+        from: 
+        - build-jar
+    params:
+    - name: appName
+      value: '$(params.appName)'
+  - name: get-next-tag
+    taskRef:
+      name: increment-version
+    runAfter:
+      - build-jar
+    resources:
+      inputs:
+      - name: source-repo
+        resource: app-git
+        from: 
+        - build-jar
+      outputs:
+      - name: source-repo
+        resource: app-git
+    params:
+    - name: appName
+      value: '$(params.appName)'
+  - name: tag-image
+    taskRef:
+      name: oc-tag-image
+    runAfter:
+      - get-next-tag
+      - build-image
+    resources:
+      inputs:
+      - name: source-repo
+        resource: app-git
+        from: 
+        - get-next-tag
+    params:
+    - name: appName
+      value: '$(params.appName)'
+  - name: deploy
+    taskRef:
+      name: oc-deploy
+    runAfter:
+      - tag-image
+    params:
+    - name: appName
+      value: '$(params.appName)'
