@@ -8,7 +8,7 @@ spec:
     resources:
       - name: source-repo
         type: git
-      params:
+    params:
       - name: appName
         default: sample
         description: The name of the application
