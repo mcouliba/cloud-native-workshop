@@ -97,7 +97,15 @@ commands:
         type: exec
         command: ./runGatewayService.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
-  - name: 'Pipeline - Start'
+  - name: 'Pipeline - Start Mine'
+    actions:
+      - type: exec
+        command: >-
+          echo "------ START ------" &&
+          tkn pipeline start my-pipeline --resource app-git=inventory-git --param appName=inventory --serviceaccount pipeline &&
+          echo "------  END  ------"
+        component: workshop-tools
+  - name: 'Pipeline - Start Full'
     actions:
       - type: exec
         command: >-
