@@ -101,7 +101,7 @@ commands:
     actions:
       - type: exec
         command: >-
-          echo "------ START ------"
+          echo "------ START ------" &&
           tkn pipeline start application-pipeline --resource app-git=inventory-git --param appName=inventory --serviceaccount pipeline &&
           echo "------  END  ------"
         component: workshop-tools
