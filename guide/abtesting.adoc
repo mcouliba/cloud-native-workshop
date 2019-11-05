@@ -46,12 +46,13 @@ Then, `*enter the following information and click on 'Create' button*` :
 |Labels
 |app=catalog
 
-group=com.redhat.cloudnative,provider=fabric8
+group=com.redhat.cloudnative
+
+provider=fabric8
 
 app.kubernetes.io/name=golang
 
 version=2.0
-
 
 |===
 
