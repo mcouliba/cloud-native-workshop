@@ -28,4 +28,4 @@ spec:
       args:
         - '-c'
         - >-
-          oc patch dc $(inputs.params.appName) --patch '{"spec": {"template": {"spec": {"containers": [{"name": "$(inputs.params.appName)", "image": "$(inputs.params.appName):$(cat /workspace/source-repo/next_version.txt)"}]}}}}'
+          oc patch dc $(inputs.params.appName) --patch '{"spec": {"template": {"spec": {"containers": [{"name": "$(inputs.params.appName)", "image": "$(inputs.params.appName):'$(cat /workspace/source-repo/next_version.txt)'"}]}}}}'
