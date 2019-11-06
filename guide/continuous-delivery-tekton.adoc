@@ -205,7 +205,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set triggers dc/inventory --manual
+$ oc set triggers dc/inventory --remove-all
 ----
 
 '''

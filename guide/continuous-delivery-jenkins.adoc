@@ -260,11 +260,11 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set triggers dc/inventory --manual #<1>
+$ oc set triggers dc/inventory --remove-all #<1>
 $ oc new-app jenkins-ephemeral --param=MEMORY_LIMIT="2Gi" #<2>
 $ oc patch dc/jenkins -p '{"spec":{"template":{"spec":{"containers":[{"name":"jenkins","resources":{"limits":{"cpu":"2"}}}]}}}}' #<3>
 ----
-<1> Disable automatic rollout trigger
+<1> Remove all automatic rollout triggers
 <2> Deploy a Jenkins server using the provided template and container image that 
 comes out-of-the-box with OpenShift
 <3> Change the CPU Limit of Jenkins Pod to 2Gi

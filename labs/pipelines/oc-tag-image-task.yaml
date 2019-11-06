@@ -28,4 +28,5 @@ spec:
       args:
         - '-c'
         - >-
-          oc patch dc $(inputs.params.appName) --patch '{"spec": {"template": {"spec": {"containers": [{"name": "$(inputs.params.appName)", "image": "$(inputs.params.appName):'$(cat /workspace/source-repo/next_version.txt)'"}]}}}}'
+          PROJECT_NAME=$(oc get is $(inputs.params.appName) -o=jsonpath='{.metadata.namespace}') && 
+          oc patch dc $(inputs.params.appName) --patch '{"spec": {"template": {"spec": {"containers": [{"name": "$(inputs.params.appName)", "image": "image-registry.openshift-image-registry.svc:5000/'${PROJECT_NAME}'/$(inputs.params.appName):'$(cat /workspace/source-repo/next_version.txt)'"}]}}}}'
