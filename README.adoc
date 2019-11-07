@@ -4,7 +4,7 @@
 
 This one day hands-on cloud-native workshops provides developers and introduction to cloud-natives applications 
 and gives them an experience of building cloud-native applications using OpenShift, Eclipse Che7, Spring Boot, 
-Quarkus, Vert.xt and more.
+Quarkus, Vert.x and more.
 
 == Agenda
 
