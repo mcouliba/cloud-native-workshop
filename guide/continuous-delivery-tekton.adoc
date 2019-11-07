@@ -188,7 +188,7 @@ image:{% image_path tekton-architecture.png %}[Tekton Architecture, 600]
 
 === Disable Automatic Deployment Trigger
 
-OpenShift automates deployments using {{OPENSHIFT_DOCS_BASE}}/dev_guide/deployments/basic_deployment_operations.html#triggers[deployment triggers^] 
+OpenShift automates deployments using https://docs.openshift.com/container-platform/4.2/welcome/index.html[deployment triggers^] 
 that react to changes to the container image or configuration. 
 Since you want to control the deployments instead from the pipeline, 
 you should remove the Inventory deploy triggers so that building a new Inventory container 
@@ -334,7 +334,7 @@ EOF
 Now that your pipeline is created and configured, let's trigger it.
 
 In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: Pipeline - Start Mine'*`
+`*run 'Task: Run Task...' ->  'Pipeline - Start Mine'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -387,7 +387,7 @@ of your application.
 |===
 
 Once created, via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: Pipeline - Start Full'*`
+`*run 'Task: Run Task...' ->  'Pipeline - Start Full'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 

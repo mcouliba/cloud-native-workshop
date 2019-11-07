@@ -147,7 +147,7 @@ Let's now see the A/B testing with Site Mesh in action.
 First, we need to generate HTTP traffic by sending several requests to the **Gateway Service** from the **Istio Gateway**
 
 In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: Gateway - Generate Traffic'*`
+`*run 'Task: Run Task...' ->  'Gateway - Generate Traffic'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 

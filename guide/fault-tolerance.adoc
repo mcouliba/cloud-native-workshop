@@ -125,14 +125,14 @@ down. Since the deployment config is used when starting the application pods, th
 
 When allocating compute resources to application pods, each container may specify a *request*
 and a *limit* value each for CPU and memory. The 
-{{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#dev-memory-requests[*request*^] 
+https://docs.openshift.com/container-platform/4.2/welcome/index.html[*request*^] 
 values define how much resource should be dedicated to an application pod so that it can run. It's 
 the minimum resources needed in other words. The 
-{{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#dev-memory-limits[*limit*^] values 
+https://docs.openshift.com/container-platform/4.2/welcome/index.html[*limit*^] values 
 defines how much resource an application pod is allowed to consume, if there is more resources 
 on the node available than what the pod has requested. This is to allow various quality of service 
 tiers with regards to compute resources. You can read more about these quality of service tiers 
-in {{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#quality-of-service-tiers[OpenShift Documentation^].
+in https://docs.openshift.com/container-platform/4.2/welcome/index.html[OpenShift Documentation^].
 
 Set the following resource constraints on the Web UI pod:
 
@@ -167,7 +167,7 @@ operating system to determine the amount of CPU cores on the node, then multipli
 that value by 1000 to express its total capacity. For example, if a node has 2 cores, 
 the node’s CPU capacity would be represented as 2000m. If you wanted to use 1/10 of 
 a single core, it would be represented as 100m. Memory is measured in 
-bytes and is specified with {{OPENSHIFT_DOCS_BASE}}/dev_guide/compute_resources.html#dev-compute-resources[SI suffices^] 
+bytes and is specified with https://docs.openshift.com/container-platform/4.2/welcome/index.html[SI suffices^] 
 (E, P, T, G, M, K) or their power-of-two-equivalents (Ei, Pi, Ti, Gi, Mi, Ki).
 
 The pods get restarted automatically setting the new resource limits in effect. Now you can define an 
@@ -188,7 +188,7 @@ installed within your workspace.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ httperf --server web-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}} --num-conn 100 --num-calls 800 --rate 10 --timeout 5 --verbose
+$ httperf --server web.{{PROJECT}}.svc:8080 --num-conn 100 --num-calls 800 --rate 10 --timeout 5 --verbose
 ----
 
 [NOTE]
@@ -196,9 +196,9 @@ $ httperf --server web-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}} --num-conn 100 --num
 ====
 You are using the internal url of the Web UI in this command. Since your Workspace is running on 
 the same OpenShift cluster as Web UI, you can choose to use the external URL that is exposed on the load balancer 
-or the internal user which goes directly to the Web UI pod and bypasses the load balancer. You can 
+or the internal one which goes directly to the Web UI pod and bypasses the load balancer. You can 
 read more about internal service dns names in 
-{{OPENSHIFT_DOCS_BASE}}/architecture/networking/networking.html[OpenShift Docs^].
+https://docs.openshift.com/container-platform/4.2/welcome/index.html[OpenShift Docs^].
 ====
 
 As the load is generated, you will notice that it will create a spike in the 
@@ -222,20 +222,20 @@ We looked at how to build more resilience into the applications through scaling 
 previous sections. In this section, you will learn how to recover application pods when 
 failures happen. In fact, you don't need to do anything because OpenShift automatically 
 recovers failed pods when pods are not feeling healthy. The healthiness of application pods is determined via the 
-{{OPENSHIFT_DOCS_BASE}}/dev_guide/application_health.html#container-health-checks-using-probes[health probes^] 
+https://docs.openshift.com/container-platform/4.2/welcome/index.html[health probes^] 
 which was discussed in the previous labs.
 
 There are three auto-healing scenarios that OpenShift handles automatically:
 
 * Application Pod Temporary Failure: when an application pod fails and does not pass its 
-{{OPENSHIFT_DOCS_BASE}}/dev_guide/application_health.html#container-health-checks-using-probes[liveness health probe^],  
+https://docs.openshift.com/container-platform/4.2/welcome/index.html[liveness health probe^],  
 OpenShift restarts the pod in order to give the application a chance to recover and start functioning 
 again. Issues such as deadlocks, memory leaks, network disturbance and more are all examples of issues 
 that can most likely be resolved by restarting the application despite the potential bug remaining in the 
 application.
 
 * Application Pod Permanent Failure: when an application pod fails and does not pass its 
-{{OPENSHIFT_DOCS_BASE}}/dev_guide/application_health.html#container-health-checks-using-probes[readiness health probe^], 
+https://docs.openshift.com/container-platform/4.2/welcome/index.html[readiness health probe^], 
 it signals that the failure is more severe and restart is unlikely to help to mitigate the issue. OpenShift then 
 removes the application pod from the load-balancer to prevent sending traffic to it.
 

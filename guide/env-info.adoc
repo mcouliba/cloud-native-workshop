@@ -6,8 +6,8 @@ labs in this page. Note that the urls are also embedded inside each lab instruct
 OPENSHIFT::
 {{ OPENSHIFT_CONSOLE_URL }}
 
-GIT SERVER::
-{{ GIT_URL }}
+GOGS SERVER::
+{{ GOGS_URL }}
 
 NEXUS MAVEN REPOSITORY::
 {{ NEXUS_URL }}
@@ -21,5 +21,5 @@ KIALI::
 JAEGER::
 {{ JAEGER_URL }}
 
-OPENSHIFT DOCS::
-{{ OPENSHIFT_DOCS_BASE }}
+KIBANA_URL::
+{{ KIBANA_URL }}

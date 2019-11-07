@@ -66,7 +66,7 @@ You can use Maven to make sure the skeleton project builds successfully. You sho
 in the build logs, otherwise the build has failed.
 
 In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: Catalog - Build'*`
+`*run 'Task: Run Task...' ->  'Catalog - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -240,7 +240,7 @@ https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-spring
 
 Now, let's build and package the **Catalog Service** using Maven.
 Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: Catalog - Build'*`
+`*run 'Task: Run Task...' ->  'Catalog - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -248,7 +248,7 @@ image:{% image_path che-catalog-build.png %}[Che - Catalog Build, 500]
 
 Once done, you can conviently run your service using **Spring Boot maven plugin** and test the endpoint. 
 Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: Catalog - Run'*`
+`*run 'Task: Run Task...' ->  'Catalog - Run'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -282,7 +282,7 @@ In your {{ CHE_URL }}[Workspace^], stop the service by `*hitting Ctrl+c in the '
 
 It’s time to build and deploy our service on OpenShift. 
 
-OpenShift {{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/builds_and_image_streams.html#source-build[Source-to-Image (S2I)^] 
+OpenShift https://docs.openshift.com/container-platform/4.2/welcome/index.html[Source-to-Image (S2I)^] 
 feature can be used to build a container image from your project. OpenShift 
 S2I uses the https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift[supported OpenJDK container image^] to build the final container image 
 of the **Catalog Service** by uploading the Spring Boot uber-jar from the **target/** 
@@ -293,7 +293,7 @@ This maven plugin is a Kubernetes/OpenShift client and uses the REST API to comm
 deploy and launch the application as a pod.
 
 Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'che: Catalog - Deploy on OpenShift'*`
+`*run 'Task: Run Task...' ->  'Catalog - Deploy on OpenShift'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 

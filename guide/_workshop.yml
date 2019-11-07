@@ -2,7 +2,7 @@ id: "cloudnative"
 name: "OpenShift Cloud-Native Workshop"
 
 content:
-  url: https://raw.githubusercontent.com/openshift-labs/cloud-native-guides/ocp-3.11
+  url: https://raw.githubusercontent.com/mcouliba/cloud-native-workshop/master
 
 vars:
   OPENSHIFT_CONSOLE_URL: "https://console-openshift-console.192.168.99.100.nip.io"
@@ -12,18 +12,8 @@ vars:
   OPENSHIFT_PASSWORD: PASSWORD
   PROJECT: cn-projectX
   INFRA_PROJECT: infraX
-  DOWNLOAD_CLIENT_WINDOWS: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/windows/oc.zip
-  DOWNLOAD_CLIENT_MAC: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/macosx/oc.tar.gz
-  DOWNLOAD_CLIENT_LIN64: https://mirror.openshift.com/pub/openshift-v3/clients/3.11.16/linux/oc.tar.gz
-  LABS_GIT_REPO: https://github.com/openshift-labs/cloud-native-labs.git#ocp-3.11
-  LABS_DOWNLOAD_URL: https://github.com/openshift-labs/cloud-native-labs/archive/ocp-3.11.zip
-  WEB_NODEJS_GIT_REPO: https://github.com/openshift-labs/cloud-native-labs/tree/ocp-3.11/web-nodejs
-  WORKSHOP_GIT_REPO: http://WORKSHOP_GIT_REPO
+  WORKSHOP_GIT_REPO: https://github.com/mcouliba/cloud-native-workshop
   WORKSHOP_GIT_REF: master
-  OPENSHIFT_CONSOLE_URL: OPENSHIFT-CONSOLE-URL
-  INVENTORY_ROUTE_HOST: INVENTORY-ROUTE-HOST
-  CATALOG_ROUTE_HOST: CATALOG-ROUTE-HOST
-  API_GATEWAY_ROUTE_HOST: API-GATEWAY-ROUTE-HOST
   CHE_URL: http://che-eclipse-che.apps.192.168.99.100.nip.io
   GOGS_URL: http://gogs-gogs-server-workshop-infra.apps.192.168.99.100.nip.io
   JAEGER_URL: http://jaeger-istio-system.apps.192.168.99.100.nip.io

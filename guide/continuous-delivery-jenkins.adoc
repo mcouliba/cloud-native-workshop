@@ -243,9 +243,9 @@ this **Jenkinsfile**.
 
 === Create an OpenShift Jenkins Pipeline
 
-Like mentioned, {{OPENSHIFT_DOCS_BASE}}/architecture/core_concepts/builds_and_image_streams.html#pipeline-build[OpenShift Pipelines^] enable creating deployment pipelines using the widely popular *_Jenkinsfile_* format.
+Like mentioned, https://docs.openshift.com/container-platform/4.2/welcome/index.html[OpenShift Pipelines^] enable creating deployment pipelines using the widely popular *_Jenkinsfile_* format.
 
-OpenShift automates deployments using {{OPENSHIFT_DOCS_BASE}}/dev_guide/deployments/basic_deployment_operations.html#triggers[deployment triggers^] 
+OpenShift automates deployments using https://docs.openshift.com/container-platform/4.2/welcome/index.html[deployment triggers^] 
 that react to changes to the container image or configuration. Since you want to control the deployments instead from the pipeline, 
 you should remove the Inventory deploy triggers so that building a new Inventory container image wouldn't automatically result in a 
 new deployment. That would allow the pipeline to decide when a deployment should occur.
