@@ -304,7 +304,7 @@ public class Inventory implements Serializable {
 You don't need to press a save button! Che automatically saves the changes made to the files.
 ====
 
-`*Update 'src/main/resources/applications.properties' file*` to match with the following content:
+`*Update 'src/main/resources/application.properties' file*` to match with the following content:
 [source,shell]
 .application.properties
 ----
