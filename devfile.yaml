@@ -6,11 +6,11 @@ projects:
     source:
       location: 'https://github.com/mcouliba/cloud-native-workshop.git'
       type: git
-      branch: master
+      branch: 3.0
 components:
   - type: dockerimage
     alias: maven
-    image: 'quay.io/eclipse/che-java11-maven:7.3.0'
+    image: 'quay.io/eclipse/che-java11-maven:7.4.0'
     memoryLimit: 256Mi
     mountSources: true
     endpoints:
@@ -18,7 +18,7 @@ components:
         port: 8080
       - name: localhost-9000
         port: 9000
-  - id: redhat/workshop-tools/latest
+  - id: redhat/workshop-tools/3.0
     type: chePlugin
     alias: workshop-tools
 commands:
