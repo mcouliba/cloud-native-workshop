@@ -6,7 +6,7 @@ projects:
     source:
       location: 'https://github.com/mcouliba/cloud-native-workshop.git'
       type: git
-      branch: 3.0
+      branch: "3.0"
 components:
   - type: dockerimage
     alias: maven
