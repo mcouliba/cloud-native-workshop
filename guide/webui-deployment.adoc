@@ -73,35 +73,13 @@ Then, enter the following information:
 |coolstore
 
 |Name
-|web
+|web-coolstore
 
 |Create a route to the application
 |Checked
 |===
 
 `*Click on 'Create' button*` 
-
-'''
-
-=== Link graphically your service
-
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'DC web' -> 'Actions' -> 'Edit Annotations'*`
-
-image:{% image_path openshift-web-annotate.png %}[OpenShift - Web Annotate, 700]
-
-`*Add the new annotation*` in order to have a graphical link between **Web Service** and **Gateway Service**.
-
-.Web Annotations
-[%header,cols=2*]
-|===
-|Key 
-|Value
-
-|app.openshift.io/connects-to
-|gateway
-
-|===
 
 '''
 

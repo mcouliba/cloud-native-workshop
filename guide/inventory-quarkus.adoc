@@ -40,7 +40,7 @@ love and use wired on a https://quarkus.io/vision/standards[standard backbone^].
 === Quarkus Maven Project
 
 The **inventory-quarkus** project has the following structure which shows the components of 
-the Spring Boot project laid out in different subdirectories according to Maven best practices:
+the Quarkus project laid out in different subdirectories according to Maven best practices:
 
 image:{% image_path inventory-quarkus-project.png %}[Inventory Project,300]
 
@@ -371,7 +371,7 @@ In your {{ CHE_URL }}[Workspace^], stop the service by `*hitting Ctrl+c in the '
 
 === Deploy on OpenShift
 
-It’s time to build and deploy our service on OpenShift. 
+It’s time to build and deploy your service on OpenShift. 
 
 OpenShift https://docs.openshift.com/container-platform/4.2/welcome/index.html[Source-to-Image (S2I)^] 
 feature can be used to build a container image from your project. OpenShift 
@@ -409,15 +409,114 @@ To enable it, `*specify an <uberJar> configuration option in your pom.xml*`
 <1> uberJar configuration option
 
 Then, in your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Inventory - Deploy on OpenShift'*`
+`*run 'Task: Run Task...' ->  'Inventory - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
-image:{% image_path che-inventory-deploy.png %}[Che - Deploy Inventory, 500]
+image:{% image_path che-inventory-build.png %}[Che - Build Inventory, 500]
 
-Once this completes, your application should be up and running. OpenShift runs the different components of 
-the application in one or more pods which are the unit of runtime deployment and consists of the running 
-containers for the project. 
+Once this completes, let's **push** your application into OpenShift.
+
+In your {{ CHE_URL }}[Workspace^], from **'OpenShift' View**, 
+`*right-click on your '{{PROJECT}}' project and select 'New Component'*`
+
+image:{% image_path che-openshift-new-component.png %}[Che - OpenShift New Component, 400]
+
+Then, `*enter the following information*`:
+
+.OpenShift New Component
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|In which Application you want to create a Component
+|$(plus) Create new Application... 
+
+|Provide Application name
+|coolstore
+
+|Select source type for Component
+|Binary File
+
+|Select context folder
+|$(plus) Add new context folder.
+
+|Open
+|/projects/workshop/labs/inventory-quarkus
+
+|Select binary file
+|$(file-zip) inventory-quarkus-1.0.0-SNAPSHOT-runner.jar
+
+|Provide Component name
+|inventory
+
+|Component type
+|java
+
+|Component type version
+|11
+
+|===
+
+
+[TIP]
+====
+Now the configuration file **'config.yaml'** is in the local directory of the inventory component 
+(**'/projects/workshop/labs/inventory-quarkus/.odo'**) that contains information about the component for deployment.
+====
+
+Now, `*let’s create a route for the component*` by right-clicking on the **inventory component**, 
+from **'OpenShift' View**, then select **'New URL'** 
+
+image:{% image_path che-openshift-url-inventory.png %}[Che - OpenShift URL Inventory, 400]
+
+`*Enter the following inputs*`:
+
+.OpenShift New URL
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Provide URL name
+|inventory
+
+|Select port to expose
+|8080/tcp
+
+|===
+
+Finally, `*push the component to the OpenShift cluster*` by right-clicking on the **inventory component**, 
+from **'OpenShift' View**, then select **'Push'**.
+
+image:{% image_path che-openshift-push-inventory.png %}[Che - OpenShift Push Inventory, 400]
+
+You should get an output in a **'>_ OpenShift' Terminal Window** as following:
+
+[source,shell]
+.>_ OpenShift
+----
+bash-5.0$ odo push
+Validation
+ ✓  Checking component [88ms]
+
+Configuration changes
+ ✓  Initializing component
+ ✓  Creating component [188ms]
+
+Applying URL changes
+ ✓  URL inventory: http://inventory-coolstore-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}} created
+
+Pushing to component inventory of type binary
+ ✓  Checking files for pushing [4ms]
+ ✓  Waiting for component to start [42s]
+ ✓  Syncing files to the component [18s]
+ ✓  Building component [2s]
+----
+
+Once this completes, your application should be up and running. OpenShift runs the different components of the application 
+in one or more pods which are the unit of runtime deployment and consists of the running containers for the project.
 
 '''
 
@@ -438,6 +537,5 @@ Then `*click on 'Test it'*`. You should have the following output:
 ----
 {"itemId":"329299","quantity":35}
 ----
-
 
 Well done! You are ready to move on to the next lab.

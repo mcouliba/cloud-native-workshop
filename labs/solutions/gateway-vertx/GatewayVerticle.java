@@ -4,6 +4,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClientOptions;
+import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
@@ -12,8 +13,6 @@ import io.vertx.reactivex.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.reactivex.ext.web.codec.BodyCodec;
 import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import io.vertx.reactivex.ext.web.handler.StaticHandler;
-import io.vertx.reactivex.servicediscovery.ServiceDiscovery;
-import io.vertx.reactivex.servicediscovery.types.HttpEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.reactivex.Observable;
@@ -33,33 +32,43 @@ public class GatewayVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         router.route().handler(CorsHandler.create("*").allowedMethod(HttpMethod.GET));
         router.get("/*").handler(StaticHandler.create("assets"));
-        router.get("/health").handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").toString()));
+        // router.get("/health").handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").toString()));
+        router.get("/health").handler(this::health);
         router.get("/api/products").handler(this::products);
 
-        ServiceDiscovery.create(vertx, discovery -> {
-            // Catalog lookup
-            Single<WebClient> catalogDiscoveryRequest = HttpEndpoint.rxGetWebClient(discovery,
-                rec -> rec.getName().equals("catalog"))
-                .onErrorReturn(t -> WebClient.create(vertx, new WebClientOptions()
-                    .setDefaultHost(System.getProperty("catalog.api.host", "localhost"))
-                    .setDefaultPort(Integer.getInteger("catalog.api.port", 9000))));
+        ConfigRetriever retriever = ConfigRetriever.create(vertx);
+        retriever.getConfig(ar -> {
+            if (ar.failed()) {
+                // Failed to retrieve the configuration
+            } else {
+                JsonObject config = ar.result();
 
-            // Inventory lookup
-            Single<WebClient> inventoryDiscoveryRequest = HttpEndpoint.rxGetWebClient(discovery,
-                rec -> rec.getName().equals("inventory"))
-                .onErrorReturn(t -> WebClient.create(vertx, new WebClientOptions()
-                    .setDefaultHost(System.getProperty("inventory.api.host", "localhost"))
-                    .setDefaultPort(Integer.getInteger("inventory.api.port", 9001))));
+                String catalogApiHost = config.getString("COMPONENT_CATALOG_HOST", "localhost");
+                Integer catalogApiPort = config.getInteger("COMPONENT_CATALOG_PORT", 9001);
 
-            // Zip all 3 requests
-            Single.zip(catalogDiscoveryRequest, inventoryDiscoveryRequest, (c, i) -> {
-                // When everything is done
-                catalog = c;
-                inventory = i;
-                return vertx.createHttpServer()
+                catalog = WebClient.create(vertx,
+                    new WebClientOptions()
+                        .setDefaultHost(catalogApiHost)
+                        .setDefaultPort(catalogApiPort));
+
+                LOG.info("Catalog Service Endpoint: " + catalogApiHost + ":" + catalogApiPort.toString());
+
+                String inventoryApiHost = config.getString("COMPONENT_INVENTORY_HOST", "localhost");
+                Integer inventoryApiPort = config.getInteger("COMPONENT_INVENTORY_PORT", 9001);
+
+                inventory = WebClient.create(vertx,
+                    new WebClientOptions()
+                        .setDefaultHost(inventoryApiHost)
+                        .setDefaultPort(inventoryApiPort));
+
+                LOG.info("Inventory Service Endpoint: " + inventoryApiHost + ":" + inventoryApiPort.toString());
+
+                vertx.createHttpServer()
                     .requestHandler(router)
                     .listen(Integer.getInteger("http.port", 8080));
-            }).subscribe();
+
+                LOG.info("Server is running on port " + Integer.getInteger("http.port", 8080));
+            }
         });
     }
 
@@ -107,5 +116,20 @@ public class GatewayVerticle extends AbstractVerticle {
                 return product.copy().put("availability",
                     new JsonObject().put("quantity", resp.body().getInteger("quantity")));
             });
+    }
+
+    private void health(RoutingContext rc) {
+        // Check Catalog and Inventory Service up and running
+        catalog.get("/").rxSend()
+            .subscribe(
+                catalogCallOk -> {
+                    inventory.get("/").rxSend()
+                        .subscribe(
+                            inventoryCallOk -> rc.response().setStatusCode(200).end(new JsonObject().put("status", "UP").toString()),
+                            error -> rc.response().setStatusCode(503).end(new JsonObject().put("status", "DOWN").toString())
+                        );
+                },
+                error -> rc.response().setStatusCode(503).end(new JsonObject().put("status", "DOWN").toString())
+            );
     }
 }

@@ -119,6 +119,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.WebClientOptions;
+import io.vertx.reactivex.config.ConfigRetriever;
 import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
@@ -127,8 +128,6 @@ import io.vertx.reactivex.ext.web.client.predicate.ResponsePredicate;
 import io.vertx.reactivex.ext.web.codec.BodyCodec;
 import io.vertx.reactivex.ext.web.handler.CorsHandler;
 import io.vertx.reactivex.ext.web.handler.StaticHandler;
-import io.vertx.reactivex.servicediscovery.ServiceDiscovery;
-import io.vertx.reactivex.servicediscovery.types.HttpEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import io.reactivex.Observable;
@@ -148,37 +147,47 @@ public class GatewayVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         router.route().handler(CorsHandler.create("*").allowedMethod(HttpMethod.GET));
         router.get("/*").handler(StaticHandler.create("assets"));
-        router.get("/health").handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").toString()));
-        router.get("/api/products").handler(this::products); // <1>
+        // router.get("/health").handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").toString()));
+        router.get("/health").handler(this::health);
+        router.get("/api/products").handler(this::products);
 
-        ServiceDiscovery.create(vertx, discovery -> { // <2>
-            // Catalog lookup
-            Single<WebClient> catalogDiscoveryRequest = HttpEndpoint.rxGetWebClient(discovery,
-                rec -> rec.getName().equals("catalog"))
-                .onErrorReturn(t -> WebClient.create(vertx, new WebClientOptions()
-                    .setDefaultHost(System.getProperty("catalog.api.host", "localhost"))
-                    .setDefaultPort(Integer.getInteger("catalog.api.port", 9000))));
+        ConfigRetriever retriever = ConfigRetriever.create(vertx);
+        retriever.getConfig(ar -> {
+            if (ar.failed()) {
+                // Failed to retrieve the configuration
+            } else {
+                JsonObject config = ar.result();
 
-            // Inventory lookup
-            Single<WebClient> inventoryDiscoveryRequest = HttpEndpoint.rxGetWebClient(discovery,
-                rec -> rec.getName().equals("inventory"))
-                .onErrorReturn(t -> WebClient.create(vertx, new WebClientOptions()
-                    .setDefaultHost(System.getProperty("inventory.api.host", "localhost"))
-                    .setDefaultPort(Integer.getInteger("inventory.api.port", 9001))));
+                String catalogApiHost = config.getString("COMPONENT_CATALOG_HOST", "localhost");
+                Integer catalogApiPort = config.getInteger("COMPONENT_CATALOG_PORT", 9001);
 
-            // Zip all 3 requests
-            Single.zip(catalogDiscoveryRequest, inventoryDiscoveryRequest, (c, i) -> {
-                // When everything is done
-                catalog = c;
-                inventory = i;
-                return vertx.createHttpServer()
+                catalog = WebClient.create(vertx,
+                    new WebClientOptions()
+                        .setDefaultHost(catalogApiHost)
+                        .setDefaultPort(catalogApiPort));
+
+                LOG.info("Catalog Service Endpoint: " + catalogApiHost + ":" + catalogApiPort.toString());
+
+                String inventoryApiHost = config.getString("COMPONENT_INVENTORY_HOST", "localhost");
+                Integer inventoryApiPort = config.getInteger("COMPONENT_INVENTORY_PORT", 9001);
+
+                inventory = WebClient.create(vertx,
+                    new WebClientOptions()
+                        .setDefaultHost(inventoryApiHost)
+                        .setDefaultPort(inventoryApiPort));
+
+                LOG.info("Inventory Service Endpoint: " + inventoryApiHost + ":" + inventoryApiPort.toString());
+
+                vertx.createHttpServer()
                     .requestHandler(router)
                     .listen(Integer.getInteger("http.port", 8080));
-            }).subscribe();
+
+                LOG.info("Server is running on port " + Integer.getInteger("http.port", 8080));
+            }
         });
     }
 
-    private void products(RoutingContext rc) { // <3>
+    private void products(RoutingContext rc) {
         // Retrieve catalog
         catalog
             .get("/api/catalog")
@@ -207,7 +216,7 @@ public class GatewayVerticle extends AbstractVerticle {
             );
     }
 
-    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) { // <4>
+    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) {
         // Retrieve the inventory for a given product
         return inventory
             .get("/api/inventory/" + product.getString("itemId"))
@@ -222,6 +231,21 @@ public class GatewayVerticle extends AbstractVerticle {
                 return product.copy().put("availability",
                     new JsonObject().put("quantity", resp.body().getInteger("quantity")));
             });
+    }
+
+    private void health(RoutingContext rc) {
+        // Check Catalog and Inventory Service up and running
+        catalog.get("/").rxSend()
+            .subscribe(
+                catalogCallOk -> {
+                    inventory.get("/").rxSend()
+                        .subscribe(
+                            inventoryCallOk -> rc.response().setStatusCode(200).end(new JsonObject().put("status", "UP").toString()),
+                            error -> rc.response().setStatusCode(503).end(new JsonObject().put("status", "DOWN").toString())
+                        );
+                },
+                error -> rc.response().setStatusCode(503).end(new JsonObject().put("status", "DOWN").toString())
+            );
     }
 }
 ----
@@ -258,38 +282,90 @@ image:{% image_path che-gateway-build.png %}[Che - Catalog Build, 500]
 
 === Deploy on OpenShift
 
-It’s time to build and deploy our service on OpenShift. 
+It’s time to build and deploy your service on OpenShift. 
 
-OpenShift https://docs.openshift.com/container-platform/4.2/welcome/index.html[Source-to-Image (S2I)^] 
-feature can be used to build a container image from your project. OpenShift 
-S2I uses the https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift[supported OpenJDK container image^] to build the final container 
-image of the API Gateway service by uploading the Vert.x uber-jar from 
-the **target** folder to the OpenShift platform. 
+As you did previously, `*create a new Component, a New URL then Push it in to the OpenShift cluster*`
+by using the following inputs:
 
-Maven projects can use the https://maven.fabric8.io[Fabric8 Maven Plugin^] to access the OpenShift S2I for building the application container image. 
-This maven plugin is a Kubernetes/OpenShift client and uses the REST API to communicate with OpenShift and issue commands to build, 
-deploy and launch the application as a pod.
+.OpenShift New Component
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+|In which Application you want to create a Component
+|coolstore
 
-image:{% image_path che-gateway-deploy.png %}[Che - Gateway Deploy, 500]
+|Select source type for Component
+|Binary File
 
-[TIP]
-.fabric8:deploy
-====
-It will cause the following to happen:
+|Select context folder
+|$(plus) Add new context folder.
 
-* The API Gateway uber-jar is built using Vert.x
-* A container image is built on OpenShift containing the API Gateway uber-jar and JDK
-* All necessary objects are created within the OpenShift project to deploy the API Gateway service
-====
+|Open
+|/projects/workshop/labs/gateway-vertx
 
-Once this completes, your project should be up and running. OpenShift runs the different components of 
-the project in one or more pods which are the unit of runtime deployment and consists of the running 
+|Select binary file
+|$(file-zip) catalog-1.0-SNAPSHOT.jar
+
+|Provide Component name
+|gateway
+
+|Component type
+|java
+
+|Component type version
+|11
+
+|===
+
+.OpenShift New URL
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Provide URL name
+|gateway
+
+|Select port to expose
+|8080/tcp
+
+|===
+
+The Gateway Component needs to be connected to the Inventory and Catalog components in order to interact.
+OpenShift Container Platform provides linking mechanisms to publish communication bindings from a program to its clients, 
+especially by injecting the variables **'COMPONENT_*_HOST'** and **'COMPONENT_*_PORT'**.
+
+In your {{ CHE_URL }}[Workspace^], from **'OpenShift' View**, 
+`*right-click on the 'Gateway component' -> 'Link Component'*`.
+
+image:{% image_path che-openshift-link-component.png %}[Che - OpenShift Link Component, 400]
+
+Then, `*link the 2 following components*`:
+
+.OpenShift Link Component
+[%header,cols=2*]
+|===
+|Component 
+|Port
+
+|catalog
+|8080/tcp
+
+|inventory
+|8080/tcp
+
+|===
+
+The configuration information of the Inventory and Catalog component is added to the Gateway component 
+and the Gateway component restarts.
+
+Once this completes, your application should be up and running. OpenShift runs the different components of 
+the application in one or more pods which are the unit of runtime deployment and consists of the running 
 containers for the project. 
 
 '''
-
 === Test your Service
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,

@@ -280,34 +280,56 @@ In your {{ CHE_URL }}[Workspace^], stop the service by `*hitting Ctrl+c in the '
 
 === Deploy on OpenShift
 
-It’s time to build and deploy our service on OpenShift. 
+It’s time to build and deploy your service on OpenShift. 
 
-OpenShift https://docs.openshift.com/container-platform/4.2/welcome/index.html[Source-to-Image (S2I)^] 
-feature can be used to build a container image from your project. OpenShift 
-S2I uses the https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift[supported OpenJDK container image^] to build the final container image 
-of the **Catalog Service** by uploading the Spring Boot uber-jar from the **target/** 
-folder to the OpenShift platform. 
+As you did previously, `*create a new Component, a New URL then Push it in to the OpenShift cluster*`
+by using the following inputs:
 
-Maven projects can use the https://maven.fabric8.io[Fabric8 Maven Plugin^] to access the OpenShift S2I for building the application container image. 
-This maven plugin is a Kubernetes/OpenShift client and uses the REST API to communicate with OpenShift and issue commands to build, 
-deploy and launch the application as a pod.
+.OpenShift New Component
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
 
-Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Catalog - Deploy on OpenShift'*`
+|In which Application you want to create a Component
+|coolstore
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+|Select source type for Component
+|Binary File
 
-image:{% image_path che-catalog-deploy.png %}[Che - Catalog Deploy, 500]
+|Select context folder
+|$(plus) Add new context folder.
 
-[TIP]
-.fabric8:deploy
-====
-It will cause the following to happen:
+|Open
+|/projects/workshop/labs/catalog-spring-boot
 
-* The Catalog uber-jar is built using Spring Boot
-* A container image is built on OpenShift containing the Catalog uber-jar and JDK
-* All necessary objects are created within the OpenShift project to deploy the Catalog service
-====
+|Select binary file
+|$(file-zip) catalog-1.0-SNAPSHOT.jar
+
+|Provide Component name
+|catalog
+
+|Component type
+|java
+
+|Component type version
+|11
+
+|===
+
+.OpenShift New URL
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Provide URL name
+|catalog
+
+|Select port to expose
+|8080/tcp
+
+|===
 
 Once this completes, your application should be up and running. OpenShift runs the different components of 
 the application in one or more pods which are the unit of runtime deployment and consists of the running 

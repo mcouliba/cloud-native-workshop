@@ -36,6 +36,12 @@ commands:
         type: exec
         command: 'mvn compile quarkus:dev'
         component: workshop-tools
+  - name: 'Inventory - Build'
+    actions:
+      - workdir: /projects/workshop/labs/inventory-quarkus
+        type: exec
+        command: mvn clean package -DskipTests
+        component: workshop-tools
   - name: 'Inventory - Build on OpenShift'
     actions:
       - workdir: /projects/workshop/labs/inventory-quarkus

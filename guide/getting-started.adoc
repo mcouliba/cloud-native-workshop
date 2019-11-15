@@ -68,45 +68,90 @@ image:{% image_path che-workspace.png %}[Che - Workspace, 800]
 
 '''
 
-=== Connect Your Workspace to Your OpenShift User
+=== What is OpenShift Connect?
 
-First, you need to connect your {{ CHE_URL }}[Che Workspace^] to the OpenShift cluster.
+[sidebar]
+--
+image:{% image_path openshiftconnect.png %}[OpenShift Connector, 400]
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'OpenShift - Login'*`
+https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
+is a Visual Studio (VS) Code extension for interacting with Red Hat OpenShift cluster with more improved features for a seamless developer experience.
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+Developers can now focus on higher-level abstractions like their application and components and can drill down deeper to get to the OpenShift and 
+Kubernetes resources that make up their application directly from Eclipse Che.
 
-image:{% image_path che-openshift-login.png %}[Che - OpenShift Login, 500]
+Three major benefits:
 
-[NOTE]
-.Command Info
-====
-The command **oc login --server={{ OPENSHIFT_API_URL }}:6443** is issued using the credentials `{{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }}`
-====
+The new OpenShift Connector 0.1.1 features offer three major benefits:
 
-You should get an output in the **'>_ oc login' Terminal Window** as following:
+* Speeds up OpenShift development by supporting fully integrated OpenShift development and deployment within Eclipse Che, 
+which lets you connect to any OpenShift cluster and create, debug, and deploy from the IDE itself.
+* Simplifies inner-loop development for cloud infrastructure, since under the hood this extension uses tools like 
+https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_developer_cli/understanding-odo.html[OpenShift Do (odo)^],
+a fast and simple CLI tool for creating applications on Red Hat OpenShift Container Platform and 
+https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html[OpenShift CLI (oc)^] 
+to help you interact with the local or production OpenShift instance and complete the inner-loop experience.
+* Enhances developer workflow by providing a streamlined developer experience for working with OpenShift instances (3.x or 4.x) 
+and supporting public cloud instances such as Red Hat OpenShift on Azure and AWS.
 
-[source,shell]
-.>_ oc login
-----
-Login successful.
- 
-You have access to the following projects and can switch between them with 'oc project <projectname>':
- 
-  * {{ PROJECT }}
-    {{ INFRA_PROJECT }}
-    workspaceiwml5w542l456ja7
-
-Using project "{{ PROJECT }}".
-Already on project "{{ PROJECT }}" on server "https://172.30.0.1:443".
-----
+https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^] on Eclipse Che provides an end-to-end developer experience for interacting with a Red Hat OpenShift cluster. 
+By leveraging the IDE features, developers can create, deploy, and debug applications and then deploy directly to 
+the running OpenShift cluster.
+--
 
 '''
 
+=== Connect Your Workspace to Your OpenShift User
+
+First, in your {{ CHE_URL }}[Workspace^], `*open the 'OpenShift' View*` by clicking on the OpenShift icon of the left hand side.
+
+image:{% image_path che-openshift-view.png %}[Che - OpenShift View, 300]
+
+Then, `*click the 'Log in to cluster' icon and confirm you want to connect to a different cluster*`
+
+image:{% image_path che-openshift-login-popup.png %}[Che - OpenShift View, 500]
+
+Finally, `*enter the following information*`:
+
+.OpenShift Log in
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Select the way to log in to the cluster.
+|Credentials
+
+|Provide cluster URL to connect.
+|https://172.30.0.1:443
+
+|Select username for basic authentication to the API Server
+|$(plus) Add new user...
+
+|Provide Username for basic authentication to the API Server
+|{{ OPENSHIFT_USER }}
+
+|Provide Password for basic authentication to the API Server
+|{{ OPENSHIFT_PASSWORD }}
+
+|===
+
+You should see your project ({{PROJECT}}) in the **OpenShift View** as following:
+
+image:{% image_path che-openshift-login.png %}[Che - OpenShift View, 300]
+
+'''
+
+=== Log in to the OpenShift Developer Console
+
 OpenShift ships with a web-based console that will allow users to
-perform various tasks via a browser.  To get a feel for how the web console
-works, open your browser and `*go to {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]*`.
+perform various tasks via a browser.
+
+`*Click on the below button called 'Developer Console'*`
+
+[link={{OPENSHIFT_CONSOLE_URL}}]
+[window=_blank, align="center"]
+image::{% image_path developer-console-button.png  %}[Developer Workspace - Button, 300]
 
 `*Enter your username and password ({{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}})*` and 
 then log in. After you have authenticated to the web console, you will be presented with a
