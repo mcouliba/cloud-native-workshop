@@ -67,7 +67,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://catalog.{{PROJECT}}.svc:8080/actuator/health
+$ curl -w "\n" http://catalog-coolstore.{{PROJECT}}.svc:8080/actuator/health
 
 {"status":"UP"}
 ----
@@ -147,7 +147,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://inventory.{{PROJECT}}.svc:8080/health
+$ curl -w "\n" http://inventory-coolstore.{{PROJECT}}.svc:8080/health
 
 {
     "status": "UP",
@@ -185,7 +185,7 @@ Verify that the health endpoint works for the **Gateway Service** using `*curl*`
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://gateway.{{PROJECT}}.svc:8080/health
+$ curl -w "\n" http://gateway-coolstore.{{PROJECT}}.svc:8080/health
 
 {"status":"UP"}
 ----

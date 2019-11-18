@@ -22,14 +22,6 @@ components:
     type: chePlugin
     alias: workshop-tools
 commands:
-  - name: 'OpenShift - Login'
-    actions:
-      - type: exec
-        command: >-
-          oc login --server=$(oc whoami --show-server) -u
-          ${CHE_WORKSPACE_NAMESPACE}  -p 'openshift' --insecure-skip-tls-verify
-          &&  oc project cn-project${CHE_WORKSPACE_NAMESPACE#user}
-        component: workshop-tools
   - name: 'Inventory - Compile (Dev Mode)'
     actions:
       - workdir: /projects/workshop/labs/inventory-quarkus
@@ -41,26 +33,6 @@ commands:
       - workdir: /projects/workshop/labs/inventory-quarkus
         type: exec
         command: mvn clean package -DskipTests
-        component: workshop-tools
-  - name: 'Inventory - Build on OpenShift'
-    actions:
-      - workdir: /projects/workshop/labs/inventory-quarkus
-        type: exec
-        command: >-
-          mvn clean package -DskipTests &&
-          oc start-build inventory --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow
-        component: workshop-tools
-  - name: 'Inventory - Deploy on OpenShift'
-    actions:
-      - workdir: /projects/workshop/labs/inventory-quarkus
-        type: exec
-        command: >-
-          mvn clean package -DskipTests && 
-          oc new-build --name=inventory java --binary=true --labels=app.kubernetes.io/instance=inventory && 
-          oc start-build inventory --from-file=target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --follow && 
-          oc new-app inventory &&  
-          oc label dc/inventory app.kubernetes.io/part-of=coolstore app.kubernetes.io/name=java app.kubernetes.io/instance=inventory && 
-          oc expose svc inventory
         component: workshop-tools
   - name: 'Catalog - Build'
     actions:
@@ -74,28 +46,11 @@ commands:
         type: exec
         command: mvn spring-boot:run
         component: workshop-tools
-  - name: 'Catalog - Deploy on OpenShift'
-    actions:
-      - workdir: /projects/workshop/labs/catalog-spring-boot
-        type: exec
-        command: >- 
-          mvn clean fabric8:deploy &&
-          oc label bc/catalog-s2i app.kubernetes.io/instance=catalog
-        component: workshop-tools
   - name: 'Gateway - Build'
     actions:
       - workdir: /projects/workshop/labs/gateway-vertx
         type: exec
         command: 'mvn clean package -DskipTests'
-        component: workshop-tools
-  - name: 'Gateway - Deploy on OpenShift'
-    actions:
-      - workdir: /projects/workshop/labs/gateway-vertx
-        type: exec
-        command: >- 
-          mvn clean fabric8:deploy &&
-          oc label bc/gateway-s2i app.kubernetes.io/instance=gateway &&
-          oc annotate dc/gateway "app.openshift.io/connects-to"="inventory,catalog"
         component: workshop-tools
   - name: 'Gateway - Generate Traffic'
     actions:
