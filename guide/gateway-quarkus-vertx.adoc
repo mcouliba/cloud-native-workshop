@@ -35,7 +35,7 @@ http://vertx.io/[Eclipse Vert.x^] is designed to be event-driven and non-blockin
 
 === Bootstrap the Gateway Project
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Quarkus: Generate a Maven project'*`
 
 image:{% image_path che-quarkus-generateproject.png %}[Che - Quarkus Generate Project, 600]
@@ -174,8 +174,7 @@ triggers a scan of the workspace, and if any changes are detected, the Java file
 your request is then serviced by the redeployed application. If there are any issues with compilation or deployment an error page 
 will let you know.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Gateway - Compile (Dev Mode)'*`
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Compile (Dev Mode)'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -235,7 +234,7 @@ Let's add the following dependencies to */projects/inventory/pom.xml*:
 * Hibernate ORM  (quarkus-hibernate-orm)
 * JDBC Driver - H2 (quarkus-jdbc-h2)
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Quarkus: Add extensions to current project'*`
 
 image:{% image_path che-quarkus-addextensions.png %}[Che - Quarkus Add Extensions, 600]
@@ -425,8 +424,7 @@ To enable it, `*specify an <uberJar> configuration option in your pom.xml*`
 ----
 <1> uberJar configuration option
 
-Then, in your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Inventory - Initialize on OpenShift'*`
+Then, in your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Initialize on OpenShift'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 

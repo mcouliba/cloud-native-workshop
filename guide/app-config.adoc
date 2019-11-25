@@ -131,7 +131,7 @@ Now you can move on to configure the Inventory and Catalog service to use these 
 ===  Externalize Quarkus (Inventory) Configuration
 
 Quarkus supports multiple mechanisms for externalizing configurations such as environment variables, 
-Maven properties, command-line arguments and more. The recommend approach for the long-term for externalizing 
+Maven properties, command-line arguments and more. The recommended approach for the long-term for externalizing 
 configuration is however using an https://quarkus.io/guides/application-configuration-guide#overriding-properties-at-runtime[application.properties^] 
 which you have already packaged within the Inventory Maven project.
 
@@ -166,8 +166,7 @@ Leave the **'quarkus.datasource.url'**, **'quarkus.datasource.username'** and **
 parameters unchanged. They will be overridden later.
 ====
 
-Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Inventory - Build on OpenShift'*`
+`*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build on OpenShift'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 

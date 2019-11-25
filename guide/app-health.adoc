@@ -78,7 +78,7 @@ if you want to define the same health endpoint and parameters for both liveness 
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set probe dc/catalog \
+$ oc set probe dc/catalog-coolstore \
     --liveness \# <1>
     --readiness \# <2>
     --initial-delay-seconds=30 \# <3>
@@ -128,17 +128,18 @@ In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory
 .pom.xml
 ----
     <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-smallrye-health</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
 ----
 
-Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Inventory - Build on OpenShift'*`
+`*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
-image:{% image_path che-inventory-build-openshift.png %}[Che - Inventory Build On OpenShift, 500]
+image:{% image_path che-inventory-build.png %}[Che - Inventory Build, 500]
+
+Then, `*push the updated component to the OpenShift cluster*`.
 
 Once completed, verify that the health endpoint works for the **Inventory Service** using `*curl*`
 
@@ -165,10 +166,10 @@ Finally, `*Add the Liveness and Readiness Probes*` to the Service
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rollout pause dc/inventory
-$ oc set probe dc/inventory --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready
-$ oc set probe dc/inventory --liveness --initial-delay-seconds=180 --failure-threshold=3 --get-url=http://:8080/health/live
-$ oc rollout resume dc/inventory
+oc rollout pause dc/inventory-coolstore
+oc set probe dc/inventory-coolstore --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready
+oc set probe dc/inventory-coolstore --liveness --initial-delay-seconds=180 --failure-threshold=3 --get-url=http://:8080/health/live
+oc rollout resume dc/inventory-coolstore
 ----
 
 OpenShift automatically restarts the Inventory pod and as soon as the health probes succeed, it is ready to receive traffic.
@@ -190,41 +191,35 @@ $ curl -w "\n" http://gateway-coolstore.{{PROJECT}}.svc:8080/health
 {"status":"UP"}
 ----
 
-Fabric8 Maven Plugin is already configured using https://maven.fabric8.io/#enrichers[Enrichers^] to automatically set 
-the health probes when running **fabric8:deploy** goal. `*Look at '/projects/workshop/labs/gateway-vertx/pom.xml'*`
+You are an expert in health probes by now! `*Add Liveness and Readiness Probes*` to the Gateway Service 
+using the following information:
 
-[source,xml]
-.pom.xml
-----
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>fabric8-maven-plugin</artifactId>
-                <version>${fabric8.maven.plugin.version}</version>
-                ...
-                <configuration>
-                    ...
-                    <enricher>
-                        <config>
-                            <f8-healthcheck-vertx>
-                                <readiness>
-                                <path>/health</path>
-                                </readiness>
-                                <liveness>
-                                <path>/health</path>
-                                </liveness>
-                            </f8-healthcheck-vertx>
-                        </config>
-                    </enricher>
-                    ...
-                </configuration>
-            </plugin>
-----
+
+.Health Probes
+[%header,cols=4*]
+|===
+|Probe 
+|Path
+|Initial Delay
+|Failure Threshold
+
+|Readiness
+|/health
+|30
+|3
+
+|Liveness
+|/health
+|30
+|3
+
+|===
 
 '''
 
 ===  Monitoring Web UI Health
 
-You are an expert in health probes by now! `*Add Liveness and Readiness Probes*` to the WebUI Service 
+Finally, let's confirm your expertise! `*Add Liveness and Readiness Probes*` to the WebUI Service 
 using the following information:
 
 

@@ -45,7 +45,13 @@ The first step for any deployment pipeline is to store all code and configuratio
 a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
 Gogs git server.
 
-In {{ GOGS_URL }}[Gogs^], `*Click on 'Register'*` to register a new user with the following details:
+`*Click on the below button called 'Developer Repository'*`
+
+[link={{ GOGS_URL }}]
+[window=_blank, align="center"]
+image::{% image_path developer-repository-button.png  %}[Developer Repository - Button, 300]
+
+Then, `*click on 'Register'*` to register a new user with the following details:
 
 
 .Gogs Registration
@@ -58,7 +64,7 @@ In {{ GOGS_URL }}[Gogs^], `*Click on 'Register'*` to register a new user with th
 |{{OPENSHIFT_USER}}
 
 |Email
-|your email  (Don't worry! Gogs won't send you any emails)
+|{{OPENSHIFT_USER}}@none.com
 
 |Password
 |{{OPENSHIFT_PASSWORD}}
@@ -96,7 +102,7 @@ image:{% image_path cd-gogs-empty-repo.png %}[Empty Repository,900]
 Now that you have a Git repository for the Inventory service, you should push the 
 source code into this Git repository.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Initialize Repository'*`
 
 image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
@@ -117,13 +123,13 @@ $ cd /projects/workshop/labs/inventory-quarkus
 $ git remote add origin {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/inventory-quarkus
 ----
 
-Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+Via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Close Repository'*`
 
-Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+Via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Open Repository' and select the '/projects/workshop/labs/inventory-quarkus' folder*`
 
-Open the **Source Code Management (SCM) view** via the shortcut `*Cmd+Shift+G ⌘⇧G on macOS or Ctrl+Shift+G ⌃⇧G on Windows and Linux.*`
+Open the **Source Code Management (SCM) view** by clicking on `*'View' -> 'SCM menu'*`
 
 `*Click on '...' -> 'Stage All Changes'*`
 
@@ -144,7 +150,7 @@ image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
 
 image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
 
-Once done, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
+Once done, in {{ GOGS_URL }}, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
 see the project files in the repository.
 
 image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
@@ -205,7 +211,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set triggers dc/inventory --remove-all
+$ oc set triggers dc/inventory-coolstore --remove-all
 ----
 
 '''
@@ -333,8 +339,7 @@ EOF
 
 Now that your pipeline is created and configured, let's trigger it.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Pipeline - Start Mine'*`
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start Mine'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -354,8 +359,8 @@ Congratulations!! You have created and run your first **OpenShift Pipeline with 
 Now, you have learnt and understood how to create a simple **Pipeline** with **Task** and **PipelineResource**.
 Let's create more tasks and expand the existing pipeline.
 
-In your {{ CHE_URL }}[Workspace^], `*double click on the following files*` then 
-via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+In your {{ CHE_URL }}[Workspace^], `*double click on each following file*` then 
+via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Kubernetes: Create'*`
 
 image:{% image_path che-kubernetes-create.png %}[Che - Kubernetes Create, 500]
@@ -386,8 +391,7 @@ of your application.
 
 |===
 
-Once created, via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Pipeline - Start Full'*`
+Once created, `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start Full'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 

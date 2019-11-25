@@ -169,8 +169,7 @@ triggers a scan of the workspace, and if any changes are detected, the Java file
 your request is then serviced by the redeployed application. If there are any issues with compilation or deployment an error page 
 will let you know.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Inventory - Compile (Dev Mode)'*`
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Compile (Dev Mode)'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -408,8 +407,7 @@ To enable it, `*specify an <uberJar> configuration option in your pom.xml*`
 ----
 <1> uberJar configuration option
 
-Then, in your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Inventory - Build'*`
+Then, in your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -466,7 +464,37 @@ Now the configuration file **'config.yaml'** is in the local directory of the in
 (**'/projects/workshop/labs/inventory-quarkus/.odo'**) that contains information about the component for deployment.
 ====
 
-Now, `*let’s create a route for the component*` by right-clicking on the **inventory component**, 
+Then, `*push the component to the OpenShift cluster*` by right-clicking on the **inventory component**, 
+from **'OpenShift' View**, then select **'Push'**.
+
+image:{% image_path che-openshift-push-inventory.png %}[Che - OpenShift Push Inventory, 400]
+
+You should get an output in a **'>_ OpenShift' Terminal Window** as following:
+
+[source,shell]
+.>_ OpenShift
+----
+bash-5.0$ odo push
+Validation
+ ✓  Checking component [23ms]
+
+Configuration changes
+ ✓  Initializing component
+ ✓  Creating component [149ms]
+
+Pushing to component inventory of type binary
+ ✓  Checking files for pushing [4ms]
+ ✓  Waiting for component to start [42s]
+ ✓  Syncing files to the component [27s]
+ ✓  Building component [2s]
+----
+
+[IMPORTANT]
+====
+You need to push your component first in order to create a Route for it.
+====
+
+Now, `*let’s create a Route for the component to access to your service from Internet*` by right-clicking on the **inventory component**, 
 from **'OpenShift' View**, then select **'New URL'** 
 
 image:{% image_path che-openshift-url-inventory.png %}[Che - OpenShift URL Inventory, 400]
@@ -487,10 +515,9 @@ image:{% image_path che-openshift-url-inventory.png %}[Che - OpenShift URL Inven
 
 |===
 
-Finally, `*push the component to the OpenShift cluster*` by right-clicking on the **inventory component**, 
-from **'OpenShift' View**, then select **'Push'**.
+Finally, `*push again the component to the OpenShift cluster*` to create the Route on OpenShift Cluster.
 
-image:{% image_path che-openshift-push-inventory.png %}[Che - OpenShift Push Inventory, 400]
+image:{% image_path che-openshift-push-again-inventory.png %}[Che - OpenShift Push Inventory, 400]
 
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
@@ -499,19 +526,19 @@ You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 ----
 bash-5.0$ odo push
 Validation
- ✓  Checking component [88ms]
+ ✓  Checking component [140ms]
 
 Configuration changes
- ✓  Initializing component
- ✓  Creating component [188ms]
+ ✓  Retrieving component data [107ms]
+ ✓  Applying configuration [43ms]
 
 Applying URL changes
  ✓  URL inventory: http://inventory-coolstore-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}} created
 
 Pushing to component inventory of type binary
- ✓  Checking files for pushing [4ms]
- ✓  Waiting for component to start [42s]
- ✓  Syncing files to the component [18s]
+ ✓  Checking file changes for pushing [5ms]
+ ✓  Waiting for component to start [7ms]
+ ✓  Syncing files to the component [6s]
  ✓  Building component [2s]
 ----
 

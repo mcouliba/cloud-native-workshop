@@ -86,8 +86,7 @@ public class GatewayVerticle extends AbstractVerticle { // <1>
 You can use Maven to make sure the skeleton project builds successfully. You should get a **BUILD SUCCESS** message 
 in the build logs, otherwise the build has failed.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Gateway - Build'*`
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -147,7 +146,6 @@ public class GatewayVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         router.route().handler(CorsHandler.create("*").allowedMethod(HttpMethod.GET));
         router.get("/*").handler(StaticHandler.create("assets"));
-        // router.get("/health").handler(ctx -> ctx.response().end(new JsonObject().put("status", "UP").toString()));
         router.get("/health").handler(this::health);
         router.get("/api/products").handler(this::products);
 
@@ -271,8 +269,7 @@ will be acted upon and update the response which is then sent back to the client
 <4> The **getAvailabilityFromInventory()** method is similar to the **product()** method, it invokes the 
 Inventory REST endpoint and retrieves the inventory.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Gateway - Build'*`
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
@@ -318,6 +315,11 @@ by using the following inputs:
 |11
 
 |===
+
+[IMPORTANT]
+====
+You need to push your component first in order to create a Route for it.
+====
 
 .OpenShift New URL
 [%header,cols=2*]

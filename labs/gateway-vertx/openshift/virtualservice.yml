@@ -18,4 +18,4 @@ spec:
     - destination:
         port:
           number: 8080
-        host: gateway
+        host: gateway-coolstore

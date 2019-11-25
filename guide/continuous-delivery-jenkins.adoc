@@ -96,7 +96,7 @@ image:{% image_path cd-gogs-empty-repo.png %}[Empty Repository,900]
 Now that you have a Git repository for the Inventory service, you should push the 
 source code into this Git repository.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Initialize Repository'*`
 
 image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
@@ -117,10 +117,10 @@ $ cd /projects/workshop/labs/inventory-quarkus
 $ git remote add origin <PASTE-YOUR-GIT_REPO-URL-HERE>
 ----
 
-Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+Via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Close Repository'*`
 
-Via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
+Via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Open Repository' and select the '/projects/workshop/labs/inventory-quarkus' folder*`
 
 Open the **Source Code Management (SCM) view** via the shortcut `*Cmd+Shift+G ⌘⇧G on macOS or Ctrl+Shift+G ⌃⇧G on Windows and Linux.*`

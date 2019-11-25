@@ -44,15 +44,7 @@ Then, `*enter the following information and click on 'Create' button*` :
 |Checked
 
 |Labels
-|app=catalog
-
-group=com.redhat.cloudnative
-
-provider=fabric8
-
-app.kubernetes.io/name=golang
-
-version=2.0
+|app=catalog group=com.redhat.cloudnative provider=fabric8 app.kubernetes.io/name=golang version=2.0
 
 |===
 
@@ -65,7 +57,8 @@ and the **Catalog Service v2**.
 
 image:{% image_path openshift-catalogv2-topology.png %}[OpenShift - Catalog Topology, 700]
 
-Now, `*enable the Service Mesh to the service*` by adding the Istio sidecar to the **Catalog Service v2**. 
+Now, `*enable the Service Mesh to the service*` by adding the Istio sidecar to the **Catalog Service v2**.
+
 In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
@@ -146,8 +139,7 @@ Doing so, you route **90%** of the **HTTP traffic** to pods of the **Catalog Ser
 Let's now see the A/B testing with Site Mesh in action.
 First, we need to generate HTTP traffic by sending several requests to the **Gateway Service** from the **Istio Gateway**
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (Cmd+Shift+P ⌘⇧P on macOS or Ctrl+Shift+P ⌃⇧P on Windows and Linux),
-`*run 'Task: Run Task...' ->  'Gateway - Generate Traffic'*`
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Generate Traffic'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
