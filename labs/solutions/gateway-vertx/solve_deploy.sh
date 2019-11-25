@@ -5,6 +5,15 @@
 DIRECTORY=`dirname $0`
 
 $DIRECTORY/solve.sh
-mvn clean fabric8:deploy -f $DIRECTORY/../../gateway-vertx
-oc label bc/gateway-s2i app.kubernetes.io/instance=gateway
-oc annotate dc/gateway "app.openshift.io/connects-to"="inventory,catalog"
+
+cd /projects/workshop/labs/gateway-vertx
+mvn clean package -DskipTests
+
+odo create java:11 gateway --context /projects/workshop/labs/gateway-vertx/ --binary target/gateway-1.0-SNAPSHOT.jar --app coolstore
+odo push
+
+odo url create gateway --port 8080
+odo push
+
+odo link inventory --component gateway --port 8080
+odo link catalog --component gateway --port 8080
