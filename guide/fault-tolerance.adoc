@@ -31,62 +31,30 @@ deploying instances a repeatable practice. Immutable server pattern simplifies s
 application instances to starting a new instance which is guaranteed to be identical to the 
 existing instances and adding it to the load-balancer.
 
-Now, let's use the `*oc scale*` command to scale up the Web UI pod in the CoolStore retail 
+Now, let's scale up the Web UI pod in the CoolStore retail 
 application to 2 instances. In OpenShift, deployment config is responsible for starting the 
 application pods and ensuring the specified number of instances for each application pod 
 is running. Therefore the number of pods you want to scale to should be defined on the 
 deployment config.
 
-TIP: You can scale pods up and down via the OpenShift Web Console by clicking on the up and 
-down arrows on the right side of each pods blue circle.
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Topology' -> 'DC web-coolstore' -> 'Overview' then click once on the up arrows 
+on the right side of the pod blue circle*`.
 
-First, get list of deployment configs available in the project.
+image:{% image_path openshift-scale-up-web.png %}[OpenShift Scale Up Web, 700]
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by **clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'**:
-
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
-
-In the window called **'>_ workshop-tools terminal'**, **execute the following commands**:
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ oc get dc 
-
-NAME        REVISION   DESIRED   CURRENT   TRIGGERED BY
-catalog     1          1         1         config,image(catalog:latest)
-gateway     1          1         1         config,image(gateway:latest)
-inventory   1          1         1         config,image(inventory:latest)
-web         1          1         1         config,image(web:latest)
-----
-
-And then, scale the **Web Service** deployment config to 2 pods:
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ oc scale dc/web --replicas=2
-----
-
-The **--replicas** option specified the number of Web UI pods that should be running. If you look 
-at the OpenShift Web Console, you can see a new pod is being started for the Web UI and as soon 
-as the health probes pass, it will be automatically added to the load-balancer.
-
-image:{% image_path fault-scale-up.png %}[Scaling Up Pods,740]
+You can see a new pod is being started for the Web UI and as soon as the health probes pass, 
+it will be automatically added to the load-balancer.
 
 You can verify that the new pod is added to the load balancer by checking the details of the 
-Web UI service object:
+Web UI service resource. 
 
-----
-$ oc describe svc/web
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Topology' -> 'DC web-coolstore' -> 'Resources' -> 'S web-coolstore' -> 'Pods'*`.
 
-...
-Endpoints:              10.129.0.146:8080,10.129.0.232:8080
-...
-----
+image:{% image_path openshift-service-web.png %}[OpenShift Service Web, 700]
 
-*_Endpoints_* shows the IPs of the 2 pods that the load-balancer is sending traffic to.
+This page is showing the 2 pods that the load-balancer is sending traffic to.
 
 [TIP]
 ====
@@ -98,7 +66,7 @@ strategy to round robin:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc annotate route/web haproxy.router.openshift.io/balance=roundrobin
+$ oc annotate route/web-coolstore haproxy.router.openshift.io/balance=roundrobin
 ----
 ====
 
@@ -156,10 +124,17 @@ Set the following resource constraints on the Web UI pod:
 
 |===
 
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set resources dc/web --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi
+$ oc set resources dc/web-coolstore --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi
 ----
 
 TIP: CPU is measured in units called millicores. Each node in a cluster inspects the 
@@ -177,7 +152,7 @@ the CPU consumption passes 40% utilization:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc autoscale dc/web --min 1 --max 5 --cpu-percent=40
+$ oc autoscale dc/web-coolstore --min 1 --max 5 --cpu-percent=40
 ----
 
 All set! Now the Web UI can scale automatically to multiple instances if the load on the CoolStore 
@@ -188,7 +163,7 @@ installed within your workspace.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ httperf --server web.{{PROJECT}}.svc:8080 --num-conn 100 --num-calls 800 --rate 10 --timeout 5 --verbose
+$ httperf --server web-coolstore.{{PROJECT}}.svc --port 8080 --num-conn 100 --num-calls 800 --rate 10 --timeout 5 --verbose
 ----
 
 [NOTE]
@@ -254,10 +229,10 @@ pod to verify how OpenShift starts the pod again. First, check the Catalog pod t
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc get pods -l deploymentconfig=catalog #<1>
+$ oc get pods -l deploymentconfig=catalog-coolstore #<1>
 
-NAME              READY     STATUS    RESTARTS   AGE
-catalog-3-xf111   1/1       Running   0          42m
+NAME                        READY     STATUS    RESTARTS   AGE
+catalog-coolstore-6-gp5jz   1/1       Running   0          47m
 ----
 <1> The **-l** options tells the command to list pods that have the **deploymentconfig=catalog** label 
 assigned to them. You can see pods labels using **oc get pods --show-labels** command.
@@ -267,7 +242,7 @@ assigned to them. You can see pods labels using **oc get pods --show-labels** co
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc delete pods -l deploymentconfig=catalog
+$ oc delete pods -l deploymentconfig=catalog-coolstore
 ----
 
 You need to be fast for this one! 

@@ -129,16 +129,39 @@ Finally, `*enter the following information*`:
 |$(plus) Add new user...
 
 |Provide Username for basic authentication to the API Server
-|{{ OPENSHIFT_USER }}
+|{{OPENSHIFT_USER}}
 
 |Provide Password for basic authentication to the API Server
-|{{ OPENSHIFT_PASSWORD }}
+|{{OPENSHIFT_PASSWORD}}
 
 |===
 
-You should see your project ({{PROJECT}}) in the **OpenShift View** as following:
+You should see 2 projects in the **OpenShift View** as following:
 
 image:{% image_path che-openshift-login.png %}[Che - OpenShift View, 300]
+
+* The **'{{PROJECT}}' project** will be used as a **Staging Environment**.
+* The **'{{OPENSHIFT_USER}}-che' project** contains your **Developer Workspace** up and running
+
+So, as you can see, you are missing the **Development Environment**. Let's create it!
+
+In your {{ CHE_URL }}[Workspace^], from **'OpenShift' View**, 
+`*right-click on the cluster URL and select 'New Project'*`
+
+image:{% image_path che-openshift-new-project.png %}[Che - OpenShift New Project, 500]
+
+Finally, `*enter the following information*`:
+
+.OpenShift New Project
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Provide Project name.
+|{{DEV_PROJECT}}
+
+|===
 
 '''
 
@@ -157,7 +180,7 @@ image::{% image_path developer-console-button.png  %}[Developer Workspace - Butt
 then log in. After you have authenticated to the web console, you will be presented with a
 list of projects that your user has permission to work with. 
 
-`*Select the 'Developer View' then your '{{PROJECT}}'*` to be taken to the project overview page
+`*Select the 'Developer View' then your '{{DEV_PROJECT}}'*` to be taken to the project overview page
 which will list all of the routes, services, deployments, and pods that you have
 running as part of your project. There's nothing there now, but that's about to
 change.

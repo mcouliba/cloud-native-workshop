@@ -166,11 +166,15 @@ Leave the **'quarkus.datasource.url'**, **'quarkus.datasource.username'** and **
 parameters unchanged. They will be overridden later.
 ====
 
-`*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build on OpenShift'*`
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 
 image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
-image:{% image_path che-inventory-build-openshift.png %}[Che - Inventory Build On OpenShift, 500]
+image:{% image_path che-inventory-build.png %}[Che - Build Inventory, 500]
+
+Then, `*push the updated component to the OpenShift cluster*`.
+
+image:{% image_path che-openshift-push-again-inventory.png %}[Che - OpenShift Push Inventory, 400]
 
 Now, let's create the Quarkus configuration content using the database credentials.
 In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
@@ -200,7 +204,7 @@ packaged in the Inventory JAR archive:
 .>_ workshop-tools terminal
 ----
 $ oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties # <1>
-$ oc set volume dc/inventory --add --configmap-name=inventory --mount-path=/deployments/config # <2>
+$ oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config # <2>
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
 is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
@@ -221,7 +225,7 @@ a shell command inside the Inventory Container*`:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -c inventory dc/inventory cat /deployments/config/application.properties
+$ oc rsh -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
 
 quarkus.datasource.url=jdbc:mariadb://inventory-mariadb:3306/inventorydb
 quarkus.datasource.username=inventory
@@ -311,7 +315,7 @@ if enabled, triggers hot reloading of beans or Spring context when changes are d
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc delete pod -l deploymentconfig=catalog
+$ oc delete pod -l deploymentconfig=catalog-coolstore
 ----
 
 When the Catalog container is ready, verify that the PostgreSQL database is being 
@@ -320,7 +324,7 @@ used. Check the Catalog pod logs:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc logs -c spring-boot dc/catalog | grep hibernate.dialect
+$ oc logs -c catalog-coolstore dc/catalog-coolstore | grep hibernate.dialect
 
 2017-08-10 21:07:51.670  INFO 1 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
 ----

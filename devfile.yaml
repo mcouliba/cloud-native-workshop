@@ -52,6 +52,12 @@ commands:
         type: exec
         command: 'mvn clean package -DskipTests'
         component: workshop-tools
+  - name: 'GitOps - Export'
+    actions:
+      - workdir: /projects/workshop/labs/gitops
+        type: exec
+        command: ./gitops_exporter.sh my-project${CHE_WORKSPACE_NAMESPACE#user} cn-project${CHE_WORKSPACE_NAMESPACE#user}
+        component: workshop-tools
   - name: 'Gateway - Generate Traffic'
     actions:
       - workdir: /projects/workshop/labs/scripts

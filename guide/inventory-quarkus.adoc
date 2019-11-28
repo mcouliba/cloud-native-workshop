@@ -416,7 +416,7 @@ image:{% image_path che-inventory-build.png %}[Che - Build Inventory, 500]
 Once this completes, let's **push** your application into OpenShift.
 
 In your {{ CHE_URL }}[Workspace^], from **'OpenShift' View**, 
-`*right-click on your '{{PROJECT}}' project and select 'New Component'*`
+`*right-click on your '{{DEV_PROJECT}}' project and select 'New Component'*`
 
 image:{% image_path che-openshift-new-component.png %}[Che - OpenShift New Component, 400]
 
@@ -533,7 +533,7 @@ Configuration changes
  ✓  Applying configuration [43ms]
 
 Applying URL changes
- ✓  URL inventory: http://inventory-coolstore-{{PROJECT}}.{{APPS_HOSTNAME_SUFFIX}} created
+ ✓  URL inventory: http://inventory-coolstore-{{DEV_PROJECT}}.{{APPS_HOSTNAME_SUFFIX}} created
 
 Pushing to component inventory of type binary
  ✓  Checking file changes for pushing [5ms]

@@ -46,5 +46,7 @@ modules:
     name:  Microservice Tracing with Service Mesh
   abtesting:
     name:  "A/B Testing with Service Mesh"
+  gitops:
+    name:  "GitOps"
   env-info:
     name: "Appendix: Lab Env Info"

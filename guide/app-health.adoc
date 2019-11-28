@@ -141,6 +141,8 @@ image:{% image_path che-inventory-build.png %}[Che - Inventory Build, 500]
 
 Then, `*push the updated component to the OpenShift cluster*`.
 
+image:{% image_path che-openshift-push-again-inventory.png %}[Che - OpenShift Push Inventory, 400]
+
 Once completed, verify that the health endpoint works for the **Inventory Service** using `*curl*`
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:

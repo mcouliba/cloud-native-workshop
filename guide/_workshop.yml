@@ -11,6 +11,7 @@ vars:
   OPENSHIFT_USER: userX
   OPENSHIFT_PASSWORD: PASSWORD
   PROJECT: cn-projectX
+  DEV_PROJECT: my-projectX
   INFRA_PROJECT: infraX
   WORKSHOP_GIT_REPO: https://github.com/mcouliba/cloud-native-workshop
   WORKSHOP_GIT_REF: master
@@ -32,6 +33,7 @@ modules:
   - app-health
   - fault-tolerance
   - app-config
+  - gitops
   - continuous-delivery-tekton
   - service-mesh
   - abtesting

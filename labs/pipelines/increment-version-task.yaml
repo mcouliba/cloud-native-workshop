@@ -6,7 +6,7 @@ metadata:
 spec:
   inputs:
     resources:
-      - name: source-repo
+      - name: gitops-repo
         type: git
     params:
       - name: appName
@@ -14,7 +14,7 @@ spec:
         description: The name of the application
   outputs:
     resources:
-      - name: source-repo
+      - name: gitops-repo
         type: git 
   steps:
     - name: get-current-version
@@ -26,8 +26,8 @@ spec:
         - >-
           oc get imagestream $(inputs.params.appName) -o=jsonpath='{range
           .status.tags[*]}{.tag}{"\n"}{end}' | grep -v latest | sort -r | head
-          -1 > /workspace/source-repo/version.txt && cat
-          /workspace/source-repo/version.txt
+          -1 > /workspace/gitops-repo/version.txt && cat
+          /workspace/gitops-repo/version.txt
     - name: get-next-version
       image: 'perl:5.30'
       command:
@@ -35,7 +35,7 @@ spec:
       args:
         - '-e'
         - >-
-          open my $fh_version, '<', '/workspace/source-repo/version.txt' or die
+          open my $fh_version, '<', '/workspace/gitops-repo/version.txt' or die
           "Can't open file $!";
 
           my $current_version = do { local $/; <$fh_version> };
@@ -50,7 +50,7 @@ spec:
           }
 
           open(my $fh_next_version, '>',
-          '/workspace/output/source-repo/next_version.txt');
+          '/workspace/output/gitops-repo/next_version.txt');
 
           print $fh_next_version $next_version;
 

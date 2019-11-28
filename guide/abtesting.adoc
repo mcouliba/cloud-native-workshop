@@ -38,22 +38,15 @@ Then, `*enter the following information and click on 'Create' button*` :
 |coolstore
 
 |Name
-|catalog-v2
+|catalog-coolstore-v2
 
 |Create a route to the application
 |Checked
 
 |Labels
-|app=catalog group=com.redhat.cloudnative provider=fabric8 app.kubernetes.io/name=golang version=2.0
+|app=coolstore app.kubernetes.io/instance=catalog app.kubernetes.io/name=golang app.kubernetes.io/part-of=coolstore version=2.0
 
 |===
-
-[TIP]
-.Graphical Link
-====
-Add the value **'catalog-v2'** to the annotation called **'app.openshift.io/connects-to'** to graphically link the **Gateway Service** 
-and the **Catalog Service v2**.
-====
 
 image:{% image_path openshift-catalogv2-topology.png %}[OpenShift - Catalog Topology, 700]
 
@@ -69,7 +62,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc patch dc/catalog-v2 --patch \
+$ oc patch dc/catalog-coolstore-v2 --patch \
   '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}'
 ----
 
@@ -78,9 +71,9 @@ To confirm that the application is successfully deployed, `*run this following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc get pods -lapp=catalog-v2,deploymentconfig=catalog-v2
-NAME                 READY     STATUS    RESTARTS   AGE
-catalog-v2-2-7zsxb   2/2       Running   0          1m
+$ oc get pods -ldeploymentconfig=catalog-coolstore-v2
+NAME                           READY     STATUS    RESTARTS   AGE
+catalog-coolstore-v2-3-n2bmf   2/2       Running   0          24s
 ----
 
 The status should be **Running** and there should be **2/2** pods in the **Ready** column.
@@ -116,17 +109,17 @@ $ cat << EOF | oc create -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: catalog
+  name: catalog-coolstore
 spec:
   hosts:
-    - catalog
+    - catalog-coolstore
   http:
   - route:
     - destination:
-        host: catalog
+        host: catalog-coolstore
       weight: 90
     - destination:
-        host: catalog-v2
+        host: catalog-coolstore-v2
       weight: 10
 EOF
 ----
@@ -197,17 +190,17 @@ $ cat << EOF | oc replace -f -
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: catalog
+  name: catalog-coolstore
 spec:
   hosts:
-    - catalog
+    - catalog-coolstore
   http:
   - route:
     - destination:
-        host: catalog
+        host: catalog-coolstore
       weight: 0
     - destination:
-        host: catalog-v2
+        host: catalog-coolstore-v2
       weight: 100
 EOF
 ----

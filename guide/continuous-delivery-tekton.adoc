@@ -24,76 +24,21 @@ the platform and enables defining truly complex workflows directly from within O
 
 '''
 
-=== What is Gogs?
-
-[sidebar]
---
-image:{% image_path gogs-logo.png %}[Gogs, 150]
-
-https://gogs.io[Gogs^] is a painless self-hosted Git service.
-
-The goal of this project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. 
-With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, 
-Mac OS X, Windows and ARM.
---
-
-'''
-
 === Create a Git Repository for Inventory
 
 The first step for any deployment pipeline is to store all code and configurations in 
-a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
-Gogs git server.
+a source code repository.
 
-`*Click on the below button called 'Developer Repository'*`
-
-[link={{ GOGS_URL }}]
-[window=_blank, align="center"]
-image::{% image_path developer-repository-button.png  %}[Developer Repository - Button, 300]
-
-Then, `*click on 'Register'*` to register a new user with the following details:
-
-
-.Gogs Registration
-[%header,cols=2*]
-|===
-|Parameter
-|Value
-
-|Username 
-|{{OPENSHIFT_USER}}
-
-|Email
-|{{OPENSHIFT_USER}}@none.com
-
-|Password
-|{{OPENSHIFT_PASSWORD}}
-
-| Re-Type
-|{{OPENSHIFT_PASSWORD}}
-
-|===
-
-image:{% image_path cd-gogs-signup.png %}[Sign Up Gogs,700]
-
-`*Click on 'Create New Account'*`. 
-You will be redirected to the sign in page. Sign in using the above username and password.
-
-`*Click on the plus icon*` as below
+In {{ GOGS_URL }}[Gogs^], `*click on the plus icon*` as below
 
 image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
 
 
-`*Give 'inventory-quarkus' as Repository Name and click on 'Create Repository' button*`
+`*Give 'inventory-quarkus' as Repository Name*`
 
 image:{% image_path cd-gogs-new-repo.png %}[Create New Repository,700]
 
-The Git repository is created now. 
-
-`*Click on the copy-to-clipboard icon*` to near the 
-HTTP Git url to copy it to the clipboard which you will need in a few minutes.
-
-image:{% image_path cd-gogs-empty-repo.png %}[Empty Repository,900]
+`*Click on 'Create Repository' button*`. The Git repository is created now. 
 
 '''
 
@@ -119,8 +64,8 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cd /projects/workshop/labs/inventory-quarkus
-$ git remote add origin {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/inventory-quarkus
+cd /projects/workshop/labs/inventory-quarkus
+git remote add origin {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/inventory-quarkus
 ----
 
 Via the command menu (`*'View' -> 'Find Command...'*`),
@@ -192,14 +137,7 @@ image:{% image_path tekton-architecture.png %}[Tekton Architecture, 600]
 
 '''
 
-=== Disable Automatic Deployment Trigger
-
-OpenShift automates deployments using https://docs.openshift.com/container-platform/4.2/welcome/index.html[deployment triggers^] 
-that react to changes to the container image or configuration. 
-Since you want to control the deployments instead from the pipeline, 
-you should remove the Inventory deploy triggers so that building a new Inventory container 
-image wouldn't automatically result in a new deployment. That would allow the pipeline to decide when a 
-deployment should occur.
+=== Create the Image Builder for Inventory Service
 
 In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
@@ -211,8 +149,35 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set triggers dc/inventory-coolstore --remove-all
+$ oc new-build java \
+  --name=inventory-coolstore \
+  --binary=true \
+  --labels=app=coolstore,app.kubernetes.io/instance=inventory \
+  --namespace={{PROJECT}}
 ----
+
+You should have the following output:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+    Java Applications 
+    ----------------- 
+    Platform for building and running plain Java applications (fat-jar and flat classpath)
+
+    Tags: builder, java
+
+    * A source build using binary input will be created
+      * The resulting image will be pushed to image stream tag "inventory-coolstore:latest"
+      * A binary build was created, use 'start-build --from-dir' to trigger a new build
+
+--> Creating resources with label app=coolstore,app.kubernetes.io/instance=inventory ...
+    imagestream.image.openshift.io "inventory-coolstore" created
+    buildconfig.build.openshift.io "inventory-coolstore" created
+--> Success
+----
+
+
 
 '''
 
@@ -228,7 +193,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create -f -
+$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -269,6 +234,37 @@ spec:
 EOF
 ----
 
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: s2i-jar
+spec:
+  inputs:
+    resources:
+      - name: source-repo
+        type: git
+    params:
+      - name: componentName
+        default: sample
+        description: The name of the component
+  steps:
+    - name: build-image
+      image: 'quay.io/openshift/origin-cli:latest'
+      command:
+        - /usr/bin/oc
+      args:
+        - start-build
+        - \$(inputs.params.componentName)
+        - '--from-file=/workspace/source-repo/ROOT.jar'
+        - '--follow'
+EOF
+----
+
 '''
 
 === Create a Pipeline
@@ -281,7 +277,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create -f -
+$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
@@ -289,19 +285,37 @@ metadata:
   name: my-pipeline
 spec:
   resources:
-  - name: app-git
-    type: git
+    - name: app-git
+      type: git
+  params:
+    - name: componentName
+      default: sample
+      description: The name of the component
   tasks:
-  - name: build-jar
-    taskRef:
-      name: maven-build
-    resources:
-      inputs:
-      - name: source-repo
-        resource: app-git
-      outputs:
-      - name: source-repo
-        resource: app-git
+    - name: build-jar
+      taskRef:
+        name: maven-build
+      resources:
+        inputs:
+          - name: source-repo
+            resource: app-git
+        outputs:
+          - name: source-repo
+            resource: app-git
+    - name: build-image
+      taskRef:
+        name: s2i-jar
+      runAfter:
+        - build-jar
+      resources:
+        inputs:
+          - name: source-repo
+            resource: app-git
+            from: 
+              - build-jar
+      params:
+        - name: componentName
+          value: '\$(params.componentName)'
 EOF
 ----
 
@@ -317,7 +331,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create -f -
+$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
@@ -351,6 +365,34 @@ Once done, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **
 image:{% image_path openshift-pipeline-mine.png %}[OpenShift Pipeline,400]
 
 Congratulations!! You have created and run your first **OpenShift Pipeline with Tekton**!!
+
+'''
+
+=== Create a Pipeline Resource for GitOps
+
+A **PipelineResource** in a pipeline are the set of objects that are going to be used as inputs to a **Task** 
+and can be output by a **Task**.
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: gitops-git
+spec:
+  type: git
+  params:
+  - name: url
+    value: {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/gitops-cn-project.git
+  - name: revision
+    value: master
+EOF
+----
 
 '''
 

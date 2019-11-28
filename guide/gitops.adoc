@@ -1,0 +1,187 @@
+== Gitops
+
+_20 MINUTE EXERCISE_
+
+In this lab you will learn about deployment pipelines and you will create a pipeline to 
+automate build and deployment of the Inventory service.
+
+[sidebar]
+.GitOps
+--
+So far you have been building and deploying each service manually to OpenShift. Although 
+it's convenient for local development, it's an error-prone way of delivering software if 
+extended to test and production environments.
+
+Continuous Delivery (CD) refers to a set of practices with the intention of automating 
+various aspects of delivery software. One of these practices is called **Delivery Pipeline** 
+which is an automated process to define the steps a change in code or configuration has 
+to go through in order to reach upper environments and eventually to production. 
+
+OpenShift simplifies building CI/CD Pipelines by integrating
+the popular https://jenkins.io/doc/book/pipeline/overview/[Jenkins Pipelines^] into
+the platform and enables defining truly complex workflows directly from within OpenShift.
+--
+
+'''
+
+=== Export OpenShift Resources
+
+In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'GitOps - Export'*`
+
+image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+
+image:{% image_path che-gitops-export.png %}[Che - GitOps Export, 500]
+
+image:{% image_path che-gitops-export-result.png %}[Che - GitOps Export Result, 300]
+
+'''
+
+=== What is Gogs?
+
+[sidebar]
+--
+image:{% image_path gogs-logo.png %}[Gogs, 150]
+
+https://gogs.io[Gogs^] is a painless self-hosted Git service.
+
+The goal of this project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. 
+With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, 
+Mac OS X, Windows and ARM.
+--
+
+'''
+
+=== Create a Git Repository for GitOps
+
+The first step is to store all Kubernetes/OpenShift resources in 
+a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
+Gogs git server.
+
+`*Click on the below button called 'Developer Repository'*`
+
+[link={{ GOGS_URL }}]
+[window=_blank, align="center"]
+image::{% image_path developer-repository-button.png  %}[Developer Repository - Button, 300]
+
+Then, `*click on 'Register'*` to register a new user with the following details:
+
+
+.Gogs Registration
+[%header,cols=2*]
+|===
+|Parameter
+|Value
+
+|Username 
+|{{OPENSHIFT_USER}}
+
+|Email
+|{{OPENSHIFT_USER}}@none.com
+
+|Password
+|{{OPENSHIFT_PASSWORD}}
+
+| Re-Type
+|{{OPENSHIFT_PASSWORD}}
+
+|===
+
+image:{% image_path cd-gogs-signup.png %}[Sign Up Gogs,700]
+
+`*Click on 'Create New Account'*`. 
+You will be redirected to the sign in page. Sign in using the above username and password.
+
+`*Click on the plus icon*` as below
+
+image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
+
+
+`*Give 'gitops-cn-project' as Repository Name*`
+
+image:{% image_path gogs-gitops-new-repo.png %}[Create New Repository,700]
+
+`*Click on 'Create Repository' button*`.The Git repository is created now. 
+
+'''
+
+=== Push The Configuration to the Git Repository
+
+Now that you have a Git repository for the Inventory service, you should push the 
+source code into this Git repository.
+
+In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
+`*run 'Git: Initialize Repository'*`
+
+image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
+
+`*Select the '/projects/workshop/labs/gitops' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
+
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+cd /projects/workshop/labs/gitops
+git remote add origin {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/gitops-cn-project
+----
+
+Via the command menu (`*'View' -> 'Find Command...'*`),
+`*run 'Git: Close Repository'*`
+
+Via the command menu (`*'View' -> 'Find Command...'*`),
+`*run 'Git: Open Repository' and select the '/projects/workshop/labs/gitops' folder*`
+
+Open the **Source Code Management (SCM) view** by clicking on `*'View' -> 'SCM menu'*`
+
+`*Click on '...' -> 'Stage All Changes'*`
+
+image:{% image_path che-scm-gitops-stage-all-changes.png %}[Che - SCM Stage All Changes, 500]
+
+`*Click on the 'check' icon and enter 'Initial' as commit message*`
+
+image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
+
+`*Click on '...' -> 'Push'*`
+
+image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
+
+`*Click on the 'OK' button*` to publish the new **master branch**. 
+Finally, `*enter your Gogs credentials ({{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }})*`.
+
+image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
+
+image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
+
+Once done, in {{ GOGS_URL }}, `*refresh the page of your 'gitops-cn-project' repository*`. You should 
+see the project files in the repository.
+
+image:{% image_path gogs-gitops-repo.png %}[GitOps Repository,900]
+
+'''
+
+=== What is Argo CD?
+
+[sidebar]
+--
+image:{% image_path argocd-logo.png %}[Argo CD Logo, 150]
+
+https://argoproj.github.io/argo-cd/[Argo CD^] is a declarative, GitOps continuous delivery tool for Kubernetes.
+
+Application definitions, configurations, and environments should be declarative and version controlled. 
+Application deployment and lifecycle management should be automated, auditable, and easy to understand.
+--
+
+'''
+
+=== What is ArgoCD?
+
+
+'''
+
+
+Well done! You are ready for the next lab.
