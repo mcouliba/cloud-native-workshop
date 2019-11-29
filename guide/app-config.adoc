@@ -73,7 +73,16 @@ Then, enter the following information:
 |Parameter 
 |Value
 
-|Database Service Name
+|Namespace*
+|PR {{DEV_PROJECT}}
+
+|Memory Limit*
+|512Mi
+
+|Namespace
+|openshift
+
+|Database Service Name*
 |inventory-mariadb
 
 |MariaDB Connection Username
@@ -85,8 +94,11 @@ Then, enter the following information:
 |MariaDB root Password
 |inventoryadmin
 
-|MariaDB Database Name
+|MariaDB Database Name*
 |inventorydb
+
+|Version of MariaDB Image*
+|10.2
 
 |===
 
@@ -95,7 +107,7 @@ Then, enter the following information:
 image:{% image_path openshift-inventory-mariadb-topology.png %}[OpenShift - Inventory MariaDB, 700]
 
 
-`*click again on '+ Add' and select 'Database', delect 'PostgreSQL (Ephemeral)' and click on 'Instantiate Template'*` 
+`*Click again on '+ Add' and select 'Database', delect 'PostgreSQL (Ephemeral)' and click on 'Instantiate Template'*` 
 to create the Catalog Database as following:
 
 Then, enter the following information:
@@ -106,7 +118,16 @@ Then, enter the following information:
 |Parameter 
 |Value
 
-|Database Service Name
+|Namespace*
+|PR {{DEV_PROJECT}}
+
+|Memory Limit*
+|512Mi
+
+|Namespace
+|openshift
+
+|Database Service Name*
 |catalog-postgresql
 
 |PostgreSQL Connection Username
@@ -115,8 +136,11 @@ Then, enter the following information:
 |PostgreSQL Connection Password
 |catalog
 
-|PostgreSQL Database Name
+|PostgreSQL Database Name*
 |catalogdb
+
+|Version of PostgreSQL Image*
+|10
 
 |===
 
@@ -203,8 +227,8 @@ packaged in the Inventory JAR archive:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties # <1>
-$ oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config # <2>
+oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n {{DEV_PROJECT}}# <1>
+oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n {{DEV_PROJECT}}# <2>
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
 is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
@@ -225,8 +249,13 @@ a shell command inside the Inventory Container*`:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
+$ oc rsh -n {{DEV_PROJECT}} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
+----
 
+You should have the following output:
+
+[source,properties]
+----
 quarkus.datasource.url=jdbc:mariadb://inventory-mariadb:3306/inventorydb
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
@@ -238,7 +267,7 @@ loaded into the database.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh dc/inventory-mariadb
+$ oc rsh -n {{DEV_PROJECT}} dc/inventory-mariadb
 ----
 
 Once connected to the MariaDB container, `*run the following*`:
@@ -299,10 +328,18 @@ spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.hibernate.ddl-auto=create
 EOF
-$ oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties
 ----
 <1> The hostname defined for the PostgreSQL connection-url (catalog-postgresql) corresponds to the PostgreSQL service name published on OpenShift. 
 This name will be resolved by the internal DNS server exposed by OpenShift and accessible to containers running on OpenShift.
+
+And then `*create a Config Map*` that you will use to overlay on the default **application.properties** which is 
+packaged in the Catalog JAR archive:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n {{DEV_PROJECT}}
+----
 
 The https://github.com/spring-cloud-incubator/spring-cloud-kubernetes[Spring Cloud Kubernetes^] plug-in implements 
 the integration between Kubernetes and Spring Boot and is already added as a dependency to the Catalog Maven 
@@ -310,12 +347,26 @@ project. Using this dependency, Spring Boot would search for a config map (by de
 the application) to use as the source of application configurations during application bootstrapping and 
 if enabled, triggers hot reloading of beans or Spring context when changes are detected on the config map.
 
+Although https://github.com/spring-cloud-incubator/spring-cloud-kubernetes[Spring Cloud Kubernetes^] 
+tries to discover config maps, due to security reasons containers 
+by default are not allowed to snoop around OpenShift clusters and discover objects. Security comes first, 
+and discovery is a privilege that needs to be granted to containers in each project. 
+
+Since you do want Spring Boot to discover the config maps inside the **{{DEV_PROJECT}}** project, you 
+need to grant permission to the Spring Boot service account to access the OpenShift REST API and find the 
+config maps. 
+
+.>_ workshop-tools terminal
+----
+$ oc policy add-role-to-user view -n {{DEV_PROJECT}} -z default
+----
+
 `*Delete the Catalog Pod*` to make it start again and look for the config maps:
 
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc delete pod -l deploymentconfig=catalog-coolstore
+$ oc delete pod -l deploymentconfig=catalog-coolstore -n {{DEV_PROJECT}}
 ----
 
 When the Catalog container is ready, verify that the PostgreSQL database is being 
@@ -324,7 +375,7 @@ used. Check the Catalog pod logs:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc logs -c catalog-coolstore dc/catalog-coolstore | grep hibernate.dialect
+$ oc logs -c catalog-coolstore dc/catalog-coolstore -n {{DEV_PROJECT}} | grep hibernate.dialect
 
 2017-08-10 21:07:51.670  INFO 1 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
 ----
@@ -334,7 +385,7 @@ You can also connect to the Catalog PostgreSQL database and verify that the seed
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh dc/catalog-postgresql
+$ oc rsh -n {{DEV_PROJECT}} dc/catalog-postgresql
 ----
 
 Once connected to the PostgreSQL container, run the following:
@@ -417,8 +468,8 @@ This secret has three encrypted properties defined as **database-name**, **datab
 the PostgreSQL database name, username and password values. These values are injected in the PostgreSQL container as 
 environment variables and used to initialize the database.
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Administrator view**,
-`*click on 'Workloads' -> 'Deployment Configs' -> 'DC catalog-postgresql' -> 'Environment'*`. Notice the values 
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'DC catalog-postgresql' -> 'DC catalog-postgresql' -> 'Environment'*`. Notice the values 
 from the secret are defined as env vars on the deployment:
 
 image:{% image_path config-psql-secret.png %}[Secrets as Env Vars,900]

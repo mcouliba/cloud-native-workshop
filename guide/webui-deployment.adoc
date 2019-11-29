@@ -88,6 +88,31 @@ Then, enter the following information:
 
 '''
 
+=== Update Annotations
+
+For the integration with the https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^] plugin, 
+you need to add a specific annotation when deploying a component without use it.
+
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'DC web-coolstore' -> 'Actions' -> 'Edit Annotations'*`
+
+image:{% image_path openshift-web-annotate.png %}[OpenShift - Web Annotate, 700]
+
+`*Add the new annotation*` in order to have a graphical link between **Web Service** and **Gateway Service**.
+
+.Web Annotations
+[%header,cols=2*]
+|===
+|Key 
+|Value
+
+|app.kubernetes.io/component-source-type
+|git
+
+|===
+
+'''
+
 === Test your Service
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
