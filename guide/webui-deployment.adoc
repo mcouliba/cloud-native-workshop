@@ -77,6 +77,11 @@ Then, enter the following information:
 
 |Create a route to the application
 |Checked
+
+|Labels
+|app=coolstore app.kubernetes.io/instance=web
+
+
 |===
 
 `*Click on 'Create' button*` 
