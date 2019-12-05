@@ -2,29 +2,30 @@
 
 _20 MINUTE EXERCISE_
 
-In this lab you will learn about deployment pipelines and you will create a pipeline to 
-automate build and deployment of the Inventory service.
+In this lab you will learn about deploying and managing Kubernetes resources using a GitOps tool.
+
+'''
+
+=== What is Argo CD?
 
 [sidebar]
-.GitOps
 --
-So far you have been building and deploying each service manually to OpenShift. Although 
-it's convenient for local development, it's an error-prone way of delivering software if 
-extended to test and production environments.
+image:{% image_path argocd-logo.png %}[Argo CD Logo, 200]
 
-Continuous Delivery (CD) refers to a set of practices with the intention of automating 
-various aspects of delivery software. One of these practices is called **Delivery Pipeline** 
-which is an automated process to define the steps a change in code or configuration has 
-to go through in order to reach upper environments and eventually to production. 
+https://argoproj.github.io/argo-cd/[Argo CD^] is a declarative, GitOps continuous delivery tool for Kubernetes.
 
-OpenShift simplifies building CI/CD Pipelines by integrating
-the popular https://jenkins.io/doc/book/pipeline/overview/[Jenkins Pipelines^] into
-the platform and enables defining truly complex workflows directly from within OpenShift.
+It follows the GitOps pattern of using Git repositories as the source of truth for defining 
+the desired application state. 
+
+It automates the deployment of the desired application states in the specified target environments. Application 
+deployments can track updates to branches, tags, or pinned to a specific version of manifests at a Git commit.
 --
 
 '''
 
 === Export OpenShift Resources
+
+First, you need to export the project resources from OpenShift.
 
 In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'GitOps - Export'*`
 
@@ -32,26 +33,28 @@ image:{% image_path che-runtask.png %}[Che - RunTask, 500]
 
 image:{% image_path che-gitops-export.png %}[Che - GitOps Export, 500]
 
+A terminal should be opened with the following output:
+
+[source,shell]
+.>_ GitOps Export
+----
+--- Export Kubernetes resources for GitOps from {{DEV_PROJECT}} to {{PROJECT}} ---
+Exporting resources for inventory-coolstore...
+Exporting resources for catalog-coolstore...
+Exporting resources for gateway-coolstore...
+Exporting resources for web-coolstore...
+--- Kubernetes resources has been exported! ---
+----
+
+This operation exports the project resources (deploymentconfig, route, secret, service)
+and cleans them up. As a result, you should have all resources in YAML files under 
+the **/project/workshop/lab/gitops** folder.
+
 image:{% image_path che-gitops-export-result.png %}[Che - GitOps Export Result, 300]
 
 '''
 
-=== What is Gogs?
-
-[sidebar]
---
-image:{% image_path gogs-logo.png %}[Gogs, 150]
-
-https://gogs.io[Gogs^] is a painless self-hosted Git service.
-
-The goal of this project is to make the easiest, fastest, and most painless way of setting up a self-hosted Git service. 
-With Go, this can be done with an independent binary distribution across ALL platforms that Go supports, including Linux, 
-Mac OS X, Windows and ARM.
---
-
-'''
-
-=== Create a Git Repository for GitOps
+=== Push them into a Git Repository
 
 The first step is to store all Kubernetes/OpenShift resources in 
 a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
@@ -127,7 +130,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/gitops
-git remote add origin {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/gitops-cn-project
+git remote add origin {{ GOGS_URL }}/{{OPENSHIFT_USER}}/gitops-cn-project.git
 ----
 
 Via the command menu (`*'View' -> 'Find Command...'*`),
@@ -151,7 +154,7 @@ image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
 image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
 
 `*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gogs credentials ({{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }})*`.
+Finally, `*enter your Gogs credentials ({{OPENSHIFT_USER}}/{{ OPENSHIFT_PASSWORD }})*`.
 
 image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
 
@@ -164,24 +167,101 @@ image:{% image_path gogs-gitops-repo.png %}[GitOps Repository,900]
 
 '''
 
-=== What is Argo CD?
+=== Configure Argo CD
 
-[sidebar]
---
-image:{% image_path argocd-logo.png %}[Argo CD Logo, 150]
+You are going to to use the Argo CD CLI tool to interact with the Argo CD Server.
 
-https://argoproj.github.io/argo-cd/[Argo CD^] is a declarative, GitOps continuous delivery tool for Kubernetes.
+First, `*let's login using the current admin user*`.
 
-Application definitions, configurations, and environments should be declarative and version controlled. 
-Application deployment and lifecycle management should be automated, auditable, and easy to understand.
---
+In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following command*`:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ argocd --insecure --grpc-web login argocd-server.argocd.svc:443 --username admin --password {{OPENSHIFT_PASSWORD}}
+----
+
+You should have the following output:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+WARNING: server is not configured with TLS. Proceed (y/n)? y
+'admin' logged in successfully
+Context 'argocd-server.argocd.svc:443' updated
+----
+
+Next, `*you need to add the newly created repository, **'gitops-cn-project'**, to Argo CD*` with the following command:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ argocd repo add http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
+----
+
+As output, you should see:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+repository 'http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git' added
+----
+
+Finally, `*let's create the application in Argo CD*`.
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ argocd app create \
+    --project default \
+    --name {{PROJECT}} \
+    --repo http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git \
+    --path . \
+    --dest-server https://kubernetes.default.svc \
+    --dest-namespace {{PROJECT}} \
+    --revision master \
+    --sync-policy none
+----
+
+As output, you should see:
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+application '{{PROJECT}}' created
+----
+
+Now your **'gitops-cn-project'** repository is synchronized with your **'{{PROJECT}}'** project.
 
 '''
 
-=== What is ArgoCD?
+=== Deploy your Application into the Staging Environment
 
+Now you set up your application in Argo CD, `*let's sync it in your {{PROJECT}} project*`.
+
+[source,shell]
+.>_ workshop-tools terminal
+----
+$ argocd app sync {{PROJECT}}
+----
+
+Once done, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+`*Select the '{{PROJECT}}'*` to be taken to the project overview page.
+
+image:{% image_path openshift-app-deployed-by-argocd.png %}[OpenShift - Coolstore Project Deployed by Argo CD , 700]
+
+You can see that all resources of your application have been created by Argo CD. 
+But only the **Web Service** is up and running. Indeed, this is the only Service you deployed using s2i feature.
+For the others, https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
+does not create Image or BuildConfig. Using odo underneath, it directly injects the binary into the running Runtime Container.
+
+You are going to fix it in the next lab.
 
 '''
-
 
 Well done! You are ready for the next lab.

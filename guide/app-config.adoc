@@ -106,7 +106,6 @@ Then, enter the following information:
 
 image:{% image_path openshift-inventory-mariadb-topology.png %}[OpenShift - Inventory MariaDB, 700]
 
-
 `*Click again on '+ Add' and select 'Database', delect 'PostgreSQL (Ephemeral)' and click on 'Instantiate Template'*` 
 to create the Catalog Database as following:
 
