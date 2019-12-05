@@ -17,8 +17,7 @@ various aspects of delivery software. One of these practices is called **Deliver
 which is an automated process to define the steps a change in code or configuration has 
 to go through in order to reach upper environments and eventually to production. 
 
-OpenShift simplifies building CI/CD Pipelines by integrating
-the popular https://jenkins.io/doc/book/pipeline/overview/[Jenkins Pipelines^] into
+OpenShift simplifies building CI/CD Pipelines by integrating TektonCD into
 the platform and enables defining truly complex workflows directly from within OpenShift.
 --
 
@@ -29,7 +28,7 @@ the platform and enables defining truly complex workflows directly from within O
 The first step for any deployment pipeline is to store all code and configurations in 
 a source code repository.
 
-In {{ GOGS_URL }}[Gogs^], `*click on the plus icon*` as below
+In {{GOGS_URL}}[Gogs^], `*click on the plus icon*` as below
 
 image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
 
@@ -65,7 +64,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/inventory-quarkus
-git remote add origin {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/inventory-quarkus
+git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/inventory-quarkus
 ----
 
 Via the command menu (`*'View' -> 'Find Command...'*`),
@@ -89,13 +88,13 @@ image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
 image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
 
 `*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gogs credentials ({{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }})*`.
+Finally, `*enter your Gogs credentials ({{OPENSHIFT_USER}}/{{ OPENSHIFT_PASSWORD }})*`.
 
 image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
 
 image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
 
-Once done, in {{ GOGS_URL }}, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
+Once done, in {{GOGS_URL}}/{{OPENSHIFT_USER}}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
 see the project files in the repository.
 
 image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
@@ -285,7 +284,7 @@ metadata:
   name: my-pipeline
 spec:
   resources:
-    - name: app-git
+    - name: component-git
       type: git
   params:
     - name: componentName
@@ -298,10 +297,10 @@ spec:
       resources:
         inputs:
           - name: source-repo
-            resource: app-git
+            resource: component-git
         outputs:
           - name: source-repo
-            resource: app-git
+            resource: component-git
     - name: build-image
       taskRef:
         name: s2i-jar
@@ -310,7 +309,7 @@ spec:
       resources:
         inputs:
           - name: source-repo
-            resource: app-git
+            resource: component-git
             from: 
               - build-jar
       params:
@@ -341,7 +340,7 @@ spec:
   type: git
   params:
   - name: url
-    value: {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/inventory-quarkus.git
+    value: http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/inventory-quarkus.git
   - name: revision
     value: master
 EOF
@@ -388,7 +387,7 @@ spec:
   type: git
   params:
   - name: url
-    value: {{ GOGS_URL }}/{{ OPENSHIFT_USER }}/gitops-cn-project.git
+    value: http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
   - name: revision
     value: master
 EOF
@@ -417,9 +416,6 @@ image:{% image_path che-kubernetes-create.png %}[Che - Kubernetes Create, 500]
 |**Task** which retrieves the current version of the current image of your application 
 then increment it. 
 If "latest" is the current version, the next version will be "1.0", then "1.1", ...
-
-|/projects/workshop/labs/pipelines/s2i-jar-task.yaml
-|**Task** which creates the Container Image of your application based on the generated jar file.
 
 |/projects/workshop/labs/pipelines/oc-tag-image-task.yaml
 |**Task** which tags the new version of the image and updates the Deployment configuration

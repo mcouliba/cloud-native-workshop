@@ -5,12 +5,12 @@ metadata:
   name: application-pipeline
 spec:
   resources:
-  - name: app-git
+  - name: component-git
     type: git
   params:
-  - name: appName
-    default: todefine
-    description: The name of the application
+  - name: componentName
+    default: sample
+    description: The name of the component
   tasks:
   - name: build-jar
     taskRef:
@@ -18,10 +18,10 @@ spec:
     resources:
       inputs:
       - name: source-repo
-        resource: app-git
+        resource: component-git
       outputs:
       - name: source-repo
-        resource: app-git
+        resource: component-git
   - name: build-image
     taskRef:
       name: s2i-jar
@@ -30,12 +30,12 @@ spec:
     resources:
       inputs:
       - name: source-repo
-        resource: app-git
+        resource: component-git
         from: 
         - build-jar
     params:
-    - name: appName
-      value: '$(params.appName)'
+    - name: componentName
+      value: '$(params.componentName)'
   - name: get-next-tag
     taskRef:
       name: increment-version
@@ -44,15 +44,15 @@ spec:
     resources:
       inputs:
       - name: source-repo
-        resource: app-git
+        resource: component-git
         from: 
         - build-jar
       outputs:
       - name: source-repo
-        resource: app-git
+        resource: component-git
     params:
-    - name: appName
-      value: '$(params.appName)'
+    - name: componentName
+      value: '$(params.componentName)'
   - name: tag-image
     taskRef:
       name: oc-tag-image
@@ -62,17 +62,17 @@ spec:
     resources:
       inputs:
       - name: source-repo
-        resource: app-git
+        resource: component-git
         from: 
         - get-next-tag
     params:
-    - name: appName
-      value: '$(params.appName)'
+    - name: componentName
+      value: '$(params.componentName)'
   - name: deploy
     taskRef:
       name: oc-deploy
     runAfter:
       - tag-image
     params:
-    - name: appName
-      value: '$(params.appName)'
+    - name: componentName
+      value: '$(params.componentName)'

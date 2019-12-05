@@ -6,9 +6,9 @@ metadata:
 spec:
   inputs:
     params:
-      - name: appName
+      - name: componentName
         default: sample
-        description: The name of the application
+        description: The name of the component
   steps:
     - name: oc-deploy
       image: quay.io/openshift/origin-cli:latest
@@ -17,4 +17,4 @@ spec:
       args:
         - rollout 
         - latest 
-        - '$(inputs.params.appName)'
+        - '$(inputs.params.componentName)'

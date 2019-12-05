@@ -1,3 +1,4 @@
+
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -6,12 +7,12 @@ metadata:
 spec:
   inputs:
     resources:
-      - name: gitops-repo
+      - name: source-repo
         type: git
     params:
-      - name: appName
+      - name: componentName
         default: sample
-        description: The name of the application
+        description: The name of the component
   steps:
     - name: tag
       image: 'quay.io/openshift/origin-cli:latest'
@@ -20,26 +21,13 @@ spec:
       args:
         - '-c'
         - >-
-          oc tag $(inputs.params.appName):latest $(inputs.params.appName):$(cat /workspace/gitops-repo/next_version.txt)
+          oc tag $(inputs.params.componentName):latest $(inputs.params.componentName):$(cat /workspace/source-repo/next_version.txt)
     - name: update-deployment-config
-      workingdir: /workspace/gitops-repo
       image: 'quay.io/openshift/origin-cli:latest'
       command:
         - /usr/bin/bash
       args:
         - '-c'
         - >-
-          PROJECT_NAME=$(oc get is $(inputs.params.appName) -o=jsonpath='{.metadata.namespace}') && 
-          sed -i 's/image: .*$/image:image-registry.openshift-image-registry.svc:5000\/${PROJECT_NAME}\/$(inputs.params.componentName):MADOU/g' $(inputs.params.componentName)-deploymentconfig.yaml
-    - name: git-push-deployment-config
-      image: 'quay.io/mcouliba/git-cli:latest'
-      workingdir: /workspace/gitops-repo
-      command:
-        - /usr/bin/bash
-      args:
-        - '-c'
-        - >-
-          git config --global user.email "tekton@none.com" && 
-          git config --global user.name "Tekton (userX)" && 
-          git commit /workspace/gitops-repo/$(inputs.params.componentName)-deploymentconfig.yaml -m "Tekton update to version X" && 
-          git push $(echo '$(inputs.resources.gitops-repo.url)' | sed 's/http:\/\//http:\/\/userX:openshift@/g')
+          PROJECT_NAME=$(oc get is $(inputs.params.componentName) -o=jsonpath='{.metadata.namespace}') && 
+          oc patch dc $(inputs.params.componentName) --patch '{"spec": {"template": {"spec": {"containers": [{"name": "$(inputs.params.componentName)", "image": "image-registry.openshift-image-registry.svc:5000/'${PROJECT_NAME}'/$(inputs.params.componentName):'$(cat /workspace/source-repo/next_version.txt)'"}]}}}}'

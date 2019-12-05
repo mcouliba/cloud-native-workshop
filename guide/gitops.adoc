@@ -130,7 +130,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/gitops
-git remote add origin {{ GOGS_URL }}/{{OPENSHIFT_USER}}/gitops-cn-project.git
+git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
 ----
 
 Via the command menu (`*'View' -> 'Find Command...'*`),
@@ -160,7 +160,7 @@ image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
 
 image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
 
-Once done, in {{ GOGS_URL }}, `*refresh the page of your 'gitops-cn-project' repository*`. You should 
+Once done, in {{ GOGS_URL }}/{{OPENSHIFT_USER}}/gitops-cn-project, `*refresh the page of your 'gitops-cn-project' repository*`. You should 
 see the project files in the repository.
 
 image:{% image_path gogs-gitops-repo.png %}[GitOps Repository,900]
@@ -256,11 +256,8 @@ Once done, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **
 image:{% image_path openshift-app-deployed-by-argocd.png %}[OpenShift - Coolstore Project Deployed by Argo CD , 700]
 
 You can see that all resources of your application have been created by Argo CD. 
-But only the **Web Service** is up and running. Indeed, this is the only Service you deployed using s2i feature.
-For the others, https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
-does not create Image or BuildConfig. Using odo underneath, it directly injects the binary into the running Runtime Container.
-
-You are going to fix it in the next lab.
+None of the services is deployed, up and running as we removed all automatic deployment triggers when exporting the configuration
+and there is no image available on your **{{PROJECT}}** project. **You are going to fix it in the next lab.**
 
 '''
 

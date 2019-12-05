@@ -15,6 +15,8 @@ do
     SECRET_YAML=${DIRECTORY}/${COMPONENT_NAME}-secret.yaml
     SERVICE_YAML=${DIRECTORY}/${COMPONENT_NAME}-service.yaml
     ROUTE_YAML=${DIRECTORY}/${COMPONENT_NAME}-route.yaml
+    IMAGESTREAM_YAML=${DIRECTORY}/${COMPONENT_NAME}-imagestream.yaml
+    BUILDCONFIG_YAML=${DIRECTORY}/${COMPONENT_NAME}-buildconfig.yaml
     DEPLOYMENTCONFIG_YAML=${DIRECTORY}/${COMPONENT_NAME}-deploymentconfig.yaml
 
     ## Secret
@@ -52,7 +54,28 @@ do
     yq delete --inplace  ${ROUTE_YAML} items[*].status.ingress[*].wildcardPolicy
     sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${ROUTE_YAML}
 
-    ## Deployment
+    ## Imagestream
+    oc get imagestream -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${IMAGESTREAM_YAML}
+
+    yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.namespace
+    yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.uid
+    yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.selfLink
+    yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.creationTimestamp
+    yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.resourceVersion
+    yq delete --inplace  ${IMAGESTREAM_YAML} items[*].status.tags
+    sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${IMAGESTREAM_YAML}
+
+    ## Build Config
+    oc get buildconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${BUILDCONFIG_YAML}
+
+    yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.namespace
+    yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.uid
+    yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.selfLink
+    yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.creationTimestamp
+    yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.resourceVersion
+    sed -i "s/nodeSelector: .*/nodeSelector: {}/g" ${BUILDCONFIG_YAML}
+
+    ## Deployment Config
     oc get deploymentconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${DEPLOYMENTCONFIG_YAML}
 
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].metadata.namespace

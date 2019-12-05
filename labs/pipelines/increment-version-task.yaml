@@ -9,9 +9,9 @@ spec:
       - name: gitops-repo
         type: git
     params:
-      - name: appName
+      - name: componentName
         default: sample
-        description: The name of the application
+        description: The name of the component
   outputs:
     resources:
       - name: gitops-repo
@@ -24,7 +24,7 @@ spec:
       args:
         - '-c'
         - >-
-          oc get imagestream $(inputs.params.appName) -o=jsonpath='{range
+          oc get imagestream $(inputs.params.componentName) -o=jsonpath='{range
           .status.tags[*]}{.tag}{"\n"}{end}' | grep -v latest | sort -r | head
           -1 > /workspace/gitops-repo/version.txt && cat
           /workspace/gitops-repo/version.txt
