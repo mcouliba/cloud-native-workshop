@@ -227,13 +227,14 @@ packaged in the Inventory JAR archive:
 .>_ workshop-tools terminal
 ----
 oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n {{DEV_PROJECT}}# <1>
-oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n {{DEV_PROJECT}}# <2>
+oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n {{DEV_PROJECT}} # <2>
+oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n {{DEV_PROJECT}}# <3>
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
 is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
 value. Whenever a config map is injected into a container, it would appear as a file with the same 
 name as the key, at specified path on the filesystem.
-<2> Mounts the content of the **Inventory Config Map** as a file inside the **Inventory container**
+<3> Mounts the content of the **Inventory Config Map** as a file inside the **Inventory container**
 at **/deployments/config/application.properties **
 
 [TIP]
@@ -255,7 +256,7 @@ You should have the following output:
 
 [source,properties]
 ----
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb:3306/inventorydb
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.{{DEV_PROJECT}}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 ----
@@ -321,7 +322,7 @@ Let's create the Spring Boot configuration content using the database credential
 .>_ workshop-tools terminal
 ----
 $ cat <<EOF > /projects/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql:5432/catalogdb #<1>
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.{{DEV_PROJECT}}.svc:5432/catalogdb #<1>
 spring.datasource.username=catalog
 spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver
@@ -337,7 +338,8 @@ packaged in the Catalog JAR archive:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n {{DEV_PROJECT}}
+oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n {{DEV_PROJECT}}
+oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n {{DEV_PROJECT}}
 ----
 
 The https://github.com/spring-cloud-incubator/spring-cloud-kubernetes[Spring Cloud Kubernetes^] plug-in implements 

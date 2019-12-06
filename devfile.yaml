@@ -69,7 +69,7 @@ commands:
       - type: exec
         command: >-
           echo "------ START ------" &&
-          tkn pipeline start my-pipeline --resource component-git=inventory-git --serviceaccount pipeline &&
+          tkn pipeline start my-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
           echo "------  END  ------"
         component: workshop-tools
   - name: 'Pipeline - Start Full'
@@ -77,7 +77,7 @@ commands:
       - type: exec
         command: >-
           echo "------ START ------" &&
-          tkn pipeline start application-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline &&
+          tkn pipeline start application-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
           echo "------  END  ------"
         component: workshop-tools
   - name: 'Service Mesh - Deploy'

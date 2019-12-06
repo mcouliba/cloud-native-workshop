@@ -367,34 +367,6 @@ Congratulations!! You have created and run your first **OpenShift Pipeline with 
 
 '''
 
-=== Create a Pipeline Resource for GitOps
-
-A **PipelineResource** in a pipeline are the set of objects that are going to be used as inputs to a **Task** 
-and can be output by a **Task**.
-
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
----
-apiVersion: tekton.dev/v1alpha1
-kind: PipelineResource
-metadata:
-  name: gitops-git
-spec:
-  type: git
-  params:
-  - name: url
-    value: http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
-  - name: revision
-    value: master
-EOF
-----
-
-'''
-
 === Expand your Pipeline
 
 Now, you have learnt and understood how to create a simple **Pipeline** with **Task** and **PipelineResource**.
