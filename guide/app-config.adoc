@@ -211,7 +211,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 $ cat <<EOF > /projects/inventory-openshift-application.properties
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb:3306/inventorydb# <1>
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.{{DEV_PROJECT}}.svc:3306/inventorydb# <1>
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 EOF
@@ -322,11 +322,12 @@ Let's create the Spring Boot configuration content using the database credential
 .>_ workshop-tools terminal
 ----
 $ cat <<EOF > /projects/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql.{{DEV_PROJECT}}.svc:5432/catalogdb #<1>
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.{{DEV_PROJECT}}.svc:5432/catalogdb#<1>
 spring.datasource.username=catalog
 spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.hibernate.ddl-auto=create
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 EOF
 ----
 <1> The hostname defined for the PostgreSQL connection-url (catalog-postgresql) corresponds to the PostgreSQL service name published on OpenShift. 

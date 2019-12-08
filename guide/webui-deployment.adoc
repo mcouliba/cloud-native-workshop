@@ -101,7 +101,7 @@ In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer v
 
 image:{% image_path openshift-web-annotate.png %}[OpenShift - Web Annotate, 700]
 
-`*Add the new annotation*` in order to have a graphical link between **Web Service** and **Gateway Service**.
+`*Add the new annotation*` in order to be compatible with odo usage.
 
 .Web Annotations
 [%header,cols=2*]

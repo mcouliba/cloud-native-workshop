@@ -112,7 +112,8 @@ do
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].status
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.triggers null
 
-    sed -i "s/  image:/- image:/g"  ${DEPLOYMENTCONFIG_YAML}
+    sed -i "s/  envFrom:/- envFrom:/g"  ${DEPLOYMENTCONFIG_YAML}
+    grep '\- envFrom:' ${DEPLOYMENTCONFIG_YAML} || sed -i "s/  image:/- image:/g"  ${DEPLOYMENTCONFIG_YAML}
     sed -i "/^.*: \[\]$/d"  ${DEPLOYMENTCONFIG_YAML}
     sed -i "s/triggers: .*/triggers: []/g"  ${DEPLOYMENTCONFIG_YAML}
     sed -i "s/image: .*$/image: image-registry.openshift-image-registry.svc:5000\/${DEV_PROJECT}\/${COMPONENT_NAME}:latest/g" ${DEPLOYMENTCONFIG_YAML}
