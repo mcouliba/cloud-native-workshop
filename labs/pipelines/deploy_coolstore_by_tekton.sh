@@ -19,7 +19,7 @@ oc new-build java \
   --context-dir=/labs/gateway-vertx \
   https://github.com/mcouliba/cloud-native-workshop#completed
 
-oc create --namespace=${PROJECT} -f ${DIRECTORY}/oc-build-git-task.yaml
+oc create --namespace=${PROJECT} -f ${DIRECTORY}/oc-start-build-git-task.yaml
 
 oc create --namespace=${PROJECT} -f ${DIRECTORY}/git-pipeline.yaml
 

@@ -83,10 +83,9 @@ commands:
     actions:
       - type: exec
         command: >-
-          echo "------ START ------" &&
-          tkn pipeline start application-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
-          echo "------  END  ------"
+          ./deploy_coolstore_by_tekton.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
+        workdir: /projects/workshop/labs/pipelines
   - name: 'Service Mesh - Deploy'
     actions:
       - type: exec

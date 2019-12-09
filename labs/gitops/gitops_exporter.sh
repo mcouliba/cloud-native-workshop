@@ -72,6 +72,7 @@ do
     yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.selfLink
     yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.creationTimestamp
     yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.resourceVersion
+    yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.generation
     yq delete --inplace  ${IMAGESTREAM_YAML} items[*].status.tags
     sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${IMAGESTREAM_YAML}
 
@@ -84,6 +85,7 @@ do
     yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.creationTimestamp
     yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.resourceVersion
     sed -i "s/nodeSelector: .*/nodeSelector: {}/g" ${BUILDCONFIG_YAML}
+    sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${BUILDCONFIG_YAML}
 
     ## Deployment Config
     oc get deploymentconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${DEPLOYMENTCONFIG_YAML}
@@ -113,10 +115,10 @@ do
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.triggers null
 
     sed -i "s/  envFrom:/- envFrom:/g"  ${DEPLOYMENTCONFIG_YAML}
-    grep '\- envFrom:' ${DEPLOYMENTCONFIG_YAML} || sed -i "s/  image:/- image:/g"  ${DEPLOYMENTCONFIG_YAML}
+    grep '\- envFrom:' ${DEPLOYMENTCONFIG_YAML} &> /dev/null || sed -i "s/  image:/- image:/g"  ${DEPLOYMENTCONFIG_YAML}
     sed -i "/^.*: \[\]$/d"  ${DEPLOYMENTCONFIG_YAML}
     sed -i "s/triggers: .*/triggers: []/g"  ${DEPLOYMENTCONFIG_YAML}
-    sed -i "s/image: .*$/image: image-registry.openshift-image-registry.svc:5000\/${DEV_PROJECT}\/${COMPONENT_NAME}:latest/g" ${DEPLOYMENTCONFIG_YAML}
+    sed -i "s/image: .*$/image: image-registry.openshift-image-registry.svc:5000\/${PROJECT}\/${COMPONENT_NAME}:latest/g" ${DEPLOYMENTCONFIG_YAML}
     sed -i "s/8080-tcp/http/g" ${DEPLOYMENTCONFIG_YAML}
 done
 
