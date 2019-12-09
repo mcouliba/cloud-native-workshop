@@ -58,8 +58,8 @@
   },
   "dependencies": {
     "@patternfly/patternfly": "^2.36.2",
-    "angular": "^1.7.8",
-    "angular-route": "^1.7.8",
+    "angular": ">=1.7.9",
+    "angular-route": ">=1.7.9",
     "body-parser": "~1.19.0",
     "cors": "^2.8.5",
     "debug": "^4.0.1",
