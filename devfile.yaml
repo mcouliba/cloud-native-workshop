@@ -72,7 +72,14 @@ commands:
           tkn pipeline start my-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
           echo "------  END  ------"
         component: workshop-tools
-  - name: 'Pipeline - Start Full'
+  - name: 'Pipeline - Start Inventory'
+    actions:
+      - type: exec
+        command: >-
+          ./deploy_coolstore_by_tekton.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}
+        component: workshop-tools
+        workdir: /projects/workshop/labs/gitops
+  - name: 'Pipeline - Start All'
     actions:
       - type: exec
         command: >-
