@@ -1,0 +1,25 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: git-pipeline
+spec:
+  params:
+  - name: componentName
+    default: sample
+    description: The name of the component
+  tasks:
+  - name: build-image
+    taskRef:
+      name: oc-start-build-git
+    params:
+    - name: componentName
+      value: '$(params.componentName)'
+  - name: deploy
+    taskRef:
+      name: oc-deploy
+    runAfter:
+      - build-image
+    params:
+    - name: componentName
+      value: '$(params.componentName)'
