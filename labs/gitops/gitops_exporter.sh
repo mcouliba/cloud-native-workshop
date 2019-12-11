@@ -54,6 +54,7 @@ do
     yq delete --inplace  ${ROUTE_YAML} items[*].status.ingress[*].routerName
     yq delete --inplace  ${ROUTE_YAML} items[*].status.ingress[*].wildcardPolicy
     sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${ROUTE_YAML}
+    sed -i "s/8080-tcp/http/g" ${ROUTE_YAML}
 
     ## ConfigMap
     oc get configmap -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${CONFIGMAP_YAML}
