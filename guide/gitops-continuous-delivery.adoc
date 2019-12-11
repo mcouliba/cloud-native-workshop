@@ -1,4 +1,4 @@
-== Gitops
+== GitOps Continuous Delivery with Argo CD
 
 _20 MINUTE EXERCISE_
 

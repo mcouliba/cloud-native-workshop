@@ -33,7 +33,7 @@ The components that make up the data plane and the control plane are:
 
 '''
 
-=== Enabling Service Mesh to Catalog Service
+=== Enabling Service Mesh to Inventory Service
 
 OpenShift Service Mesh automatically injects the sidecar into the Pod by specifying **sidecar.istio.io/inject:true** annotation in the DeploymentConfig.
 
@@ -47,31 +47,29 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc rollout pause dc/catalog-coolstore # <1>
-oc patch dc/catalog-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' # <2>
-oc patch dc/catalog-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "catalog-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' # <3>
-oc rollout resume dc/catalog-coolstore # <4>
+oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n {{PROJECT}} # <1>
+oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n {{PROJECT}} # <2>
+oc rollout latest dc/inventory-coolstore -n {{PROJECT}} # <3>
 ----
-<1> Pause the deployment
-<2> Define the annotation to automatically inject an Istio sidecar
-<3> Wait for the proxy to be up and running before starting the application
-<4> Resume the deployment
+<1> Define the annotation to automatically inject an Istio sidecar
+<2> Wait for the Envoy Proxy to be up and running before starting the application
+<3> Trigger the deployment
 
 To confirm that the application is successfully deployed, `*run this following command*`:
 
 ----
-$ oc get pods -ldeploymentconfig=catalog-coolstore
+$ oc get pods -ldeploymentconfig=inventory-coolstore -n {{PROJECT}}
 NAME                        READY     STATUS    RESTARTS   AGE
-catalog-coolstore-4-dhfrm   2/2       Running   0          12s
+inventory-coolstore-4-dhfrm   2/2       Running   0          12s
 ----
 
 The status should be **Running** and there should be **2/2** pods in the **Ready** column. 
 
 '''
 
-=== Enabling Service Mesh to Inventory and Gateway Service
+=== Enabling Service Mesh to Catalog and Gateway Service
 
-Now, we understand how to enable Service Mesh for one service, let's enable for Inventory and Gateway Services via the command menu.
+Now, we understand how to enable Service Mesh for one service, let's enable for Catalog and Gateway Services via a simple command.
 
 In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Service Mesh - Deploy'*`
 
@@ -84,10 +82,10 @@ To verify the deployment `*run this following command*`:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc get pods -ldeploymentconfig=inventory-coolstore
+$ oc get pods -ldeploymentconfig=catalog-coolstore -n {{PROJECT}}
 NAME                          READY     STATUS    RESTARTS   AGE
-inventory-coolstore-4-xnwfp   2/2       Running   0          39s
-$ oc get pods -ldeploymentconfig=gateway-coolstore
+catalog-coolstore-4-xnwfp   2/2       Running   0          39s
+$ oc get pods -ldeploymentconfig=gateway-coolstore -n {{PROJECT}}
 NAME                        READY     STATUS    RESTARTS   AGE
 gateway-coolstore-4-h5g7t   2/2       Running   0          73s
 ----
@@ -110,8 +108,8 @@ to create an **Istio Gateway** and a **VirtualService** for the **Gateway Servic
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc create -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
-sed s/PROJECT/{{PROJECT}}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -f -
+oc create -n {{PROJECT}} -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
+sed s/PROJECT/{{PROJECT}}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -n {{PROJECT}} -f -
 ----
 
 To confirm that the **Istio Gateway** is properly configured, 
@@ -143,7 +141,8 @@ You should have the following result:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set env dc/web-coolstore COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{PROJECT}}
+oc set env dc/web-coolstore -n {{PROJECT}} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{PROJECT}}
+oc rollout latest dc/web-coolstore -n {{PROJECT}}
 ----
 
 '''
@@ -232,31 +231,19 @@ https://www.kiali.io/[Kiali^] includes https://www.jaegertracing.io/[Jaeger Trac
 
 IMPORTANT: Because of certificates issues, you need first to access the main {{ JAEGER_URL }}[Jaeger Console^] to use it through Kiali.
 
-From the {{ KIALI_URL }}[Kiali Console^], `*click on the _Distributed Tracing_ link*` in the left navigation and 
-enter the following configuration in the drop down menus:
+In the {{ KIALI_URL }}[Kiali Console^], from **Graph view**, 
+`*right-click on the gateway-service node and select 'Show Traces'*`.
 
-.Graph Settings
-[%header,cols=2*]
-|===
-|Parameter
-|Value
+image:{% image_path kiali-show-traces.png %}[Kiali- Show Traces, 700]
 
-|Namespace 
-|{{PROJECT}}
-
-|Service
-|gateway
-
-|===
-
-image:{% image_path kiali-traces-param.png %}[Kiali- Traces View,500]
-
-Then `*click on the 'Search' button*` on the right corner.
+You should be redirected to the **Distributed Tracing menu**.
 
 image:{% image_path kiali-traces-view.png %}[Kiali- Traces View,700]
 
 Let’s `*click on one of trace title bar*`.
 
 image:{% image_path kiali-trace-detail-view.png %}[Kiali- Trace Detail View,700]
+
+'''
 
 That's all for this lab! You are ready to move on to the next lab.

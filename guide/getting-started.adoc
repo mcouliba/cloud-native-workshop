@@ -71,8 +71,9 @@ image:{% image_path che-workspace.png %}[Che - Workspace, 800]
 === What is OpenShift Connect?
 
 [sidebar]
+.OpenShift Connector
 --
-image:{% image_path openshiftconnect.png %}[OpenShift Connector, 400]
+image:{% image_path openshiftconnect-logo.png %}[OpenShift Connector logo, 150]
 
 https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
 is a Visual Studio (VS) Code extension for interacting with Red Hat OpenShift cluster with more improved features for a seamless developer experience.

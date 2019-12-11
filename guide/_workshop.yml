@@ -33,8 +33,7 @@ modules:
   - app-health
   - fault-tolerance
   - app-config
-  - gitops
+  - gitops-continuous-delivery
   - continuous-delivery-tekton
   - service-mesh
-  - abtesting
   - env-info
