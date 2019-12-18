@@ -234,6 +234,7 @@ oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-pa
 is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
 value. Whenever a config map is injected into a container, it would appear as a file with the same 
 name as the key, at specified path on the filesystem.
+<2> Add **app** and **app.kubernetes.io/instance** labels to the ConfigMap
 <3> Mounts the content of the **Inventory Config Map** as a file inside the **Inventory container**
 at **/deployments/config/application.properties **
 
