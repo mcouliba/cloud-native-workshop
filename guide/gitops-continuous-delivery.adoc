@@ -353,7 +353,7 @@ $ argocd app create \
 
 |SOURCE
 |Path
-|.
+|. _(dot)_
 
 |DESTINATION
 |Cluster
@@ -365,7 +365,7 @@ $ argocd app create \
 
 |ALL OTHER SECTIONS
 |*
-|
+|_leave them empty/by default_
 
 |===
 
@@ -373,92 +373,30 @@ Finally, `*Click on 'CREATE'*`.
 
 Your Coolstore Application has been created in Argo CD.
 
-image::{% image_path argocd-application.png  %}[Argo CD - Application, 500]
+image::{% image_path argocd-outofsync-application.png  %}[Argo CD - OutOfSync Application, 500]
+
+The application status is initially in yellow **OutOfSync** state since the application has yet to be 
+deployed into {{PROJECT}} OpenShift project, and no Kubernetes resources have been created.
 
 '''
 
-You are going to to use the Argo CD CLI tool to interact with the Argo CD Server.
+=== Sync/Deploy The GitOps Application
 
-First, `*let's login using the current admin user*`.
+Let's deploy the Coolstore Application into {{PROJECT}}!
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+From the **Application menu**, `*Click on 'Sync > Synchronize'*`.
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::{% image_path argocd-sync.png  %}[Argo CD - Sync, 500]
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following command*`:
+This task retrieves the manifests from the GitOps Repository and performs _kubectl apply_ command of 
+the manifests. Your application is now running and you can now view its resource components, 
+logs, events, and assessed health status.
 
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ argocd --insecure --grpc-web login argocd-server.argocd.svc:443 --username admin --password {{OPENSHIFT_PASSWORD}}
-----
+`*Click on your 'coolstore' application*` and you should see everything in green.
 
-You should have the following output:
+image::{% image_path argocd-synced-application.png  %}[Argo CD - Synced Application, 500]
 
-[source,shell]
-.>_ workshop-tools terminal
-----
-WARNING: server is not configured with TLS. Proceed (y/n)? y
-'admin' logged in successfully
-Context 'argocd-server.argocd.svc:443' updated
-----
-
-Next, `*you need to add the newly created repository, **'gitops-cn-project'**, to Argo CD*` with the following command:
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ argocd repo add http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
-----
-
-As output, you should see:
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-repository 'http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git' added
-----
-
-Finally, `*let's create the application in Argo CD*`.
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ argocd app create \
-    --project default \
-    --name {{PROJECT}} \
-    --repo http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git \
-    --path . \
-    --dest-server https://kubernetes.default.svc \
-    --dest-namespace {{PROJECT}} \
-    --revision master \
-    --sync-policy none
-----
-
-As output, you should see:
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-application '{{PROJECT}}' created
-----
-
-Now your **'gitops-cn-project'** repository is synchronized with your **'{{PROJECT}}'** project.
-
-'''
-
-=== Deploy your Application into the Staging Environment
-
-Now you set up your application in Argo CD, `*let's sync it in your {{PROJECT}} project*`.
-
-[source,shell]
-.>_ workshop-tools terminal
-----
-$ argocd app sync {{PROJECT}}
-----
-
-Once done, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*Select the '{{PROJECT}}'*` to be taken to the project overview page.
 
 image:{% image_path openshift-app-deployed-by-argocd.png %}[OpenShift - Coolstore Project Deployed by Argo CD , 700]
