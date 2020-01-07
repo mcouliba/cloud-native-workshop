@@ -114,16 +114,16 @@ Then, `*enter the following values*`:
 |gitops-cn-project
 
 |Visibility
-|Unchecked
+|_unchecked_
 
 |Description
-|
+|_leave it empty_
 
 |.gitignore
-|
+|_leave it empty_
 
 |License
-|
+|_leave it empty_
 
 |Readme
 |Default
@@ -236,16 +236,16 @@ image::{% image_path argocd-configure-repositories.png  %}[Argo CD - Configure R
 |http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
 
 |Username (optional)
-|
+|_leave it empty_
 
 |Password (optional)
-|
+|_leave it empty_
 
 |TLS client certificate (optional)
-|
+|_leave it empty_
 
 |TLS client certificate key (optional)
-|
+|_leave it empty_
 
 |Skip server verification
 |_unchecked_
@@ -290,10 +290,10 @@ image::{% image_path argocd-configure-projects.png  %}[Argo CD - Configure Proje
 |* / {{PROJECT}}
 
 |Whitelisted Cluster Resources
-|
+|_leave it empty_
 
 |Orphaned Resource Monitoring
-|
+|_leave it empty_
 
 |===
 
