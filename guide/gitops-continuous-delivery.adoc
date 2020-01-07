@@ -325,7 +325,7 @@ $ argocd app create \
     --sync-policy none
 
 .Application Configuration
-[%header,cols=2*]
+[%header,cols=3*]
 |===
 |Section 
 |Parameter 
@@ -333,11 +333,11 @@ $ argocd app create \
 
 |GENERAL
 |Application Name
-|{{PROJECT}}
+|coolstore
 
 |GENERAL
 |Project
-|default
+|{{PROJECT}}
 
 |GENERAL
 |SYNC POLICY
@@ -355,8 +355,27 @@ $ argocd app create \
 |Path
 |.
 
+|DESTINATION
+|Cluster
+|in-cluster (https://kubernetes.default.svc)
+
+|DESTINATION
+|Namespace
+|cn-project1
+
+|ALL OTHER SECTIONS
+|*
+|
+
 |===
 
+Finally, `*Click on 'CREATE'*`.
+
+Your Coolstore Application has been created in Argo CD.
+
+image::{% image_path argocd-application.png  %}[Argo CD - Application, 500]
+
+'''
 
 You are going to to use the Argo CD CLI tool to interact with the Argo CD Server.
 
