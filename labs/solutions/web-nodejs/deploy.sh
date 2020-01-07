@@ -9,4 +9,5 @@ oc new-app nodejs~https://github.com/mcouliba/cloud-native-workshop#3.0 \
         --name=web-coolstore \
         --labels=app=coolstore,app.kubernetes.io/instance=web
 
-oc expose svc/web-coolstore 
+oc expose svc/web-coolstore
+ oc annotate svc/web-coolstore app.kubernetes.io/component-source-type='git'
