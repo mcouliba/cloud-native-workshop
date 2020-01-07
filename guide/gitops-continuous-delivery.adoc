@@ -99,7 +99,39 @@ You will be redirected to the sign in page. Sign in using the above username and
 image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
 
 
-`*Give 'gitops-cn-project' as Repository Name*`
+Then, `*enter the following values*`:
+
+.GitOps Repository
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Owner*
+|{{OPENSHIFT_USER}}
+
+|Repository Name*
+|gitops-cn-project
+
+|Visibility
+|Unchecked
+
+|Description
+|
+
+|.gitignore
+|
+
+|License
+|
+
+|Readme
+|Default
+
+|Intialize this repository with selected files and templates
+|Unchecked
+
+|===
 
 image:{% image_path gogs-gitops-new-repo.png %}[Create New Repository,700]
 
