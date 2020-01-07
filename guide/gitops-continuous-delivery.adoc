@@ -308,21 +308,9 @@ image::{% image_path argocd-project.png  %}[Argo CD - project, 800]
 
 === Create a GitOps Application
 
-`*Select the 'Application menu' then click on your '+ New App'*`
+`*Select the 'Application menu' then click on your '+ New App'*` and enter the following details:
 
 image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Application, 500]
-
-`*Enter the following details*`
-
-$ argocd app create \
-    --project default \
-    --name {{PROJECT}} \
-    --repo http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git \
-    --path . \
-    --dest-server https://kubernetes.default.svc \
-    --dest-namespace {{PROJECT}} \
-    --revision master \
-    --sync-policy none
 
 .Application Configuration
 [%header,cols=3*]
@@ -386,7 +374,7 @@ Let's deploy the Coolstore Application into {{PROJECT}}!
 
 From the **Application menu**, `*Click on 'Sync > Synchronize'*`.
 
-image::{% image_path argocd-sync.png  %}[Argo CD - Sync, 500]
+image::{% image_path argocd-sync.png  %}[Argo CD - Sync, 800]
 
 This task retrieves the manifests from the GitOps Repository and performs _kubectl apply_ command of 
 the manifests. Your application is now running and you can now view its resource components, 
@@ -394,7 +382,7 @@ logs, events, and assessed health status.
 
 `*Click on your 'coolstore' application*` and you should see everything in green.
 
-image::{% image_path argocd-synced-application.png  %}[Argo CD - Synced Application, 500]
+image::{% image_path argocd-synced-application.png  %}[Argo CD - Synced Application, 800]
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*Select the '{{PROJECT}}'*` to be taken to the project overview page.
