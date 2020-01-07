@@ -21,6 +21,7 @@ vars:
   NEXUS_URL: http://nexus.workshop-infra.apps.192.168.99.100.nip.io
   KIALI_URL: http://kiali-istio-system.apps.192.168.99.100.nip.io
   KIBANA_URL: http://kibana.apps192.168.99.100.nip.io
+  GITOPS_URL: https://argocd-server-argocd.apps192.168.99.100.nip.io
   
 modules:
   activate:

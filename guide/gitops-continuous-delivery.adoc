@@ -199,7 +199,65 @@ image:{% image_path gogs-gitops-repo.png %}[GitOps Repository,900]
 
 '''
 
-=== Configure Argo CD
+=== Log in to Argo CD
+
+`*Click on the below button called 'Developer GitOps'*`
+
+[link={{ GITOPS_URL }}]
+[window=_blank, align="center"]
+image::{% image_path developer-gitops-button.png  %}[Developer GitOps - Button, 300]
+
+Then `*login as {{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }}*`, `*click on 'Allow selected permissions'*`
+
+Once completed, you will be redirected to the following page.
+
+image:{% image_path argocd-home.png %}[Argo CD - Home Page, 800]
+
+'''
+
+=== Add your Newly Created GitOps Repository 
+
+`*Select the 'Configuration menu' then click on your 'Repositories'*`
+
+image::{% image_path argocd-configure-repository.png  %}[Argo CD - Configure Repository, 300]
+
+`*Click on 'CONNECT REPO USING HTTPS'*` and enter the following:
+
+.Repository Configuration
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Type
+|git
+
+|Repository URL
+|http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
+
+|Username (optional)
+|
+
+|Password (optional)
+|
+
+|TLS client certificate (optional)
+|
+
+|TLS client certificate key (optional)
+|
+
+|Skip server verification
+|_unchecked_
+
+|Enable LFS support (Git only)
+|_unchecked_
+
+|===
+
+Finally, `*Click on 'CONNECT'*`.
+
+'''
 
 You are going to to use the Argo CD CLI tool to interact with the Argo CD Server.
 
