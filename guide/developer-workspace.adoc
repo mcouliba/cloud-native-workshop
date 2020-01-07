@@ -1,4 +1,4 @@
-== Getting Started
+== Get Your Developer Workspace
 
 _5 MINUTE EXERCISE_
 
