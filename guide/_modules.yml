@@ -4,8 +4,8 @@ config:
 modules:
   introduction:
     name: Introduction
-  getting-started:
-    name: Getting Started
+  developer-workspace:
+    name: Get your Workspace
   catalog-spring-boot:
     name: Create Catalog Service as a Microservice with Spring Boot
   catalog-deployment:
