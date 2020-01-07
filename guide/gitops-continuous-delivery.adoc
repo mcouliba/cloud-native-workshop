@@ -211,7 +211,7 @@ Then `*login as {{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }}*`, `*click on 'All
 
 Once completed, you will be redirected to the following page.
 
-image:{% image_path argocd-home.png %}[Argo CD - Home Page, 800]
+image:{% image_path argocd-home.png %}[Argo CD - Home Page, 500]
 
 '''
 
@@ -219,7 +219,7 @@ image:{% image_path argocd-home.png %}[Argo CD - Home Page, 800]
 
 `*Select the 'Configuration menu' then click on your 'Repositories'*`
 
-image::{% image_path argocd-configure-repository.png  %}[Argo CD - Configure Repository, 300]
+image::{% image_path argocd-configure-repositories.png  %}[Argo CD - Configure Repositories, 500]
 
 `*Click on 'CONNECT REPO USING HTTPS'*` and enter the following:
 
@@ -259,13 +259,103 @@ Finally, `*Click on 'CONNECT'*`.
 
 Your GitOps repository is now added to Argo CD.
 
-image::{% image_path argocd-repository.png  %}[Argo CD - Repository, 300]
+image::{% image_path argocd-repository.png  %}[Argo CD - Repository, 800]
+
+'''
+
+=== Create your GitOps Project 
+
+`*Select the 'Configuration menu' then click on your 'Projects'*`
+
+image::{% image_path argocd-configure-projects.png  %}[Argo CD - Configure Projects, 500]
+
+`*Click on 'NEW PROJECT'*` and enter the following:
+
+.Repository Configuration
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Project Name
+|{{PROJECT}}
+
+|Project Description
+|This is my first GitOps project
+
+|Sources
+|http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
+
+|Destination
+|* / {{PROJECT}}
+
+|Whitelisted Cluster Resources
+|
+
+|Orphaned Resource Monitoring
+|
+
+|===
+
+Finally, `*Click on 'CREATE'*`.
+
+Your GitOps project has been created in Argo CD.
+
+image::{% image_path argocd-project.png  %}[Argo CD - project, 800]
+
 
 '''
 
 === Create a GitOps Application
 
-image:{% image_path argocd-manage-application.png %}[Argo CD - Home Page, 800]
+`*Select the 'Application menu' then click on your '+ New App'*`
+
+image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Application, 500]
+
+`*Enter the following details*`
+
+$ argocd app create \
+    --project default \
+    --name {{PROJECT}} \
+    --repo http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git \
+    --path . \
+    --dest-server https://kubernetes.default.svc \
+    --dest-namespace {{PROJECT}} \
+    --revision master \
+    --sync-policy none
+
+.Application Configuration
+[%header,cols=2*]
+|===
+|Section 
+|Parameter 
+|Value
+
+|GENERAL
+|Application Name
+|{{PROJECT}}
+
+|GENERAL
+|Project
+|default
+
+|GENERAL
+|SYNC POLICY
+|MANUAL
+
+|SOURCE
+|Repository URL
+|http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/gitops-cn-project.git
+
+|SOURCE
+|Revision
+|HEAD
+
+|SOURCE
+|Path
+|.
+
+|===
 
 
 You are going to to use the Argo CD CLI tool to interact with the Argo CD Server.
