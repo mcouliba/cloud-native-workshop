@@ -28,16 +28,47 @@ the platform and enables defining truly complex workflows directly from within O
 The first step for any deployment pipeline is to store all code and configurations in 
 a source code repository.
 
-In {{GOGS_URL}}[Gogs^], `*click on the plus icon*` as below
+In {{GOGS_URL}}[Gogs^], `*click on the plus icon*` as below and enter the following values
 
 image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
 
+.Inventory Repository
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
 
-`*Give 'inventory-quarkus' as Repository Name*`
+|Owner*
+|{{OPENSHIFT_USER}}
 
-image:{% image_path cd-gogs-new-repo.png %}[Create New Repository,700]
+|Repository Name*
+|inventory-quarkus
 
-`*Click on 'Create Repository' button*`. The Git repository is created now. 
+|Visibility
+|_unchecked_
+
+|Description
+|_leave it empty_
+
+|.gitignore
+|_leave it empty_
+
+|License
+|_leave it empty_
+
+|Readme
+|Default
+
+|Intialize this repository with selected files and templates
+|_unchecked_
+
+|===
+
+image:{% image_path cd-gogs-new-repo.png %}[Create New Repository,500]
+
+`*Click on 'Create Repository' button*`.
+
+The Git repository is created now. 
 
 '''
 
