@@ -28,9 +28,7 @@ the platform and enables defining truly complex workflows directly from within O
 The first step for any deployment pipeline is to store all code and configurations in 
 a source code repository.
 
-In {{GOGS_URL}}[Gogs^], `*click on the plus icon*` as below and enter the following values
-
-image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
+In {{GOGS_URL}}[Gogs^], `*create a new Repository for Inventory Service*` as following:
 
 .Inventory Repository
 [%header,cols=2*]
@@ -63,12 +61,6 @@ image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
 |_unchecked_
 
 |===
-
-image:{% image_path cd-gogs-new-repo.png %}[Create New Repository,500]
-
-`*Click on 'Create Repository' button*`.
-
-The Git repository is created now. 
 
 '''
 
@@ -211,12 +203,14 @@ You should have the following output:
 
 '''
 
-=== Create a Task
+=== Create a Tekton Task
 
 A **Task** consists of a collection of steps that are executed sequentially. 
+
 Each **Task** is executed in a separate container within the same pod. 
 They can also have inputs and outputs in order to interact with other tasks in the pipeline.
 
+First, `*create a task to generate the binary (JAR)*`.
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 

@@ -6,23 +6,6 @@ In this lab you will learn about deploying and managing Kubernetes resources usi
 
 '''
 
-=== What is Argo CD?
-
-[sidebar]
---
-image:{% image_path argocd-logo.png %}[Argo CD Logo, 200]
-
-https://argoproj.github.io/argo-cd/[Argo CD^] is a declarative, GitOps continuous delivery tool for Kubernetes.
-
-It follows the GitOps pattern of using Git repositories as the source of truth for defining 
-the desired application state. 
-
-It automates the deployment of the desired application states in the specified target environments. Application 
-deployments can track updates to branches, tags, or pinned to a specific version of manifests at a Git commit.
---
-
-'''
-
 === Export OpenShift Resources
 
 First, you need to export the project resources from OpenShift.
@@ -195,6 +178,23 @@ Once done, in {{ GOGS_URL }}/{{OPENSHIFT_USER}}/gitops-cn-project, `*refresh the
 see the project files in the repository.
 
 image:{% image_path gogs-gitops-repo.png %}[GitOps Repository,900]
+
+'''
+
+=== What is Argo CD?
+
+[sidebar]
+--
+image:{% image_path argocd-logo.png %}[Argo CD Logo, 200]
+
+https://argoproj.github.io/argo-cd/[Argo CD^] is a declarative, GitOps continuous delivery tool for Kubernetes.
+
+It follows the GitOps pattern of using Git repositories as the source of truth for defining 
+the desired application state. 
+
+It automates the deployment of the desired application states in the specified target environments. Application 
+deployments can track updates to branches, tags, or pinned to a specific version of manifests at a Git commit.
+--
 
 '''
 
