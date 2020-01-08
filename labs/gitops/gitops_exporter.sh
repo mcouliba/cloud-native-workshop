@@ -114,7 +114,9 @@ do
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.spec.volumes[0]
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].status
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.triggers null
-
+    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.app "coolstore"
+    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.[app.kubernetes.io/instance] ${COMPONENT_NAME%-coolstore}
+    
     sed -i "s/  envFrom:/- envFrom:/g"  ${DEPLOYMENTCONFIG_YAML}
     grep '\- envFrom:' ${DEPLOYMENTCONFIG_YAML} &> /dev/null || sed -i "s/  image:/- image:/g"  ${DEPLOYMENTCONFIG_YAML}
     sed -i "/^.*: \[\]$/d"  ${DEPLOYMENTCONFIG_YAML}
