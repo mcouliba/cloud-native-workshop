@@ -146,8 +146,8 @@ public class GatewayVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         router.route().handler(CorsHandler.create("*").allowedMethod(HttpMethod.GET));
         router.get("/*").handler(StaticHandler.create("assets"));
-        router.get("/health").handler(this::health);
-        router.get("/api/products").handler(this::products);
+        router.get("/health").handler(this::health); # <1>
+        router.get("/api/products").handler(this::products); # <2>
 
         ConfigRetriever retriever = ConfigRetriever.create(vertx);
         retriever.getConfig(ar -> {
@@ -156,8 +156,8 @@ public class GatewayVerticle extends AbstractVerticle {
             } else {
                 JsonObject config = ar.result();
 
-                String catalogApiHost = config.getString("COMPONENT_CATALOG_HOST", "localhost");
-                Integer catalogApiPort = config.getInteger("COMPONENT_CATALOG_PORT", 9001);
+                String catalogApiHost = config.getString("COMPONENT_CATALOG_HOST", "localhost"); # <3>
+                Integer catalogApiPort = config.getInteger("COMPONENT_CATALOG_PORT", 9001); # <3>
 
                 catalog = WebClient.create(vertx,
                     new WebClientOptions()
@@ -166,8 +166,8 @@ public class GatewayVerticle extends AbstractVerticle {
 
                 LOG.info("Catalog Service Endpoint: " + catalogApiHost + ":" + catalogApiPort.toString());
 
-                String inventoryApiHost = config.getString("COMPONENT_INVENTORY_HOST", "localhost");
-                Integer inventoryApiPort = config.getInteger("COMPONENT_INVENTORY_PORT", 9001);
+                String inventoryApiHost = config.getString("COMPONENT_INVENTORY_HOST", "localhost"); # <3>
+                Integer inventoryApiPort = config.getInteger("COMPONENT_INVENTORY_PORT", 9001); # <3>
 
                 inventory = WebClient.create(vertx,
                     new WebClientOptions()
@@ -185,7 +185,7 @@ public class GatewayVerticle extends AbstractVerticle {
         });
     }
 
-    private void products(RoutingContext rc) {
+    private void products(RoutingContext rc) { # <4>
         // Retrieve catalog
         catalog
             .get("/api/catalog")
@@ -214,7 +214,7 @@ public class GatewayVerticle extends AbstractVerticle {
             );
     }
 
-    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) {
+    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) { # <5>
         // Retrieve the inventory for a given product
         return inventory
             .get("/api/inventory/" + product.getString("itemId"))
@@ -231,7 +231,7 @@ public class GatewayVerticle extends AbstractVerticle {
             });
     }
 
-    private void health(RoutingContext rc) {
+    private void health(RoutingContext rc) { # <6>
         // Check Catalog and Inventory Service up and running
         catalog.get("/").rxSend()
             .subscribe(
@@ -247,17 +247,11 @@ public class GatewayVerticle extends AbstractVerticle {
     }
 }
 ----
-<1> A REST mapping to map **/api/products** to the *_products()_* method
-<2> Vert.x provides http://vertx.io/docs/vertx-service-discovery/java[built-in service discovery^] 
-for finding where dependent services are deployed 
-and accessing their endpoints. Vert.x service discovery can be seamlessly integrated with external 
-service discovery mechanisms provided by OpenShift, Kubernetes, Consul, Redis, etc.
-In this lab, since you will deploy the API Gateway on OpenShift, the OpenShift service discovery 
-bridge is used to automatically import OpenShift services into the Vert.x application as they 
-get deployed and undeployed. Since you also want to test the API Gateway locally, there is an 
-*_onErrorReturn()_* method clause in the service lookup to fallback on a local service for Inventory 
-and Catalog REST APIs.
-<3> The *_products()_* method invokes the Catalog REST endpoint and retrieves the products. It then 
+<1> A REST mapping to map **/health** to the *_health()_* method
+<2> A REST mapping to map **/api/products** to the *_products()_* method
+<3> **COMPONENT_\*_HOST** and **COMPONENT_\*_PORT** environment variables used as endpoints for the Catalog
+and the Inventory Service.
+<4> The *_products()_* method invokes the Catalog REST endpoint and retrieves the products. It then 
 iterates over the retrieved products and for each product invokes the 
 Inventory REST endpoint to get the inventory status and enrich the product data with availability 
 info using the **getAvailabilityFromInventory()** method. Note that instead of making blocking calls 
@@ -266,8 +260,10 @@ are non-blocking and handled using http://vertx.io/docs/vertx-rx/java[RxJava^]. 
 nature, the *_product()_* method can immediately return without waiting for the Catalog and Inventory 
 REST invocations to complete and whenever the result of the REST calls is ready, the result 
 will be acted upon and update the response which is then sent back to the client.
-<4> The **getAvailabilityFromInventory()** method is similar to the **product()** method, it invokes the 
+<5> The **getAvailabilityFromInventory()** method is similar to the **product()** method, it invokes the 
 Inventory REST endpoint and retrieves the inventory.
+<6> The **health()** method pings the Catalog and the Inventory Service to check if this dependent services 
+are up and running. If so, it returns a **Success** HTTP code, else, it returns a **Service Unavailable** code
 
 In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Build'*`
 
