@@ -249,7 +249,7 @@ public class GatewayVerticle extends AbstractVerticle {
 ----
 <1> A REST mapping to map **/health** to the *_health()_* method
 <2> A REST mapping to map **/api/products** to the *_products()_* method
-<3> **COMPONENT_\*_HOST** and **COMPONENT_\*_PORT** environment variables used as endpoints for the Catalog
+<3> **COMPONENT_%_HOST** and **COMPONENT_%_PORT** environment variables used as endpoints for the Catalog
 and the Inventory Service.
 <4> The *_products()_* method invokes the Catalog REST endpoint and retrieves the products. It then 
 iterates over the retrieved products and for each product invokes the 
