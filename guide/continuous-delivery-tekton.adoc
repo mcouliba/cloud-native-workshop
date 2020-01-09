@@ -210,7 +210,7 @@ A **Task** consists of a collection of steps that are executed sequentially.
 Each **Task** is executed in a separate container within the same pod. 
 They can also have inputs and outputs in order to interact with other tasks in the pipeline.
 
-First, `*create a task to generate the binary (JAR)*`.
+First, `*create a task to generate the binary (JAR) using Maven*`.
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
@@ -220,19 +220,19 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 $ cat <<EOF | oc create --namespace={{PROJECT}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: Task
+kind: Task # <1>
 metadata:
-  name: maven-build
+  name: maven-build # <2>
 spec:
-  inputs:
+  inputs: # <3>
     resources:
     - name: source-repo
-      type: git
-  outputs:
+      type: git 
+  outputs: # <4>
     resources:
     - name: source-repo
       type: git    
-  steps:
+  steps: # <5>
   - name: build
     image: 'maven:3.6.0-jdk-8-slim'
     workingdir: /workspace/source-repo
@@ -252,11 +252,19 @@ spec:
     args: 
     - '-c'
     - 'cp /workspace/source-repo/target/*.jar /workspace/output/source-repo/ROOT.jar'
-  volumes:
+  volumes: # <6>
   - name: m2-folder
     emptyDir: {}
 EOF
 ----
+<1> Defines Tekton **Task** Kubernetes resource 
+<2> Name of the **Task**
+<3> **inputs** defines paramaters or input resources needed by the **Task**
+<4> **outputs** defines resources to be uploaded and shared with next **Steps**/**Tasks**
+<5> **steps** defines the body of the **Task**.
+<6> **volumes** defines Kubernetes volumes that you want to make available to the **Task**
+
+Then, `*create a task to create the container image from the binary (s2i)*`.
 
 [source,shell]
 .>_ workshop-tools terminal
@@ -304,20 +312,20 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 $ cat <<EOF | oc create --namespace={{PROJECT}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: Pipeline
+kind: Pipeline # <1>
 metadata:
-  name: my-pipeline
+  name: my-pipeline # <2>
 spec:
-  resources:
+  resources: # <3>
     - name: component-git
       type: git
-  params:
+  params: # <4>
     - name: componentName
       default: sample
       description: The name of the component
-  tasks:
+  tasks: # <5>
     - name: build-jar
-      taskRef:
+      taskRef: # <6>
         name: maven-build
       resources:
         inputs:
@@ -342,6 +350,12 @@ spec:
           value: '\$(params.componentName)'
 EOF
 ----
+<1> Defines Tekton **Pipeline** Kubernetes resource 
+<2> Name of the **Pipeline**
+<3> **resources** defines which **PipelineResources** of which types the **Pipeline** will be using in its **Tasks**
+<4> **params** defines input parameters that must be supplied to the **Pipeline** and to its **Tasks**
+<5> **tasks** defines which **Tasks** to run and how to run them
+<6> References to a Tekton **Task**
 
 '''
 
@@ -358,18 +372,22 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 $ cat <<EOF | oc create --namespace={{PROJECT}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: PipelineResource
+kind: PipelineResource # <1>
 metadata:
-  name: inventory-git
+  name: inventory-git # <2>
 spec:
-  type: git
-  params:
+  type: git # <3>
+  params: # <4>
   - name: url
     value: http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/inventory-quarkus.git
   - name: revision
     value: master
 EOF
 ----
+<1> Defines Tekton **PipelineResource** Kubernetes resource 
+<2> Name of the **PipelineResource**
+<3> Type of the **PipelineResource**, a GitHub source which contains your application code.
+<4> Params of the Git **PipelineResource** 
 
 '''
 
