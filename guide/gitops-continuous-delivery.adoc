@@ -320,7 +320,7 @@ image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Appl
 
 |GENERAL
 |Application Name
-|coolstore
+|coolstore{{USER_ID}}
 
 |GENERAL
 |Project
