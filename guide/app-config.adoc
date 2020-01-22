@@ -74,7 +74,7 @@ Then, enter the following information:
 |Value
 
 |Namespace*
-|PR {{DEV_PROJECT}}
+|PR my-project{{USER_ID}}
 
 |Memory Limit*
 |512Mi
@@ -118,7 +118,7 @@ Then, enter the following information:
 |Value
 
 |Namespace*
-|PR {{DEV_PROJECT}}
+|PR my-project{{USER_ID}}
 
 |Memory Limit*
 |512Mi
@@ -211,7 +211,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 $ cat <<EOF > /projects/inventory-openshift-application.properties
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.{{DEV_PROJECT}}.svc:3306/inventorydb# <1>
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{{USER_ID}}.svc:3306/inventorydb# <1>
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 EOF
@@ -226,9 +226,9 @@ packaged in the Inventory JAR archive:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n {{DEV_PROJECT}}# <1>
-oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n {{DEV_PROJECT}} # <2>
-oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n {{DEV_PROJECT}}# <3>
+oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n my-project{{USER_ID}}# <1>
+oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n my-project{{USER_ID}} # <2>
+oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{{USER_ID}}# <3>
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
 is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
@@ -250,14 +250,14 @@ a shell command inside the Inventory Container*`:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n {{DEV_PROJECT}} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
+$ oc rsh -n my-project{{USER_ID}} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
 ----
 
 You should have the following output:
 
 [source,properties]
 ----
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.{{DEV_PROJECT}}.svc:3306/inventorydb
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{{USER_ID}}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 ----
@@ -268,7 +268,7 @@ loaded into the database.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n {{DEV_PROJECT}} dc/inventory-mariadb
+$ oc rsh -n my-project{{USER_ID}} dc/inventory-mariadb
 ----
 
 Once connected to the MariaDB container, `*run the following*`:
@@ -323,7 +323,7 @@ Let's create the Spring Boot configuration content using the database credential
 .>_ workshop-tools terminal
 ----
 $ cat <<EOF > /projects/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql.{{DEV_PROJECT}}.svc:5432/catalogdb#<1>
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project{{USER_ID}}.svc:5432/catalogdb#<1>
 spring.datasource.username=catalog
 spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver
@@ -340,8 +340,8 @@ packaged in the Catalog JAR archive:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n {{DEV_PROJECT}}
-oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n {{DEV_PROJECT}}
+oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project{{USER_ID}}
+oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n my-project{{USER_ID}}
 ----
 
 The https://github.com/spring-cloud-incubator/spring-cloud-kubernetes[Spring Cloud Kubernetes^] plug-in implements 
@@ -355,13 +355,13 @@ tries to discover config maps, due to security reasons containers
 by default are not allowed to snoop around OpenShift clusters and discover objects. Security comes first, 
 and discovery is a privilege that needs to be granted to containers in each project. 
 
-Since you do want Spring Boot to discover the config maps inside the **{{DEV_PROJECT}}** project, you 
+Since you do want Spring Boot to discover the config maps inside the **my-project{{USER_ID}}** project, you 
 need to grant permission to the Spring Boot service account to access the OpenShift REST API and find the 
 config maps. 
 
 .>_ workshop-tools terminal
 ----
-$ oc policy add-role-to-user view -n {{DEV_PROJECT}} -z default
+$ oc policy add-role-to-user view -n my-project{{USER_ID}} -z default
 ----
 
 `*Delete the Catalog Pod*` to make it start again and look for the config maps:
@@ -369,7 +369,7 @@ $ oc policy add-role-to-user view -n {{DEV_PROJECT}} -z default
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc delete pod -l deploymentconfig=catalog-coolstore -n {{DEV_PROJECT}}
+$ oc delete pod -l deploymentconfig=catalog-coolstore -n my-project{{USER_ID}}
 ----
 
 When the Catalog container is ready, verify that the PostgreSQL database is being 
@@ -378,7 +378,7 @@ used. Check the Catalog pod logs:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc logs -c catalog-coolstore dc/catalog-coolstore -n {{DEV_PROJECT}} | grep hibernate.dialect
+$ oc logs -c catalog-coolstore dc/catalog-coolstore -n my-project{{USER_ID}} | grep hibernate.dialect
 
 2017-08-10 21:07:51.670  INFO 1 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
 ----
@@ -388,7 +388,7 @@ You can also connect to the Catalog PostgreSQL database and verify that the seed
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n {{DEV_PROJECT}} dc/catalog-postgresql
+$ oc rsh -n my-project{{USER_ID}} dc/catalog-postgresql
 ----
 
 Once connected to the PostgreSQL container, run the following:

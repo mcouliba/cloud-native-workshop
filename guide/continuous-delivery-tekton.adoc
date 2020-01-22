@@ -37,7 +37,7 @@ In {{GOGS_URL}}[Gogs^], `*create a new Repository for Inventory Service*` as fol
 |Value
 
 |Owner*
-|{{OPENSHIFT_USER}}
+|user{{USER_ID}}
 
 |Repository Name*
 |inventory-quarkus
@@ -87,7 +87,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/inventory-quarkus
-git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/inventory-quarkus
+git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/inventory-quarkus
 ----
 
 Via the command menu (`*'View' -> 'Find Command...'*`),
@@ -111,13 +111,13 @@ image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
 image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
 
 `*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gogs credentials ({{OPENSHIFT_USER}}/{{ OPENSHIFT_PASSWORD }})*`.
+Finally, `*enter your Gogs credentials (user{{USER_ID}}/{{ OPENSHIFT_PASSWORD }})*`.
 
 image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
 
 image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
 
-Once done, in {{GOGS_URL}}/{{OPENSHIFT_USER}}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
+Once done, in {{GOGS_URL}}/user{{USER_ID}}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
 see the project files in the repository.
 
 image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
@@ -175,7 +175,7 @@ $ oc new-build java \
   --name=inventory-coolstore \
   --binary=true \
   --labels=app=coolstore,app.kubernetes.io/instance=inventory \
-  --namespace={{PROJECT}}
+  --namespace=cn-project{{USER_ID}}
 ----
 
 You should have the following output:
@@ -217,7 +217,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task # <1>
@@ -269,7 +269,7 @@ Then, `*create a task to create the container image from the binary (s2i)*`.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -309,7 +309,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline # <1>
@@ -369,7 +369,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace={{PROJECT}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource # <1>
@@ -379,7 +379,7 @@ spec:
   type: git # <3>
   params: # <4>
   - name: url
-    value: http://gogs-gogs-server.workshop-infra.svc:3000/{{OPENSHIFT_USER}}/inventory-quarkus.git
+    value: http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/inventory-quarkus.git
   - name: revision
     value: master
 EOF
@@ -456,7 +456,7 @@ Back into the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Deve
 image:{% image_path openshift-pipeline-full.png %}[OpenShift Pipeline,900]
 
 Once finished, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*Select the '{{PROJECT}}'*`.
+`*Select the 'cn-project{{USER_ID}}'*`.
 
 image:{% image_path openshift-tekton-inventory-deployed.png %}[OpenShift - Inventory Deployed by Tekton, 700]
 
@@ -483,7 +483,7 @@ image:{% image_path openshift-three-pipeline-run.png %}[3 OpenShift Pipeline Run
 You should see 3 pipelines running for the 3 remaining services (Catalog, Gateway and Web).
 
 Finally , `*click on 'Topology'*` from the **Developer view** of the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]
-and validate that the CoolStore application is deployed, up and running in the **{{PROJECT}}** project.
+and validate that the CoolStore application is deployed, up and running in the **cn-project{{USER_ID}}** project.
 
 image:{% image_path openshift-tekton-coolstore-deployed.png %}[OpenShift - Coolstore Deployed by Tekton, 700]
 

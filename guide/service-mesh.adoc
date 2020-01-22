@@ -47,9 +47,9 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n {{PROJECT}} # <1>
-oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n {{PROJECT}} # <2>
-oc rollout latest dc/inventory-coolstore -n {{PROJECT}} # <3>
+oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n cn-project{{USER_ID}} # <1>
+oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n cn-project{{USER_ID}} # <2>
+oc rollout latest dc/inventory-coolstore -n cn-project{{USER_ID}} # <3>
 ----
 <1> Define the annotation to automatically inject an Istio sidecar
 <2> Wait for the Envoy Proxy to be up and running before starting the application
@@ -58,7 +58,7 @@ oc rollout latest dc/inventory-coolstore -n {{PROJECT}} # <3>
 To confirm that the application is successfully deployed, `*run this following command*`:
 
 ----
-$ oc get pods -ldeploymentconfig=inventory-coolstore -n {{PROJECT}}
+$ oc get pods -ldeploymentconfig=inventory-coolstore -n cn-project{{USER_ID}}
 NAME                        READY     STATUS    RESTARTS   AGE
 inventory-coolstore-4-dhfrm   2/2       Running   0          12s
 ----
@@ -82,10 +82,10 @@ To verify the deployment `*run this following command*`:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc get pods -ldeploymentconfig=catalog-coolstore -n {{PROJECT}}
+$ oc get pods -ldeploymentconfig=catalog-coolstore -n cn-project{{USER_ID}}
 NAME                          READY     STATUS    RESTARTS   AGE
 catalog-coolstore-4-xnwfp   2/2       Running   0          39s
-$ oc get pods -ldeploymentconfig=gateway-coolstore -n {{PROJECT}}
+$ oc get pods -ldeploymentconfig=gateway-coolstore -n cn-project{{USER_ID}}
 NAME                        READY     STATUS    RESTARTS   AGE
 gateway-coolstore-4-h5g7t   2/2       Running   0          73s
 ----
@@ -108,12 +108,12 @@ to create an **Istio Gateway** and a **VirtualService** for the **Gateway Servic
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc create -n {{PROJECT}} -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
-sed s/PROJECT/{{PROJECT}}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -n {{PROJECT}} -f -
+oc create -n cn-project{{USER_ID}} -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
+sed s/PROJECT/cn-project{{USER_ID}}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -n cn-project{{USER_ID}} -f -
 ----
 
 To confirm that the **Istio Gateway** is properly configured, 
-`*click on http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{PROJECT}}/api/products[http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{PROJECT}}/api/products^]*`
+`*click on http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{{USER_ID}}/api/products[http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{{USER_ID}}/api/products^]*`
 
 You should have the following result:
 
@@ -141,8 +141,8 @@ You should have the following result:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc set env dc/web-coolstore -n {{PROJECT}} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/{{PROJECT}}
-oc rollout latest dc/web-coolstore -n {{PROJECT}}
+oc set env dc/web-coolstore -n cn-project{{USER_ID}} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{{USER_ID}}
+oc rollout latest dc/web-coolstore -n cn-project{{USER_ID}}
 ----
 
 '''
@@ -184,7 +184,7 @@ Kiali provides an interactive graph view of your namespace in real time, being a
 [window=_blank, align="center"]
 image::{% image_path developer-observability-button.png  %}[Developer Observability - Button, 300]
 
-Then, `*log in with OpenShift as {{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}}'*`
+Then, `*log in with OpenShift as user{{USER_ID}}/{{OPENSHIFT_PASSWORD}}'*`
 
 image:{% image_path kiali-login.png %}[Kiali- Log In,300]`
 
@@ -197,7 +197,7 @@ From the **'Graph' view**, `*enter the following configuration*`:
 |Value
 
 |Namespace 
-|{{PROJECT}}
+|cn-project{{USER_ID}}
 
 |Display
 |'Traffic Animation' checked

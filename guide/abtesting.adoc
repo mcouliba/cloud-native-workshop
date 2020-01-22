@@ -155,7 +155,7 @@ In {{ KIALI_URL }}[Kiali Console^], from the **'Graph' view**,
 |Value
 
 |Namespace 
-|{{PROJECT}}
+|cn-project{{USER_ID}}
 
 |Display
 |'Traffic Animation' checked

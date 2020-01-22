@@ -8,11 +8,8 @@ vars:
   OPENSHIFT_CONSOLE_URL: "https://console-openshift-console.192.168.99.100.nip.io"
   OPENSHIFT_API_URL: "https://api.192.168.99.100.nip.io"
   APPS_HOSTNAME_SUFFIX: "192.168.99.100.nip.io"
-  OPENSHIFT_USER: userX
+  USER_ID: X
   OPENSHIFT_PASSWORD: PASSWORD
-  PROJECT: cn-projectX
-  DEV_PROJECT: my-projectX
-  INFRA_PROJECT: infraX
   WORKSHOP_GIT_REPO: https://github.com/mcouliba/cloud-native-workshop
   WORKSHOP_GIT_REF: master
   CHE_URL: http://che-eclipse-che.apps.192.168.99.100.nip.io

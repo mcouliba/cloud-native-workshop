@@ -67,7 +67,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://catalog-coolstore.{{DEV_PROJECT}}.svc:8080/actuator/health
+$ curl -w "\n" http://catalog-coolstore.my-project{{USER_ID}}.svc:8080/actuator/health
 ----
 
 You should have the following output:
@@ -89,7 +89,7 @@ $ oc set probe dc/catalog-coolstore \
     --initial-delay-seconds=30 \# <3>
     --failure-threshold=3 \# <4>
     --get-url=http://:8080/actuator/health \# <5>
-    --namespace={{DEV_PROJECT}}
+    --namespace=my-project{{USER_ID}}
 ----
 <1> **--liveness** is the option to setup a liveness probe to verify this container is running
 <2> **--readiness** is the option to setup a readiness probe to indicate when this container should receive traffic
@@ -156,7 +156,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://inventory-coolstore.{{DEV_PROJECT}}.svc:8080/health
+$ curl -w "\n" http://inventory-coolstore.my-project{{USER_ID}}.svc:8080/health
 ----
 
 You should have the following output:
@@ -179,10 +179,10 @@ Finally, `*Add the Liveness and Readiness Probes*` to the Service
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc rollout pause dc/inventory-coolstore --namespace={{DEV_PROJECT}}
-oc set probe dc/inventory-coolstore --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready --namespace={{DEV_PROJECT}}
-oc set probe dc/inventory-coolstore --liveness --initial-delay-seconds=180 --failure-threshold=3 --get-url=http://:8080/health/live --namespace={{DEV_PROJECT}}
-oc rollout resume dc/inventory-coolstore --namespace={{DEV_PROJECT}}
+oc rollout pause dc/inventory-coolstore --namespace=my-project{{USER_ID}}
+oc set probe dc/inventory-coolstore --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready --namespace=my-project{{USER_ID}}
+oc set probe dc/inventory-coolstore --liveness --initial-delay-seconds=180 --failure-threshold=3 --get-url=http://:8080/health/live --namespace=my-project{{USER_ID}}
+oc rollout resume dc/inventory-coolstore --namespace=my-project{{USER_ID}}
 ----
 
 OpenShift automatically restarts the Inventory pod and as soon as the health probes succeed, it is ready to receive traffic.
@@ -199,7 +199,7 @@ Verify that the health endpoint works for the **Gateway Service** using `*curl*`
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://gateway-coolstore.{{DEV_PROJECT}}.svc:8080/health
+$ curl -w "\n" http://gateway-coolstore.my-project{{USER_ID}}.svc:8080/health
 ----
 
 You should have the following output:
@@ -279,7 +279,7 @@ OpenShift provides container metrics out-of-the-box and displays how much memory
 each container has been consuming over time. 
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Advanced' -> 'Projects' then select your '{{DEV_PROJECT}}' project*`.
+`*click on 'Advanced' -> 'Projects' then select your 'my-project{{USER_ID}}' project*`.
 
 In the project overview, you can see the **Health** and **Resource Usage** sections
 

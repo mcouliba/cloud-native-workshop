@@ -52,11 +52,11 @@ to this file.
 
 `*Click on the below button called 'Developer Workspace'*`
 
-[link={{ CHE_URL }}/dashboard/#/ide/{{ OPENSHIFT_USER }}/wksp-cloud-native]
+[link={{ CHE_URL }}/dashboard/#/ide/user{{USER_ID}}/wksp-cloud-native]
 [window=_blank, align="center"]
 image::{% image_path developer-workspace-button.png  %}[Developer Workspace - Button, 300]
 
-Then `*login as {{ OPENSHIFT_USER }}/{{ OPENSHIFT_PASSWORD }}*`, `*click on 'Allow selected permissions'*` and let's the magic happens...
+Then `*login as user{{USER_ID}}/{{ OPENSHIFT_PASSWORD }}*`, `*click on 'Allow selected permissions'*` and let's the magic happens...
 
 image:{% image_path che-login.png %}[Che - Login, 500]
 
@@ -130,7 +130,7 @@ Finally, `*enter the following information*`:
 |$(plus) Add new user...
 
 |Provide Username for basic authentication to the API Server
-|{{OPENSHIFT_USER}}
+|user{{USER_ID}}
 
 |Provide Password for basic authentication to the API Server
 |{{OPENSHIFT_PASSWORD}}
@@ -141,8 +141,8 @@ You should see 2 projects in the **OpenShift View** as following:
 
 image:{% image_path che-openshift-login.png %}[Che - OpenShift View, 300]
 
-* The **'{{PROJECT}}' project** will be used as a **Staging Environment**.
-* The **'{{OPENSHIFT_USER}}-che' project** contains your **Developer Workspace** up and running
+* The **'cn-project{{USER_ID}}' project** will be used as a **Staging Environment**.
+* The **'user{{USER_ID}}-che' project** contains your **Developer Workspace** up and running
 
 So, as you can see, you are missing the **Development Environment**. Let's create it!
 
@@ -160,7 +160,7 @@ Finally, `*enter the following information*`:
 |Value
 
 |Provide Project name.
-|{{DEV_PROJECT}}
+|my-project{{USER_ID}}
 
 |===
 
@@ -177,11 +177,11 @@ perform various tasks via a browser.
 [window=_blank, align="center"]
 image::{% image_path developer-console-button.png  %}[Developer Workspace - Button, 300]
 
-`*Enter your username and password ({{OPENSHIFT_USER}}/{{OPENSHIFT_PASSWORD}})*` and 
+`*Enter your username and password (user{{USER_ID}}/{{OPENSHIFT_PASSWORD}})*` and 
 then log in. After you have authenticated to the web console, you will be presented with a
 list of projects that your user has permission to work with. 
 
-`*Select the 'Developer View' then your '{{DEV_PROJECT}}'*` to be taken to the project overview page
+`*Select the 'Developer View' then your 'my-project{{USER_ID}}'*` to be taken to the project overview page
 which will list all of the routes, services, deployments, and pods that you have
 running as part of your project. There's nothing there now, but that's about to
 change.
