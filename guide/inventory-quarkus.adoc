@@ -380,7 +380,7 @@ the OpenShift platform.
 
 An **uber-jar** contains all the dependencies required packaged in the **jar** to enable running the 
 application with **java -jar**. By default, in Quarkus, the generation of the uber-jar is disabled. 
-To enable it, `*specify an <uberJar> configuration option in your pom.xml*`
+To enable it, `*at the line 63, specify an <uberJar> configuration option in your pom.xml*`
 
 [source,shell]
 .pom.xml
@@ -405,7 +405,7 @@ To enable it, `*specify an <uberJar> configuration option in your pom.xml*`
     </plugins>
 </build>
 ----
-<1> uberJar configuration option
+<1> uberJar configuration option at the line 63
 
 Then, in your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 

@@ -348,7 +348,7 @@ image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Appl
 
 |DESTINATION
 |Namespace
-|cn-project1
+|{{PROJECT}}
 
 |ALL OTHER SECTIONS
 |*
