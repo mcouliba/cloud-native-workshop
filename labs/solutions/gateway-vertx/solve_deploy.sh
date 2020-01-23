@@ -10,6 +10,7 @@ cd /projects/workshop/labs/gateway-vertx
 mvn clean package -DskipTests
 
 odo delete --all --force
+odo project set my-project${CHE_WORKSPACE_NAMESPACE#user}
 
 odo create java:11 gateway --context /projects/workshop/labs/gateway-vertx/ --binary target/gateway-1.0-SNAPSHOT.jar --app coolstore
 odo push

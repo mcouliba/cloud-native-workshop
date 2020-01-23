@@ -4,6 +4,7 @@
 
 DIRECTORY=`dirname $0`
 
+oc project my-project${CHE_WORKSPACE_NAMESPACE#user}
 oc new-app nodejs~https://github.com/mcouliba/cloud-native-workshop#3.0 \
         --context-dir=labs/web-nodejs \
         --name=web-coolstore \
