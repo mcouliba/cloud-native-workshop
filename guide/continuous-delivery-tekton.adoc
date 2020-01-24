@@ -415,7 +415,13 @@ Congratulations!! You have created and run your first **OpenShift Pipeline with 
 Now, you have learnt and understood how to create a simple **Pipeline** with **Task** and **PipelineResource**.
 Let's create more tasks and expand the existing pipeline.
 
-In your {{ CHE_URL }}[Workspace^], `*double click on each following file*` then 
+In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
+`*run 'Kubernetes: Use Namespace' and enter 'cn-project{{USER_ID}}'*`
+
+image:{% image_path che-kubernetes-use-namespace.png %}[Che - Kubernetes Create, 500]
+
+
+Then,`*double click on each following file to open it*` then 
 via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Kubernetes: Create'*`
 
