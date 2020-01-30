@@ -3,22 +3,23 @@
 ## Overview
 
 This one day hands-on cloud-native workshops provides developers and introduction to cloud-natives applications
-and gives them an experience of building cloud-native applications using OpenShift, Eclipse Che7, Spring Boot,
+and gives them an experience of building cloud-native applications using OpenShift, CodeReady Workspaces, Spring Boot,
 Quarkus, Vert.x and more.
 
 ## Agenda
 
-* Introduction to Cloud-Native Development
-* Getting your Developer Workspace with Eclipse Che7
-* Building Services with Quarkus
-* Building Services with Spring Boot
-* Building Reactive Services with Vert.x
-* Monitoring Application Health
+* Introduction
+* Get your Developer Workspace
+* Create Inventory Service as an Enterprise Microservice with Quarkus
+* Create Catalog Service as a Microservice with Spring Boot
+* Create Gateway Service as a Reactive Microservice with Eclipse Vert.x
+* Deploy Web UI as a Microservice with with Node.js and AngularJS
+* Monitor Application Health
 * Service Resilience and Fault Tolerance
 * Externalize Application Configuration
-* Building Cloud-Native Pipelines with Tekton
-* Connecting and monitoring microservice applications with Service Mesh
-* Setting up A/B Testing with Service Mesh
+* GitOps Continuous Delivery with Argo CD
+* Continuous Delivery with Openshift Pipelines
+* Microservice Tracing with Service Mesh
 
 ## Deploy the Workshop on RHPDS
 
@@ -26,8 +27,8 @@ An [Operator](https://docs.openshift.com/container-platform/4.2/operators/olm-wh
 is provided for deploying the workshop infrastructure (lab instructions, Nexus, Gogs, Eclipse Che, etc)
 on OpenShift.
 
-Please follow the instructions from [OpenShift Workshop Operator](https://github.com/mcouliba/openshift-workshop-operator)
-and deploy the following **Workshop** custom resource [cloud_native_workshop_cr.yaml](https://github.com/mcouliba/openshift-workshop-operator/blob/master/deploy/crds/cloud_native_workshop_cr.yaml)
+Please follow the instructions from [OpenShift Workshop Operator](https://github.com/mcouliba/openshift-workshop-operator/tree/3.0)
+and deploy the following **Workshop** custom resource [cloud_native_workshop_cr.yaml](https://github.com/mcouliba/openshift-workshop-operator/blob/3.0/deploy/crds/cloud_native_workshop_cr.yaml)
 
 ## Run locally the lab instructions
 
