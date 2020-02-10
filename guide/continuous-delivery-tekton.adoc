@@ -433,19 +433,19 @@ image:{% image_path che-kubernetes-create.png %}[Che - Kubernetes Create, 500]
 |OpenShift Resource
 |Description
 
-|/projects/workshop/labs/pipelines/increment-version-task.yaml
+|/projects/workshop/labs/pipelines/inventory/increment-version-task.yaml
 |**Task** which retrieves the current version of the current image of your application 
 then increment it. 
 If "latest" is the current version, the next version will be "1.0", then "1.1", ...
 
-|/projects/workshop/labs/pipelines/oc-tag-image-task.yaml
+|/projects/workshop/labs/pipelines/inventory/oc-tag-image-task.yaml
 |**Task** which tags the new version of the image and updates the Deployment configuration
 of your application.
 
-|/projects/workshop/labs/pipelines/oc-deploy-task.yaml 
+|/projects/workshop/labs/pipelines/inventory/oc-deploy-task.yaml 
 |**Task** which triggers a new deployment of your application.
 
-|/projects/workshop/labs/pipelines/jar-pipeline.yaml
+|/projects/workshop/labs/pipelines/inventory/jar-pipeline.yaml
 |**Pipeline** which defines Cloud-Native CI/CD of your Java Jar application by calling defined **Task** above.
 
 |===
