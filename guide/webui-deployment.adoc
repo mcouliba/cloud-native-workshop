@@ -70,7 +70,7 @@ Then, enter the following information:
 |Node.js
 
 |Builder Image Version
-|10
+|10-SCL
 
 |Application Name
 |coolstore
@@ -78,11 +78,14 @@ Then, enter the following information:
 |Name
 |web-coolstore
 
+|Resources
+|Deployment Config
+
 |Create a route to the application
 |Checked
 
 |Labels
-|app=coolstore app.kubernetes.io/instance=web
+|app=coolstore app.kubernetes.io/instance=web app.kubernetes.io/part-of=coolstore
 
 
 |===

@@ -38,6 +38,10 @@ do
     yq delete --inplace  ${SERVICE_YAML} items[*].metadata.creationTimestamp
     yq delete --inplace  ${SERVICE_YAML} items[*].metadata.resourceVersion
     yq delete --inplace  ${SERVICE_YAML} items[*].spec.clusterIP
+
+    # Specific changes for Staging Environment with Istio
+    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.selector.app "coolstore"
+    
     sed -i "s/8080-tcp/http/g" ${SERVICE_YAML}
 
     ## Route
@@ -114,6 +118,9 @@ do
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.spec.volumes[0]
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].status
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.triggers null
+
+    # Specific changes for Staging Environment with Istio
+    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.selector.app "coolstore"
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.app "coolstore"
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.[app.kubernetes.io/instance] ${COMPONENT_NAME%-coolstore}
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.[maistra.io/expose-route] '"true"'
