@@ -1,0 +1,27 @@
+apiVersion: v1
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      app.kubernetes.io/component-source-type: binary
+      app.openshift.io/vcs-uri: file://target/catalog-1.0-SNAPSHOT.jar
+    labels:
+      app: coolstore
+      app.kubernetes.io/instance: catalog
+      app.kubernetes.io/managed-by: odo
+      app.kubernetes.io/managed-by-version: v1.0.2
+      app.kubernetes.io/name: java
+      app.kubernetes.io/part-of: coolstore
+      app.openshift.io/runtime-version: "11"
+    name: catalog-coolstore
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/cn-project6/catalog-coolstore
+    publicDockerImageRepository: default-route-openshift-image-registry.apps.cluster-nantes-c90c.nantes-c90c.example.opentlc.com/cn-project6/catalog-coolstore
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

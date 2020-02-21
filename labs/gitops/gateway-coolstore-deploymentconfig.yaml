@@ -1,0 +1,94 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.kubernetes.io/component-source-type: binary
+      app.openshift.io/connects-to: catalog,inventory
+      app.openshift.io/vcs-uri: file://target/gateway-1.0-SNAPSHOT.jar
+    labels:
+      app: coolstore
+      app.kubernetes.io/instance: gateway
+      app.kubernetes.io/managed-by: odo
+      app.kubernetes.io/managed-by-version: v1.0.2
+      app.kubernetes.io/name: java
+      app.kubernetes.io/part-of: coolstore
+      app.openshift.io/runtime-version: "11"
+    name: gateway-coolstore
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      deploymentconfig: gateway-coolstore
+      app: coolstore
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          alpha.image.policy.openshift.io/resolve-names: '*'
+        creationTimestamp: null
+        labels:
+          deploymentconfig: gateway-coolstore
+          app: coolstore
+          app.kubernetes.io/instance: gateway
+          maistra.io/expose-route: "true"
+      spec:
+        containers:
+        - envFrom:
+          - secretRef:
+              name: catalog-coolstore-8080
+          - secretRef:
+              name: inventory-coolstore-8080
+          image: image-registry.openshift-image-registry.svc:5000/cn-project6/gateway-coolstore:latest
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: gateway-coolstore
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 8443
+            name: 8443-tcp
+            protocol: TCP
+          - containerPort: 8778
+            name: 8778-tcp
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers: []
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

@@ -1,0 +1,88 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.kubernetes.io/component-source-type: git
+      app.openshift.io/connects-to: gateway
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: coolstore
+      app.kubernetes.io/instance: web
+      app.kubernetes.io/name: nodejs
+      app.kubernetes.io/part-of: coolstore
+    name: web-coolstore
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: coolstore
+      app.kubernetes.io/instance: web
+      app.kubernetes.io/name: nodejs
+      app.kubernetes.io/part-of: coolstore
+      deploymentconfig: web-coolstore
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: coolstore
+          app.kubernetes.io/instance: web
+          app.kubernetes.io/name: nodejs
+          app.kubernetes.io/part-of: coolstore
+          deploymentconfig: web-coolstore
+          maistra.io/expose-route: "true"
+      spec:
+        containers:
+        - image: image-registry.openshift-image-registry.svc:5000/cn-project6/web-coolstore:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: web-coolstore
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers: []
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

@@ -1,0 +1,46 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      app.kubernetes.io/component-source-type: binary
+      app.openshift.io/vcs-uri: file://target/gateway-1.0-SNAPSHOT.jar
+    labels:
+      app: coolstore
+      app.kubernetes.io/instance: gateway
+      app.kubernetes.io/managed-by: odo
+      app.kubernetes.io/managed-by-version: v1.0.2
+      app.kubernetes.io/name: java
+      app.kubernetes.io/part-of: coolstore
+      app.openshift.io/runtime-version: "11"
+    name: gateway-coolstore
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      kind: DeploymentConfig
+      name: gateway-coolstore
+      uid: e8386356-c6f5-4574-8822-b1a63de7083f
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8443-tcp
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    - name: 8778-tcp
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      deploymentconfig: gateway-coolstore
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
