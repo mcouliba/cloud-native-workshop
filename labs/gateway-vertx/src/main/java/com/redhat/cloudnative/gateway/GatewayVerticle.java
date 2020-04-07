@@ -23,8 +23,6 @@ import io.vertx.reactivex.ext.web.handler.StaticHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.redhat.cloudnative.gateway.HeadersPopulator.populateHeaders;
-
 public class GatewayVerticle extends AbstractVerticle {
     private static final Logger LOG = LoggerFactory.getLogger(GatewayVerticle.class);
 
@@ -76,10 +74,8 @@ public class GatewayVerticle extends AbstractVerticle {
     }
 
     private void products(RoutingContext rc) {
-        final HttpRequest<Buffer> getCatalog = catalog
-            .get("/api/catalog");
-
-        populateHeaders(getCatalog, rc)
+        TracingInterceptor.propagate(catalog, rc)
+            .get("/api/catalog")
             .expect(ResponsePredicate.SC_OK)
             .as(BodyCodec.jsonArray())
             .rxSend()
@@ -106,9 +102,8 @@ public class GatewayVerticle extends AbstractVerticle {
     }
 
     private Single<JsonObject> getAvailabilityFromInventory(JsonObject product, RoutingContext rc) {
-        final HttpRequest<Buffer> getInventory = inventory
-            .get("/api/inventory/" + product.getString("itemId"));
-        return populateHeaders(getInventory, rc)
+        return TracingInterceptor.propagate(inventory, rc)
+            .get("/api/inventory/" + product.getString("itemId"))
             .as(BodyCodec.jsonObject())
             .rxSend()
             .map(resp -> {
