@@ -49,7 +49,7 @@ items:
         - env:
             - name: COOLSTORE_GW_ENDPOINT
               value: http://istio-ingressgateway-istio-system.apps.cluster-c7a1.c7a1.example.opentlc.com/staging-project7
-        - image: image-registry.openshift-image-registry.svc:5000/staging-project7/web-coolstore:latest
+          image: image-registry.openshift-image-registry.svc:5000/staging-project7/web-coolstore:latest
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
