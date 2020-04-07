@@ -1,0 +1,54 @@
+apiVersion: v1
+items:
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: coolstore
+      app.kubernetes.io/instance: web
+      app.kubernetes.io/name: nodejs
+      app.kubernetes.io/part-of: coolstore
+    name: web-coolstore
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: {}
+    output:
+      to:
+        kind: ImageStreamTag
+        name: web-coolstore:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      contextDir: labs/web-nodejs
+      git:
+        ref: "3.0"
+        uri: https://github.com/mcouliba/cloud-native-workshop
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: nodejs:10-SCL
+          namespace: openshift
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: WJq6Nd9pHFz7qUg5TH6x
+      type: GitHub
+    - generic:
+        secret: jO2JRZP8TP2Oo_Z3j00L
+      type: Generic
+    - type: ConfigChange
+    - imageChange:
+        lastTriggeredImageID: image-registry.openshift-image-registry.svc:5000/openshift/nodejs@sha256:2222b19ff7991d82d19273feb3add8622db5a7d9714024b38392e17abd36f518
+      type: ImageChange
+  status:
+    lastVersion: 1
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

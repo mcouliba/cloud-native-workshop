@@ -1,0 +1,23 @@
+apiVersion: v1
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: coolstore
+      app.kubernetes.io/instance: web
+      app.kubernetes.io/name: nodejs
+      app.kubernetes.io/part-of: coolstore
+    name: web-coolstore
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/cn-project6/web-coolstore
+    publicDockerImageRepository: default-route-openshift-image-registry.apps.cluster-nantes-c90c.nantes-c90c.example.opentlc.com/cn-project6/web-coolstore
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

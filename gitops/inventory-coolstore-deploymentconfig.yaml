@@ -1,0 +1,97 @@
+apiVersion: v1
+items:
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.kubernetes.io/component-source-type: binary
+      app.openshift.io/connects-to: inventory-mariadb
+      app.openshift.io/vcs-uri: file://target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar
+    labels:
+      app: coolstore
+      app.kubernetes.io/instance: inventory
+      app.kubernetes.io/managed-by: odo
+      app.kubernetes.io/managed-by-version: v1.0.2
+      app.kubernetes.io/name: java
+      app.kubernetes.io/part-of: coolstore
+      app.openshift.io/runtime-version: "11"
+    name: inventory-coolstore
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      deploymentconfig: inventory-coolstore
+      app: coolstore
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          alpha.image.policy.openshift.io/resolve-names: '*'
+        creationTimestamp: null
+        labels:
+          deploymentconfig: inventory-coolstore
+          app: coolstore
+          app.kubernetes.io/instance: inventory
+          maistra.io/expose-route: "true"
+      spec:
+        containers:
+        - image: image-registry.openshift-image-registry.svc:5000/cn-project6/inventory-coolstore:latest
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/live
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: inventory-coolstore
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 8443
+            name: 8443-tcp
+            protocol: TCP
+          - containerPort: 8778
+            name: 8778-tcp
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /deployments/config
+            name: volume-p4pdg
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: inventory
+          name: volume-p4pdg
+    test: false
+    triggers: []
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
