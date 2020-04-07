@@ -141,7 +141,7 @@ You should see 2 projects in the **OpenShift View** as following:
 
 image:{% image_path che-openshift-login.png %}[Che - OpenShift View, 300]
 
-* The **'cn-project{{USER_ID}}' project** will be used as a **Staging Environment**.
+* The **'staging-project{{USER_ID}}' project** will be used as a **Staging Environment**.
 * The **'user{{USER_ID}}-che' project** contains your **Developer Workspace** up and running
 
 So, as you can see, you are missing the **Development Environment**. Let's create it!

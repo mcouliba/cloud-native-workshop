@@ -171,7 +171,7 @@ $ oc new-build java \
   --name=inventory-coolstore \
   --binary=true \
   --labels=app=coolstore,app.kubernetes.io/instance=inventory \
-  --namespace=cn-project{{USER_ID}}
+  --namespace=staging-project{{USER_ID}}
 ----
 
 You should have the following output:
@@ -213,7 +213,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=staging-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task # <1>
@@ -265,7 +265,7 @@ Then, `*create a task to create the container image from the binary (s2i)*`.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=staging-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -305,7 +305,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=staging-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline # <1>
@@ -365,7 +365,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=staging-project{{USER_ID}} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource # <1>
@@ -412,7 +412,7 @@ Now, you have learnt and understood how to create a simple **Pipeline** with **T
 Let's create more tasks and expand the existing pipeline.
 
 In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
-`*run 'Kubernetes: Use Namespace' and enter 'cn-project{{USER_ID}}'*`
+`*run 'Kubernetes: Use Namespace' and enter 'staging-project{{USER_ID}}'*`
 
 image:{% image_path che-kubernetes-use-namespace.png %}[Che - Kubernetes Create, 500]
 
@@ -458,7 +458,7 @@ Back into the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Deve
 image:{% image_path openshift-pipeline-full.png %}[OpenShift Pipeline,900]
 
 Once finished, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*Select the 'cn-project{{USER_ID}}'*`.
+`*Select the 'staging-project{{USER_ID}}'*`.
 
 image:{% image_path openshift-tekton-inventory-deployed.png %}[OpenShift - Inventory Deployed by Tekton, 700]
 
@@ -485,7 +485,7 @@ image:{% image_path openshift-three-pipeline-run.png %}[3 OpenShift Pipeline Run
 You should see 3 pipelines running for the 3 remaining services (Catalog, Gateway and Web).
 
 Finally , `*click on 'Topology'*` from the **Developer view** of the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]
-and validate that the CoolStore application is deployed, up and running in the **cn-project{{USER_ID}}** project.
+and validate that the CoolStore application is deployed, up and running in the **staging-project{{USER_ID}}** project.
 
 image:{% image_path openshift-tekton-coolstore-deployed.png %}[OpenShift - Coolstore Deployed by Tekton, 700]
 

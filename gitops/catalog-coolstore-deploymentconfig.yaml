@@ -40,7 +40,7 @@ items:
           maistra.io/expose-route: "true"
       spec:
         containers:
-        - image: image-registry.openshift-image-registry.svc:5000/cn-project6/catalog-coolstore:latest
+        - image: image-registry.openshift-image-registry.svc:5000/staging-project7/catalog-coolstore:latest
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3

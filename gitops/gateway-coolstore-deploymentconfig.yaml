@@ -45,7 +45,7 @@ items:
               name: catalog-coolstore-8080
           - secretRef:
               name: inventory-coolstore-8080
-          image: image-registry.openshift-image-registry.svc:5000/cn-project6/gateway-coolstore:latest
+          image: image-registry.openshift-image-registry.svc:5000/staging-project7/gateway-coolstore:latest
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3

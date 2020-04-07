@@ -19,8 +19,8 @@ items:
     lookupPolicy:
       local: false
   status:
-    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/cn-project6/catalog-coolstore
-    publicDockerImageRepository: default-route-openshift-image-registry.apps.cluster-nantes-c90c.nantes-c90c.example.opentlc.com/cn-project6/catalog-coolstore
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/staging-project7/catalog-coolstore
+    publicDockerImageRepository: default-route-openshift-image-registry.apps.cluster-nantes-c90c.nantes-c90c.example.opentlc.com/staging-project7/catalog-coolstore
 kind: List
 metadata:
   resourceVersion: ""

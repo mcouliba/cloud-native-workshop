@@ -56,20 +56,20 @@ commands:
     actions:
       - workdir: /projects/workshop/labs/gitops
         type: exec
-        command: ./gitops_exporter.sh my-project${CHE_WORKSPACE_NAMESPACE#user} cn-project${CHE_WORKSPACE_NAMESPACE#user}
+        command: ./gitops_exporter.sh my-project${CHE_WORKSPACE_NAMESPACE#user} staging-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
   - name: 'Gateway - Generate Traffic'
     actions:
       - workdir: /projects/workshop/labs/scripts
         type: exec
-        command: ./runGatewayService.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}
+        command: ./runGatewayService.sh staging-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
   - name: 'Pipeline - Start Mine'
     actions:
       - type: exec
         command: >-
           echo "------ START ------" &&
-          tkn pipeline start my-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
+          tkn pipeline start my-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
           echo "------  END  ------"
         component: workshop-tools
         workdir: /projects/workshop/labs/pipelines
@@ -78,7 +78,7 @@ commands:
       - type: exec
         command: >-
           echo "------ START ------" &&
-          tkn pipeline start jar-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
+          tkn pipeline start jar-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
           echo "------  END  ------"
         component: workshop-tools
         workdir: /projects/workshop/labs/pipelines/inventory
@@ -86,18 +86,18 @@ commands:
     actions:
       - type: exec
         command: >-
-          ./deploy_coolstore_by_tekton.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}
+          ./deploy_coolstore_by_tekton.sh staging-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
         workdir: /projects/workshop/labs/pipelines/others
   - name: 'Service Mesh - Deploy Catalog and Gateway'
     actions:
       - type: exec
         command: >-
-          oc patch dc/catalog-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user}&&
-          oc patch dc/catalog-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "catalog-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
-          oc rollout latest dc/catalog-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
-          oc patch dc/gateway-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
-          oc patch dc/gateway-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "gateway-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} &&
-          oc rollout latest dc/gateway-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user}
+          oc patch dc/catalog-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n staging-project${CHE_WORKSPACE_NAMESPACE#user}&&
+          oc patch dc/catalog-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "catalog-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
+          oc rollout latest dc/catalog-coolstore -n staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
+          oc patch dc/gateway-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
+          oc patch dc/gateway-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "gateway-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
+          oc rollout latest dc/gateway-coolstore -n staging-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
   
