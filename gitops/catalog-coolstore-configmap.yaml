@@ -3,7 +3,7 @@ items:
 - apiVersion: v1
   data:
     application.properties: |
-      spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project6.svc:5432/catalogdb
+      spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project7.svc:5432/catalogdb
       spring.datasource.username=catalog
       spring.datasource.password=catalog
       spring.datasource.driver-class-name=org.postgresql.Driver

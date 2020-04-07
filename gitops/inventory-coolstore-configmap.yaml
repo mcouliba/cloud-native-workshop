@@ -3,7 +3,7 @@ items:
 - apiVersion: v1
   data:
     application.properties: |
-      quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project6.svc:3306/inventorydb
+      quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project7.svc:3306/inventorydb
       quarkus.datasource.username=inventory
       quarkus.datasource.password=inventory
   kind: ConfigMap
