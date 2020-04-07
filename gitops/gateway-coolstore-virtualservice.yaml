@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - istio-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /staging-project7/api
+      rewrite:
+        uri: "/api"
+      route:
+        - destination:
+            port:
+              number: 8080
+            host: gateway

@@ -31,7 +31,7 @@ items:
     template:
       metadata:
         annotations:
-          alpha.image.policy.openshift.io/resolve-names: '*'
+          sidecar.istio.io/inject: "true"
         creationTimestamp: null
         labels:
           deploymentconfig: gateway-coolstore
