@@ -77,8 +77,10 @@ commands:
     actions:
       - type: exec
         command: >-
-          echo "------ START ------" &&
-          tkn pipeline start jar-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
+          echo "------ START ------";
+          oc new-build java --name=inventory-coolstore --binary=true --labels=app=coolstore,app.kubernetes.io/instance=inventory --namespace=staging-project${CHE_WORKSPACE_NAMESPACE#user} 2> /dev/null;
+          oc apply -f .;
+          tkn pipeline start jar-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace staging-project${CHE_WORKSPACE_NAMESPACE#user};
           echo "------  END  ------"
         component: workshop-tools
         workdir: /projects/workshop/labs/pipelines/inventory
@@ -100,4 +102,63 @@ commands:
           oc patch dc/gateway-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "gateway-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n staging-project${CHE_WORKSPACE_NAMESPACE#user} &&
           oc rollout latest dc/gateway-coolstore -n staging-project${CHE_WORKSPACE_NAMESPACE#user}
         component: workshop-tools
-  
+  - name: 'OpenShift - Cleanup'
+    actions:
+      - type: exec
+        command: >-
+          echo "------ START ------";
+          git checkout .;
+          git clean -fd;
+          git clean -f;
+          oc delete project my-project${CHE_WORKSPACE_NAMESPACE#user};
+          oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap --all --namespace staging-project${CHE_WORKSPACE_NAMESPACE#user};
+          echo "------  END  ------"
+        component: workshop-tools
+        workdir: /projects/workshop
+  - name: 'Inventory - Code'
+    actions:
+      - type: exec
+        command: >-
+          echo "------ START ------";
+          ./solve.sh;
+          echo "------  END  ------"
+        component: workshop-tools
+        workdir: /projects/workshop/labs/solutions/inventory-quarkus
+  - name: 'Catalog & Gateway - Code & Deploy'
+    actions:
+      - type: exec
+        command: >-
+          echo "------ START ------";
+          cd catalog-spring-boot;./solve_deploy.sh;cd ..;
+          cd gateway-vertx;./solve_deploy.sh;cd ..;
+          echo "------  END  ------"
+        component: workshop-tools
+        workdir: /projects/workshop/labs/solutions
+  - name: 'Catalog - Externalize Configuration'
+    actions:
+      - type: exec
+        command: >-
+          echo "------ START ------";
+          cat <<EOF > /projects/catalog-openshift-application.properties
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb
+spring.datasource.username=catalog
+spring.datasource.password=catalog
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+EOF;
+          oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project${CHE_WORKSPACE_NAMESPACE#user};
+          oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n my-project${CHE_WORKSPACE_NAMESPACE#user};
+          echo "------  END  ------"
+        component: workshop-tools
+        workdir: /projects/workshop/
+  - name: 'Probes & Config - Deploy'
+    actions:
+      - type: exec
+        command: >-
+          echo "------ START ------";
+          cd health-probes; ./deploy.sh; cd ..;
+          cd app-config; ./deploy.sh; cd ..;
+          echo "------  END  ------"
+        component: workshop-tools
+        workdir: /projects/workshop/labs/solutions

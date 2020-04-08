@@ -33,8 +33,6 @@ items:
       deploymentconfig: catalog-coolstore
     sessionAffinity: None
     type: ClusterIP
-  status:
-    loadBalancer: {}
 kind: List
 metadata:
   resourceVersion: ""
