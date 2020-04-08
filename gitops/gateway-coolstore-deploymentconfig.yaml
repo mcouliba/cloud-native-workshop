@@ -46,14 +46,14 @@ items:
           - secretRef:
               name: inventory-coolstore-8080
           image: image-registry.openshift-image-registry.svc:5000/staging-project7/gateway-coolstore:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
             httpGet:
               path: /health
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 30
+            initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1

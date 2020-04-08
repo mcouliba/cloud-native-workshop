@@ -15,11 +15,6 @@ items:
       app.kubernetes.io/part-of: coolstore
       app.openshift.io/runtime-version: "11"
     name: inventory-coolstore
-    ownerReferences:
-    - apiVersion: apps.openshift.io/v1
-      kind: DeploymentConfig
-      name: inventory-coolstore
-      uid: 36203896-f08f-4dbe-91ae-c15b19b95fc4
   spec:
     ports:
     - name: http

@@ -42,18 +42,18 @@ items:
         containers:
         - args:
             - -c
-            - until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; java -jar /ROOT.jar
+            - until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run
           command:
             - /bin/bash
           image: image-registry.openshift-image-registry.svc:5000/staging-project7/catalog-coolstore:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
             httpGet:
               path: /actuator/health
               port: 8080
               scheme: HTTP
-            initialDelaySeconds: 30
+            initialDelaySeconds: 20
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1

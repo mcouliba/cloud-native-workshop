@@ -15,11 +15,6 @@ items:
       app.kubernetes.io/part-of: coolstore
       app.openshift.io/runtime-version: "11"
     name: catalog-coolstore
-    ownerReferences:
-    - apiVersion: apps.openshift.io/v1
-      kind: DeploymentConfig
-      name: catalog-coolstore
-      uid: 6d089752-5c8b-49dc-bb03-36dc40c53907
   spec:
     ports:
     - name: http

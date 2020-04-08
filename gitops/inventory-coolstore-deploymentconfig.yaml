@@ -31,7 +31,7 @@ items:
     template:
       metadata:
         annotations:
-          alpha.image.policy.openshift.io/resolve-names: '*'
+          sidecar.istio.io/inject: "true"
         creationTimestamp: null
         labels:
           deploymentconfig: inventory-coolstore
@@ -42,11 +42,11 @@ items:
         containers:
         - args:
             - -c
-            - until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; java -jar /ROOT.jar
+            - until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run
           command:
             - /bin/bash
           image: image-registry.openshift-image-registry.svc:5000/staging-project7/inventory-coolstore:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
             httpGet:
