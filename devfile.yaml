@@ -137,14 +137,14 @@ commands:
   - name: 'Catalog - Externalize Configuration'
     actions:
       - type: exec
-        command: >-
+        command: |-
           echo "------ START ------";
-          echo "spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb\n
-          spring.datasource.username=catalog\n
-          spring.datasource.password=catalog\n
-          spring.datasource.driver-class-name=org.postgresql.Driver\n
-          spring.jpa.hibernate.ddl-auto=create\n
-          spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true\n" > /projects/catalog-openshift-application.properties;
+          echo "spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb
+          spring.datasource.username=catalog
+          spring.datasource.password=catalog
+          spring.datasource.driver-class-name=org.postgresql.Driver
+          spring.jpa.hibernate.ddl-auto=create
+          spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true" > /projects/catalog-openshift-application.properties;
           oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project${CHE_WORKSPACE_NAMESPACE#user};
           oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n my-project${CHE_WORKSPACE_NAMESPACE#user};
           echo "------  END  ------"
