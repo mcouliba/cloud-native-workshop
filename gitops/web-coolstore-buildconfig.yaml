@@ -35,17 +35,7 @@ items:
           namespace: openshift
       type: Source
     successfulBuildsHistoryLimit: 5
-    triggers:
-    - github:
-        secret: WJq6Nd9pHFz7qUg5TH6x
-      type: GitHub
-    - generic:
-        secret: jO2JRZP8TP2Oo_Z3j00L
-      type: Generic
-    - type: ConfigChange
-    - imageChange:
-        lastTriggeredImageID: image-registry.openshift-image-registry.svc:5000/openshift/nodejs@sha256:2222b19ff7991d82d19273feb3add8622db5a7d9714024b38392e17abd36f518
-      type: ImageChange
+    triggers: []
 kind: List
 metadata:
   resourceVersion: ""
