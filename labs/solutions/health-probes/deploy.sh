@@ -9,6 +9,7 @@ oc policy add-role-to-user view -z default
 
 oc set probe dc/catalog-coolstore  --liveness --readiness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/actuator/health
 
+cp $DIRECTORY/application.properties $DIRECTORY/../../inventory-quarkus/src/main/resources
 cp $DIRECTORY/pom.xml $DIRECTORY/../../inventory-quarkus
 cd /projects/workshop/labs/inventory-quarkus
 mvn clean package -DskipTests

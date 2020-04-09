@@ -6,7 +6,7 @@ projects:
     source:
       location: 'https://github.com/mcouliba/cloud-native-workshop.git'
       type: git
-      branch: "3.1"
+      branch: "3.2"
 components:
   - type: dockerimage
     alias: maven
@@ -111,7 +111,7 @@ commands:
           git clean -fd;
           git clean -f;
           oc delete project my-project${CHE_WORKSPACE_NAMESPACE#user};
-          oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap --all --namespace staging-project${CHE_WORKSPACE_NAMESPACE#user};
+          oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap,service --all --namespace staging-project${CHE_WORKSPACE_NAMESPACE#user};
           echo "------  END  ------"
         component: workshop-tools
         workdir: /projects/workshop
@@ -140,13 +140,13 @@ commands:
         command: >-
           echo "------ START ------";
           cat <<EOF > /projects/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb
-spring.datasource.username=catalog
-spring.datasource.password=catalog
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.jpa.hibernate.ddl-auto=create
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
-EOF;
+          spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb
+          spring.datasource.username=catalog
+          spring.datasource.password=catalog
+          spring.datasource.driver-class-name=org.postgresql.Driver
+          spring.jpa.hibernate.ddl-auto=create
+          spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+          EOF;
           oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project${CHE_WORKSPACE_NAMESPACE#user};
           oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n my-project${CHE_WORKSPACE_NAMESPACE#user};
           echo "------  END  ------"

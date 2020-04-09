@@ -15,18 +15,18 @@ then
         --param=DATABASE_SERVICE_NAME=catalog-postgresql \
         --param=POSTGRESQL_DATABASE=catalogdb \
         --param=POSTGRESQL_USER=catalog \
-        --param=POSTGRESQL_PASSWORD=catalog \
-        --labels=app=coolstore,app.kubernetes.io/instance=catalog-postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/part-of=coolstore
+        --param=POSTGRESQL_PASSWORD=catalog
 
-
+    oc label --overwrite deploymentconfig catalog-postgresql app=coolstore app.kubernetes.io/instance=catalog-postgresql app.kubernetes.io/name=postgresql app.kubernetes.io/part-of=coolstore
+    
     oc new-app mariadb-ephemeral \
         --param=DATABASE_SERVICE_NAME=inventory-mariadb \
         --param=MYSQL_DATABASE=inventorydb \
         --param=MYSQL_USER=inventory \
         --param=MYSQL_PASSWORD=inventory \
-        --param=MYSQL_ROOT_PASSWORD=inventoryadmin \
-        --labels=app=coolstore,app.kubernetes.io/instance=inventory-mariadb,app.kubernetes.io/name=mariadb,app.kubernetes.io/part-of=coolstore
-
+        --param=MYSQL_ROOT_PASSWORD=inventoryadmin;
+        
+    oc label --overwrite deploymentconfig inventory-mariadb app=coolstore app.kubernetes.io/instance=inventory-mariadb app.kubernetes.io/name=mariadb app.kubernetes.io/part-of=coolstore
 
     cp $DIRECTORY/pom.xml $DIRECTORY/../../inventory-quarkus
     cp $DIRECTORY/application.properties $DIRECTORY/../../inventory-quarkus/src/main/resources
@@ -41,7 +41,7 @@ quarkus.datasource.password=inventory
 EOF
 
     oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties
-    oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory
+    oc label --overwrite configmap inventory app=coolstore app.kubernetes.io/instance=inventory
     oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config
 
     cat <<EOF > /projects/catalog-openshift-application.properties
@@ -54,7 +54,7 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 EOF
 
     oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties
-    oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog
+    oc label --overwrite configmap catalog app=coolstore app.kubernetes.io/instance=catalog
 
     oc delete pod -l deploymentconfig=catalog-coolstore
 
