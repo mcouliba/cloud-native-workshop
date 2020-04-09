@@ -1,5 +1,8 @@
 # Cloud Native Workshop
 
+[![Contribute](factory-contribute.svg)](https://codeready-workspaces.apps.cluster-c7a1.c7a1.example.opentlc.com/factory?url=https://github.com/mcouliba/cloud-native-workshop/tree/3.2)
+
+
 ## Overview
 
 This one day hands-on cloud-native workshops provides developers and introduction to cloud-natives applications
