@@ -1,3 +1,10 @@
+:markup-in-source: verbatim,attributes,quotes
+:APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
+:CHE_URL: %CHE_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
+
+
 == Enterprise Microservices with Quarkus
 
 _45 MINUTE EXERCISE_
@@ -185,7 +192,7 @@ image::images/che-quarkus-preview.png[Che - Quarkus Preview, 500]
 
 `*Modify the 'src/main/resources/META-INF/resources/index.html' file*` as following
 
-[source,java]
+[source,java,role=copy]
 .index.html
 ----
 <!DOCTYPE html>
@@ -229,7 +236,7 @@ Now let's write some code and create a domain model and a RESTful endpoint to cr
 
 `*Create the 'src/main/java/com/redhat/cloudnative/Inventory.java' file`* as following:
 
-[source,java]
+[source,java,role=copy]
 .Inventory.java
 ----
 package com.redhat.cloudnative;
@@ -287,8 +294,9 @@ You don't need to press a save button! Che automatically saves the changes made 
 ====
 
 `*Update 'src/main/resources/applications.properties' file*` to match with the following content:
-[source,shell]
+
 .application.properties
+[source,bash,role=copy]
 ----
 quarkus.datasource.url=jdbc:h2:mem:inventory;DB_CLOSE_ON_EXIT=FALSE
 quarkus.datasource.driver=org.h2.Driver
@@ -297,10 +305,15 @@ quarkus.datasource.password=sa
 quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.log.sql=true
 quarkus.hibernate-orm.sql-load-script=import.sql
+
+%prod.quarkus.package.uber-jar=true # <1>
 ----
+<1> An **uber-jar** contains all the dependencies required packaged in the **jar** to enable running the 
+application with **java -jar**. By default, in Quarkus, the generation of the uber-jar is disabled. With the
+**%prod** prefix, this option is only activated when building the jar intended for deployments.
 
 `*Create the 'src/main/resources/import.sql' file`* as following:
-[source,sql]
+[source,sql,role=copy]
 .import.sql
 ----
 INSERT INTO INVENTORY(itemId, quantity) VALUES (329299, 35);
@@ -320,7 +333,7 @@ Quarkus uses JAX-RS standard for building REST services.
 
 `*Modify the 'src/main/java/com/redhat/cloudnative/InventoryResource.java' file*` to match with:
 
-[source,java]
+[source,java,role=copy]
 .InventoryResource.java
 ----
 package com.redhat.cloudnative;
@@ -370,44 +383,16 @@ In your {CHE_URL}[Workspace^], stop the service by `*hitting Ctrl+c in the '>_ I
 
 === Deploy on OpenShift
 
-It’s time to build and deploy your service on OpenShift. 
+It’s time to deploy your service on OpenShift. 
 
-OpenShift https://docs.openshift.com/container-platform/4.2/welcome/index.html[Source-to-Image (S2I)^] 
-feature can be used to build a container image from your project. OpenShift 
-S2I uses the https://access.redhat.com/documentation/en-us/red_hat_jboss_middleware_for_openshift/3/html/red_hat_java_s2i_for_openshift[supported OpenJDK container image^] to build the final container image of the 
-Inventory service by uploading the Quarkus uber-jar from the **target** folder to 
-the OpenShift platform.
+Openshift https://docs.openshift.com/container-platform/4.4/builds/understanding-image-builds.html#build-strategy-s2i_understanding-image-builds[Source-to-Image (S2I)] is an open-source project 
+which helps in building artifacts from source code and injecting these into container images. 
+S2I produces ready-to-run images by building source code without the need of a Dockerfile.
 
-An **uber-jar** contains all the dependencies required packaged in the **jar** to enable running the 
-application with **java -jar**. By default, in Quarkus, the generation of the uber-jar is disabled. 
-To enable it, `*at the line 63, specify an <uberJar> configuration option in your pom.xml*`
+https://docs.openshift.com/container-platform/4.4/cli_reference/developer_cli_odo/understanding-odo.html[odo] (OpenShift Connector Plugin) uses S2I builder image for 
+executing developer source code inside a container.
 
-[source,shell]
-.pom.xml
-----
-<build>
-    <plugins>
-        <plugin>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-maven-plugin</artifactId>
-            <version>${quarkus.version}</version>
-            <configuration> // <1>
-                <uberJar>true</uberJar> // <1>
-            </configuration> // <1>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>build</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-</build>
-----
-<1> uberJar configuration option at the line 63
-
-Then, in your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 
 image::images/che-runtask.png[Che - RunTask, 500]
 
@@ -471,7 +456,7 @@ image::images/che-openshift-push-inventory.png[Che - OpenShift Push Inventory, 4
 
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
-[source,shell]
+[source,bash]
 .>_ OpenShift
 ----
 bash-5.0$ odo push
@@ -521,7 +506,7 @@ image::images/che-openshift-push-again-inventory.png[Che - OpenShift Push Invent
 
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
-[source,shell]
+[source,bash]
 .>_ OpenShift
 ----
 bash-5.0$ odo push
@@ -533,7 +518,7 @@ Configuration changes
  ✓  Applying configuration [43ms]
 
 Applying URL changes
- ✓  URL inventory: http://inventory-coolstore-my-project{USER_ID}.{{APPS_HOSTNAME_SUFFIX}} created
+ ✓  URL inventory: http://inventory-coolstore-my-project{USER_ID}.{APPS_HOSTNAME_SUFFIX} created
 
 Pushing to component inventory of type binary
  ✓  Checking file changes for pushing [5ms]
@@ -549,7 +534,7 @@ in one or more pods which are the unit of runtime deployment and consists of the
 
 === Test your Service
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on the 'Open URL' icon of the Inventory Service*`
 
 image::images/openshift-inventory-topology.png[OpenShift - Inventory Topology, 700]

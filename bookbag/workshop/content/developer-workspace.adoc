@@ -1,7 +1,7 @@
 :CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/staging-project{USER_ID}
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
 
 _5 MINUTE EXERCISE_
 
@@ -140,12 +140,11 @@ Finally, `*enter the following information*`:
 
 |===
 
-You should see 2 projects in the **OpenShift View** as following:
+You should see at least 1 project in the **OpenShift View** as following:
 
 image::images/che-openshift-login.png[Che - OpenShift View, 300]
 
 * The **'cn-project{USER_ID}' project** will be used as a **Staging Environment**.
-* The **'user{USER_ID}-che' project** contains your **Developer Workspace** up and running
 
 So, as you can see, you are missing the **Development Environment**. Let's create it!
 

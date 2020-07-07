@@ -1,6 +1,12 @@
+:markup-in-source: verbatim,attributes,quotes
+:APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
+:CHE_URL: %CHE_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
+
 == Reactive Microservices with Eclipse Vert.x
 
-_45 MINUTE EXERCISE_
+_15 MINUTE EXERCISE_
 
 In this lab you will learn about Eclipse Vert.x and how you can 
 build microservices using reactive principles. During this lab you will 
@@ -109,7 +115,7 @@ image::images/coolstore-arch.png[API Gateway Pattern,400]
 
 `*Replace the content of '/projects/workshop/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java'*` class with the following:
 
-[source,java]
+[source,java,role=copy]
 .GatewayVerticle.java
 ----
 package com.redhat.cloudnative.gateway;
