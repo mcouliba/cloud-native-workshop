@@ -4,7 +4,7 @@ _45 MINUTE EXERCISE_
 
 In this lab you will learn about building microservices using Quarkus.
 
-image:{% image_path coolstore-arch-inventory-quarkus.png %}[CoolStore Architecture,400]
+image::images/coolstore-arch-inventory-quarkus.png[CoolStore Architecture,400]
 
 '''
 
@@ -12,7 +12,7 @@ image:{% image_path coolstore-arch-inventory-quarkus.png %}[CoolStore Architectu
 
 [sidebar]
 --
-image:{% image_path quarkus-logo.png %}[Quarkus, 500]
+image::images/quarkus-logo.png[Quarkus, 500]
 
 https://quarkus.io/[Quarkus^] is a Kubernetes Native Java stack tailored for GraalVM & OpenJDK HotSpot, 
 crafted from the best of breed Java libraries and standards.
@@ -42,7 +42,7 @@ love and use wired on a https://quarkus.io/vision/standards[standard backbone^].
 The **inventory-quarkus** project has the following structure which shows the components of 
 the Quarkus project laid out in different subdirectories according to Maven best practices:
 
-image:{% image_path inventory-quarkus-project.png %}[Inventory Project,300]
+image::images/inventory-quarkus-project.png[Inventory Project,300]
 
 The **'/projects/workshop/labs/inventory-quarkus'** folder contents:
 
@@ -169,19 +169,19 @@ triggers a scan of the workspace, and if any changes are detected, the Java file
 your request is then serviced by the redeployed application. If there are any issues with compilation or deployment an error page 
 will let you know.
 
-In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Compile (Dev Mode)'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Compile (Dev Mode)'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-inventory-compile.png %}[Che - Inventory Development Mode, 500]
+image::images/che-inventory-compile.png[Che - Inventory Development Mode, 500]
 
 Then, `*click on the 'My Workspace' white box in the right menu, then 'User Runtimes' -> 'maven' -> 'localhost-8080'*`.
 
-image:{% image_path che-localhost.png %}[Che - Localhost, 500]
+image::images/che-localhost.png[Che - Localhost, 500]
 
 Your browser will be redirect on **your Inventory Service running inside your Workspace**.
 
-image:{% image_path che-quarkus-preview.png %}[Che - Quarkus Preview, 500]
+image::images/che-quarkus-preview.png[Che - Quarkus Preview, 500]
 
 `*Modify the 'src/main/resources/META-INF/resources/index.html' file*` as following
 
@@ -219,7 +219,7 @@ image:{% image_path che-quarkus-preview.png %}[Che - Quarkus Preview, 500]
 
 `*Refresh your browser*` and you should have the following content **without rebuilding your JAR file**
 
-image:{% image_path inventory-quarkus.png %}[Inventory Quarkus,500]
+image::images/inventory-quarkus.png[Inventory Quarkus,500]
 
 Now let's write some code and create a domain model and a RESTful endpoint to create the Inventory service
 
@@ -364,7 +364,7 @@ the last path param being the product id which we want to check its inventory st
 
 The REST API returned a JSON object representing the inventory count for this product. Congratulations!
 
-In your {{ CHE_URL }}[Workspace^], stop the service by `*hitting Ctrl+c in the '>_ Inventory Compile (Dev Mode)' Terminal*`
+In your {CHE_URL}[Workspace^], stop the service by `*hitting Ctrl+c in the '>_ Inventory Compile (Dev Mode)' Terminal*`
 
 '''
 
@@ -407,18 +407,18 @@ To enable it, `*at the line 63, specify an <uberJar> configuration option in you
 ----
 <1> uberJar configuration option at the line 63
 
-Then, in your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
+Then, in your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-inventory-build.png %}[Che - Build Inventory, 500]
+image::images/che-inventory-build.png[Che - Build Inventory, 500]
 
 Once this completes, let's **push** your application into OpenShift.
 
-In your {{ CHE_URL }}[Workspace^], from **'OpenShift' View**, 
-`*right-click on your 'my-project{{USER_ID}}' project and select 'New Component'*`
+In your {CHE_URL}[Workspace^], from **'OpenShift' View**, 
+`*right-click on your 'my-project{USER_ID}' project and select 'New Component'*`
 
-image:{% image_path che-openshift-new-component.png %}[Che - OpenShift New Component, 400]
+image::images/che-openshift-new-component.png[Che - OpenShift New Component, 400]
 
 Then, `*enter the following information*`:
 
@@ -467,7 +467,7 @@ Now the configuration file **'config.yaml'** is in the local directory of the in
 Then, `*push the component to the OpenShift cluster*` by right-clicking on the **inventory component**, 
 from **'OpenShift' View**, then select **'Push'**.
 
-image:{% image_path che-openshift-push-inventory.png %}[Che - OpenShift Push Inventory, 400]
+image::images/che-openshift-push-inventory.png[Che - OpenShift Push Inventory, 400]
 
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
@@ -497,7 +497,7 @@ You need to push your component first in order to create a Route for it.
 Now, `*let’s create a Route for the component to access to your service from Internet*` by right-clicking on the **inventory component**, 
 from **'OpenShift' View**, then select **'New URL'** 
 
-image:{% image_path che-openshift-url-inventory.png %}[Che - OpenShift URL Inventory, 400]
+image::images/che-openshift-url-inventory.png[Che - OpenShift URL Inventory, 400]
 
 `*Enter the following inputs*`:
 
@@ -517,7 +517,7 @@ image:{% image_path che-openshift-url-inventory.png %}[Che - OpenShift URL Inven
 
 Finally, `*push again the component to the OpenShift cluster*` to create the Route on OpenShift Cluster.
 
-image:{% image_path che-openshift-push-again-inventory.png %}[Che - OpenShift Push Inventory, 400]
+image::images/che-openshift-push-again-inventory.png[Che - OpenShift Push Inventory, 400]
 
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
@@ -533,7 +533,7 @@ Configuration changes
  ✓  Applying configuration [43ms]
 
 Applying URL changes
- ✓  URL inventory: http://inventory-coolstore-my-project{{USER_ID}}.{{APPS_HOSTNAME_SUFFIX}} created
+ ✓  URL inventory: http://inventory-coolstore-my-project{USER_ID}.{{APPS_HOSTNAME_SUFFIX}} created
 
 Pushing to component inventory of type binary
  ✓  Checking file changes for pushing [5ms]
@@ -552,11 +552,11 @@ in one or more pods which are the unit of runtime deployment and consists of the
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on the 'Open URL' icon of the Inventory Service*`
 
-image:{% image_path openshift-inventory-topology.png %}[OpenShift - Inventory Topology, 700]
+image::images/openshift-inventory-topology.png[OpenShift - Inventory Topology, 700]
 
 Your browser will be redirect on **your Inventory Service running on OpenShift**.
 
-image:{% image_path inventory-quarkus.png %}[Inventory Quarkus,500]
+image::images/inventory-quarkus.png[Inventory Quarkus,500]
 
 Then `*click on 'Test it'*`. You should have the following output:
 

@@ -6,7 +6,7 @@ In this lab you will learn about Eclipse Vert.x and how you can
 build microservices using reactive principles. During this lab you will 
 create a scalable API Gateway that aggregates Catalog and Inventory APIs.
 
-image:{% image_path coolstore-arch-gateway-vertx.png %}[CoolStore Architecture,400]
+image::images/coolstore-arch-gateway-vertx.png[CoolStore Architecture,400]
 
 '''
 
@@ -14,7 +14,7 @@ image:{% image_path coolstore-arch-gateway-vertx.png %}[CoolStore Architecture,4
 
 [sidebar]
 --
-image:{% image_path vertx-logo.png %}[Vertx, 400]
+image::images/vertx-logo.png[Vertx, 400]
 
 http://vertx.io/[Eclipse Vert.x^] is a toolkit for building reactive applications on the Java Virtual Machine (JVM). Vert.x does not 
 impose a specific framework or packaging model and can be used within your existing applications and frameworks 
@@ -38,7 +38,7 @@ http://vertx.io/[Eclipse Vert.x^] is designed to be event-driven and non-blockin
 The **gateway-vertx** project has the following structure which shows the components of 
 the Vert.x project laid out in different subdirectories according to Maven best practices:
 
-image:{% image_path vertx-gateway-project.png %}[Gateway Project,340]
+image::images/vertx-gateway-project.png[Gateway Project,340]
 
 This is a minimal Vert.x project with support for RESTful services. This project currently contains no code
 other than the main class, *_GatewayVerticle.java_* which is there to bootstrap the Vert.x application. Verticles
@@ -48,7 +48,7 @@ is important that the code in a Verticle does not block. This asynchronous archi
 to easily scale and handle large amounts of throughput with few threads.All API calls in Vert.x by default are non-blocking 
 and support this concurrency model.
 
-image:{% image_path vertx-event-loop.png %}[Vert.x Event Loop,600]
+image::images/vertx-event-loop.png[Vert.x Event Loop,600]
 
 Although you can have multiple, there is currently only one Verticle created in the *_gateway-vertx_* project. 
 
@@ -86,11 +86,11 @@ public class GatewayVerticle extends AbstractVerticle { // <1>
 You can use Maven to make sure the skeleton project builds successfully. You should get a **BUILD SUCCESS** message 
 in the build logs, otherwise the build has failed.
 
-In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Build'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Build'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-gateway-build.png %}[Che - Catalog Build, 500]
+image::images/che-gateway-build.png[Che - Catalog Build, 500]
 
 Once successfully built, the resulting **gateway-1.0-SNAPSHOT.jar** is located in the **/projects/workshop/labs/gateway-vertx/target/** directory.
 This is an uber-jar with all the dependencies required packaged in the **jar** to enable running the application with **java -jar**.
@@ -105,7 +105,7 @@ point for the web frontend to access all backend services from a single place. T
 called http://microservices.io/patterns/apigateway.html[API Gateway^] and is a common practice in Microservices 
 architecture.
 
-image:{% image_path coolstore-arch.png %}[API Gateway Pattern,400]
+image::images/coolstore-arch.png[API Gateway Pattern,400]
 
 `*Replace the content of '/projects/workshop/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java'*` class with the following:
 
@@ -265,11 +265,11 @@ Inventory REST endpoint and retrieves the inventory.
 <6> The **health()** method pings the Catalog and the Inventory Service to check if this dependent services 
 are up and running. If so, it returns a **Success** HTTP code, else, it returns a **Service Unavailable** code
 
-In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Build'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Build'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-gateway-build.png %}[Che - Catalog Build, 500]
+image::images/che-gateway-build.png[Che - Catalog Build, 500]
 
 '''
 
@@ -335,10 +335,10 @@ The Gateway Component needs to be connected to the Inventory and Catalog compone
 OpenShift Container Platform provides linking mechanisms to publish communication bindings from a program to its clients, 
 especially by injecting the variables **'COMPONENT_*_HOST'** and **'COMPONENT_*_PORT'**.
 
-In your {{ CHE_URL }}[Workspace^], from **'OpenShift' View**, 
+In your {CHE_URL}[Workspace^], from **'OpenShift' View**, 
 `*right-click on the 'Gateway component' -> 'Link Component'*`.
 
-image:{% image_path che-openshift-link-component.png %}[Che - OpenShift Link Component, 400]
+image::images/che-openshift-link-component.png[Che - OpenShift Link Component, 400]
 
 Then, `*link the 2 following components*`:
 
@@ -369,11 +369,11 @@ containers for the project.
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on the 'Open URL' icon of the Gateway Service*`
 
-image:{% image_path openshift-gateway-topology.png %}[OpenShift - Gateway Topology, 700]
+image::images/openshift-gateway-topology.png[OpenShift - Gateway Topology, 700]
 
 Your browser will be redirect on **your Gateway Service running on OpenShift**.
 
-image:{% image_path gateway-service.png %}[Gateway Service,500]
+image::images/gateway-service.png[Gateway Service,500]
 
 Then `*click on 'Test it'*`. You should have the following output:
 

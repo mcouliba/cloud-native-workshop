@@ -61,7 +61,7 @@ be parameterized to get input for fields like service names and generate values 
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on '+ Add' and select 'Database'*`
 
-image:{% image_path openshift-add-database.png %}[OpenShift - Add database, 700]
+image::images/openshift-add-database.png[OpenShift - Add database, 700]
 
 `*Select 'MariaDB (Ephemeral)' and click on 'Instantiate Template'*`
 
@@ -74,7 +74,7 @@ Then, enter the following information:
 |Value
 
 |Namespace*
-|PR my-project{{USER_ID}}
+|PR my-project{USER_ID}
 
 |Memory Limit*
 |512Mi
@@ -104,7 +104,7 @@ Then, enter the following information:
 
 `*Click on 'Create' button*`
 
-image:{% image_path openshift-inventory-mariadb-topology.png %}[OpenShift - Inventory MariaDB, 700]
+image::images/openshift-inventory-mariadb-topology.png[OpenShift - Inventory MariaDB, 700]
 
 `*Click again on '+ Add' and select 'Database', delect 'PostgreSQL (Ephemeral)' and click on 'Instantiate Template'*` 
 to create the Catalog Database as following:
@@ -118,7 +118,7 @@ Then, enter the following information:
 |Value
 
 |Namespace*
-|PR my-project{{USER_ID}}
+|PR my-project{USER_ID}
 
 |Memory Limit*
 |512Mi
@@ -145,7 +145,7 @@ Then, enter the following information:
 
 `*Click on 'Create' button*`
 
-image:{% image_path openshift-catalog-postgresql-topology.png %}[OpenShift - Catalog PostgreSQL, 700]
+image::images/openshift-catalog-postgresql-topology.png[OpenShift - Catalog PostgreSQL, 700]
 
 Now you can move on to configure the Inventory and Catalog service to use these databases.
 
@@ -162,7 +162,7 @@ In Quarkus, Driver is a build time property and cannot be overridden. So as you 
 technology, you need to change the 'quarkus.datasource.driver' parameter 
 in **/projects/workshop/labs/inventory-quarkus/src/main/resources/applications.properties** and rebuild the application.
 
-In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file and replace the
+In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file and replace the
 'JDBC Driver - H2' dependency*`
 
 [source,xml]
@@ -189,21 +189,21 @@ Leave the **'quarkus.datasource.url'**, **'quarkus.datasource.username'** and **
 parameters unchanged. They will be overridden later.
 ====
 
-In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-inventory-build.png %}[Che - Build Inventory, 500]
+image::images/che-inventory-build.png[Che - Build Inventory, 500]
 
 Then, `*push the updated component to the OpenShift cluster*`.
 
-image:{% image_path che-openshift-push-again-inventory.png %}[Che - OpenShift Push Inventory, 400]
+image::images/che-openshift-push-again-inventory.png[Che - OpenShift Push Inventory, 400]
 
 Now, let's create the Quarkus configuration content using the database credentials.
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
@@ -211,7 +211,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 $ cat <<EOF > /projects/inventory-openshift-application.properties
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{{USER_ID}}.svc:3306/inventorydb# <1>
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{USER_ID}.svc:3306/inventorydb# <1>
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 EOF
@@ -226,9 +226,9 @@ packaged in the Inventory JAR archive:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n my-project{{USER_ID}}# <1>
-oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n my-project{{USER_ID}} # <2>
-oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{{USER_ID}}# <3>
+oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n my-project{USER_ID}# <1>
+oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n my-project{USER_ID} # <2>
+oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{USER_ID}# <3>
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
 is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
@@ -250,14 +250,14 @@ a shell command inside the Inventory Container*`:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n my-project{{USER_ID}} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
+$ oc rsh -n my-project{USER_ID} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
 ----
 
 You should have the following output:
 
 [source,properties]
 ----
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{{USER_ID}}.svc:3306/inventorydb
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{USER_ID}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 ----
@@ -268,7 +268,7 @@ loaded into the database.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n my-project{{USER_ID}} dc/inventory-mariadb
+$ oc rsh -n my-project{USER_ID} dc/inventory-mariadb
 ----
 
 Once connected to the MariaDB container, `*run the following*`:
@@ -323,7 +323,7 @@ Let's create the Spring Boot configuration content using the database credential
 .>_ workshop-tools terminal
 ----
 $ cat <<EOF > /projects/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project{{USER_ID}}.svc:5432/catalogdb#<1>
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project{USER_ID}.svc:5432/catalogdb#<1>
 spring.datasource.username=catalog
 spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver
@@ -340,8 +340,8 @@ packaged in the Catalog JAR archive:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project{{USER_ID}}
-oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n my-project{{USER_ID}}
+oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project{USER_ID}
+oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n my-project{USER_ID}
 ----
 
 The https://github.com/spring-cloud-incubator/spring-cloud-kubernetes[Spring Cloud Kubernetes^] plug-in implements 
@@ -355,13 +355,13 @@ tries to discover config maps, due to security reasons containers
 by default are not allowed to snoop around OpenShift clusters and discover objects. Security comes first, 
 and discovery is a privilege that needs to be granted to containers in each project. 
 
-Since you do want Spring Boot to discover the config maps inside the **my-project{{USER_ID}}** project, you 
+Since you do want Spring Boot to discover the config maps inside the **my-project{USER_ID}** project, you 
 need to grant permission to the Spring Boot service account to access the OpenShift REST API and find the 
 config maps. 
 
 .>_ workshop-tools terminal
 ----
-$ oc policy add-role-to-user view -n my-project{{USER_ID}} -z default
+$ oc policy add-role-to-user view -n my-project{USER_ID} -z default
 ----
 
 `*Delete the Catalog Pod*` to make it start again and look for the config maps:
@@ -369,7 +369,7 @@ $ oc policy add-role-to-user view -n my-project{{USER_ID}} -z default
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc delete pod -l deploymentconfig=catalog-coolstore -n my-project{{USER_ID}}
+$ oc delete pod -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
 ----
 
 When the Catalog container is ready, verify that the PostgreSQL database is being 
@@ -378,7 +378,7 @@ used. Check the Catalog pod logs:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc logs -c catalog-coolstore dc/catalog-coolstore -n my-project{{USER_ID}} | grep hibernate.dialect
+$ oc logs -c catalog-coolstore dc/catalog-coolstore -n my-project{USER_ID} | grep hibernate.dialect
 
 2017-08-10 21:07:51.670  INFO 1 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
 ----
@@ -388,7 +388,7 @@ You can also connect to the Catalog PostgreSQL database and verify that the seed
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n my-project{{USER_ID}} dc/catalog-postgresql
+$ oc rsh -n my-project{USER_ID} dc/catalog-postgresql
 ----
 
 Once connected to the PostgreSQL container, run the following:
@@ -475,6 +475,6 @@ In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer v
 `*click on 'DC catalog-postgresql' -> 'DC catalog-postgresql' -> 'Environment'*`. Notice the values 
 from the secret are defined as env vars on the deployment:
 
-image:{% image_path config-psql-secret.png %}[Secrets as Env Vars,900]
+image::images/config-psql-secret.png[Secrets as Env Vars,900]
 
 That's all for this lab! You are ready to move on to the next lab.

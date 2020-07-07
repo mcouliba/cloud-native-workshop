@@ -21,7 +21,7 @@ more cpu and memory (vertical scaling). Cloud-native apps however are stateless 
 easily scaled up by spinning up more application instances and load-balancing requests 
 between those instances (horizontal scaling).
 
-image:{% image_path fault-scale-up-vs-out.png %}[Scaling Up vs Scaling Out,500]
+image::images/fault-scale-up-vs-out.png[Scaling Up vs Scaling Out,500]
 
 In previous labs, you learned how to build container images from your application code and 
 deploy them on OpenShift. Container images on OpenShift follow the 
@@ -41,7 +41,7 @@ In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer v
 `*click on 'Topology' -> 'DC web-coolstore' -> 'Overview' then click once on the up arrows 
 on the right side of the pod blue circle*`.
 
-image:{% image_path openshift-scale-up-web.png %}[OpenShift Scale Up Web, 700]
+image::images/openshift-scale-up-web.png[OpenShift Scale Up Web, 700]
 
 You can see a new pod is being started for the Web UI and as soon as the health probes pass, 
 it will be automatically added to the load-balancer.
@@ -52,7 +52,7 @@ Web UI service resource.
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Topology' -> 'DC web-coolstore' -> 'Resources' -> 'S web-coolstore' -> 'Pods'*`.
 
-image:{% image_path openshift-service-web.png %}[OpenShift Service Web, 700]
+image::images/openshift-service-web.png[OpenShift Service Web, 700]
 
 This page is showing the 2 pods that the load-balancer is sending traffic to.
 
@@ -66,7 +66,7 @@ strategy to round robin:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc annotate route/web-coolstore haproxy.router.openshift.io/balance=roundrobin -n my-project{{USER_ID}}
+$ oc annotate route/web-coolstore haproxy.router.openshift.io/balance=roundrobin -n my-project{USER_ID}
 ----
 ====
 
@@ -124,17 +124,17 @@ Set the following resource constraints on the Web UI pod:
 
 |===
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc set resources dc/web-coolstore --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi -n my-project{{USER_ID}}
+$ oc set resources dc/web-coolstore --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi -n my-project{USER_ID}
 ----
 
 TIP: CPU is measured in units called millicores. Each node in a cluster inspects the 
@@ -152,7 +152,7 @@ the CPU consumption passes 40% utilization:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc autoscale dc/web-coolstore --min 1 --max 5 --cpu-percent=40 -n my-project{{USER_ID}}
+$ oc autoscale dc/web-coolstore --min 1 --max 5 --cpu-percent=40 -n my-project{USER_ID}
 ----
 
 All set! Now the Web UI can scale automatically to multiple instances if the load on the CoolStore 
@@ -163,7 +163,7 @@ installed within your workspace.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ ab -c 100 -n 80000 -s 5 http://web-coolstore.my-project{{USER_ID}}.svc:8080/
+$ ab -c 100 -n 80000 -s 5 http://web-coolstore.my-project{USER_ID}.svc:8080/
 ----
 
 [NOTE]
@@ -184,7 +184,7 @@ TIP: Depending on the resources available on the OpenShift cluster in the lab en
 the Web UI might scale to fewer than 5 pods to handle the extra load. Run the command again 
 to generate more load.
 
-image:{% image_path fault-autoscale-web.png %}[Web UI Automatically Scaled,740]
+image::images/fault-autoscale-web.png[Web UI Automatically Scaled,740]
 
 When the load on Web UI disappears, after a while OpenShift scales the Web UI pods down to the minimum 
 or whatever this needed to cope with the load at that point.
@@ -229,7 +229,7 @@ pod to verify how OpenShift starts the pod again. First, check the Catalog pod t
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc get pods -l deploymentconfig=catalog-coolstore -n my-project{{USER_ID}} #<1>
+$ oc get pods -l deploymentconfig=catalog-coolstore -n my-project{USER_ID} #<1>
 
 NAME                        READY     STATUS    RESTARTS   AGE
 catalog-coolstore-6-gp5jz   1/1       Running   0          47m
@@ -242,13 +242,13 @@ assigned to them. You can see pods labels using **oc get pods --show-labels** co
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc delete pods -l deploymentconfig=catalog-coolstore -n my-project{{USER_ID}}
+$ oc delete pods -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
 ----
 
 You need to be fast for this one! 
 `*Switch on the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the 'Developer view', and click on 'DC catalog'*` 
 
-image:{% image_path openshift-catalog-failed.png %}[Che - OpenShift Catalog Failed, 700]
+image::images/openshift-catalog-failed.png[Che - OpenShift Catalog Failed, 700]
 
 As the Catalog pod is being deleted, OpenShift notices the lack of 1 pod and starts a new Catalog 
 pod automatically.

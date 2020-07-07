@@ -10,7 +10,7 @@ look into line-by-line code execution as the code runs inside a container on Ope
 CoolStore application seems to have a bug that causes the inventory status for one of the 
 products not to be displayed in the web interface. 
 
-image:{% image_path debug-coolstore-bug.png %}[Inventory Status Bug,800]
+image::images/debug-coolstore-bug.png[Inventory Status Bug,800]
 
 This is not an expected behavior! In previous labs, you added a circuit breaker to 
 protect the CoolStore application from failures and in case the Inventory API is not 
@@ -113,33 +113,33 @@ inside containers and debug while following the code execution in the IDE.
 
 From the **Run** menu, click on **Edit Debug Configurations...**.
 
-image:{% image_path debug-che-debug-config-1.png %}[Remote Debug,600]
+image::images/debug-che-debug-config-1.png[Remote Debug,600]
 
 The window shows the debuggers available in CodeReady Workspaces. Click on the plus sign near the 
 Java debugger.
 
-image:{% image_path debug-che-debug-config-2.png %}[Remote Debug,700]
+image::images/debug-che-debug-config-2.png[Remote Debug,700]
 
 Configure the remote debugger and click on the **Save** button:
 
 * Check **Connect to process on workspace machine**
 * Port: **5005**
 
-image:{% image_path debug-che-debug-config-3.png %}[Remote Debug,700]
+image::images/debug-che-debug-config-3.png[Remote Debug,700]
 
 You can now click on the **Debug** button to make CodeReady Workspaces connect to the 
 Inventory service running on OpenShift.
 
 You should see a confirmation that the remote debugger is successfully connected.
 
-image:{% image_path debug-che-debug-config-4.png %}[Remote Debug,360]
+image::images/debug-che-debug-config-4.png[Remote Debug,360]
 
 Open ***com.redhat.cloudnative.inventory.InventoryResource*** and `*click once
 on the editor sidebar on the line number of the first line of the getAvailability() 
 method*` to add a breakpoint to that line. A start appears near the line to show a breakpoint 
 is set.
 
-image:{% image_path debug-che-breakpoint.png %}[Add Breakpoint,600]
+image::images/debug-che-breakpoint.png[Add Breakpoint,600]
 
 Open a new **Terminal** window and use `*curl*` to invoke the Inventory API with the 
 suspect product id in order to pause the code execution at the defined breakpoint.
@@ -147,7 +147,7 @@ suspect product id in order to pause the code execution at the defined breakpoin
 Note that you can use the the following icons to switch between debug and terminal windows.
 
 
-image:{% image_path debug-che-window-guide.png %}[Icons,700]
+image::images/debug-che-window-guide.png[Icons,700]
 
 IMPORTANT:  You can find out the Inventory route url using `*oc get routes`. Replace 
 IMPORTANT: **{{INVENTORY_ROUTE_HOST}}** with the Inventory route url from your project.
@@ -159,20 +159,20 @@ $ curl -v http://{{INVENTORY_ROUTE_HOST}}/api/inventory/444436
 Switch back to the debug panel and notice that the code execution is paused at the 
 breakpoint on ***InventoryResource*** class.
 
-image:{% image_path debug-che-breakpoint-stop.png %}[Icons,900]
+image::images/debug-che-breakpoint-stop.png[Icons,900]
 
 Click on the _Step Over_ icon to execute one line and retrieve the inventory object for the 
 given product id from the database.
 
-image:{% image_path debug-che-step-over.png %}[Step Over,340]
+image::images/debug-che-step-over.png[Step Over,340]
 
 Click on the the plus icon in the **Variables** panel to add the ***inventory*** variable 
 to the list of watch variables. This would allow you to see the value of ***inventory*** variable 
 during execution.
 
-image:{% image_path debug-che-variables.png %}[Watch Variables,500]
+image::images/debug-che-variables.png[Watch Variables,500]
 
-image:{% image_path debug-che-breakpoint-values.png %}[Debug,900]
+image::images/debug-che-breakpoint-values.png[Debug,900]
 
 Can you spot the bug now? 
 
@@ -223,13 +223,13 @@ $ git push origin master
 
 As soon as you commit the changes to the Git repository, the ***inventory-pipeline*** gets 
 triggered to build and deploy a new Inventory container with the fix. Go to the 
-OpenShift Web Console and inside the **cn-project{{USER_ID}}** project. On the sidebar 
+OpenShift Web Console and inside the **cn-project{USER_ID}** project. On the sidebar 
 menu, `*click on 'Builds >> Pipelines'*` to see its progress.
 
 When the pipeline completes successfully, point your browser at the Web route and verify 
 that the inventory status is visible for all products. The suspect product should show 
 the inventory status as _Not in Stock_.
 
-image:{% image_path debug-coolstore-bug-fixed.png %}[Inventory Status Bug Fixed,800]
+image::images/debug-coolstore-bug-fixed.png[Inventory Status Bug Fixed,800]
 
 Well done and congratulations for completing all the labs.

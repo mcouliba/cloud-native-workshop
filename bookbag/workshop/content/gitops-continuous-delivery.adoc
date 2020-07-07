@@ -10,18 +10,18 @@ In this lab you will learn about deploying and managing Kubernetes resources usi
 
 First, you need to export the project resources from OpenShift.
 
-In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'GitOps - Export'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'GitOps - Export'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-gitops-export.png %}[Che - GitOps Export, 500]
+image::images/che-gitops-export.png[Che - GitOps Export, 500]
 
 A terminal should be opened with the following output:
 
 [source,shell]
 .>_ GitOps Export
 ----
---- Export Kubernetes resources for GitOps from my-project{{USER_ID}} to cn-project{{USER_ID}} ---
+--- Export Kubernetes resources for GitOps from my-project{USER_ID} to cn-project{USER_ID} ---
 Exporting resources for inventory-coolstore...
 Exporting resources for catalog-coolstore...
 Exporting resources for gateway-coolstore...
@@ -33,7 +33,7 @@ This operation exports the project resources (deploymentconfig, route, secret, s
 and cleans them up. As a result, you should have all resources in YAML files under 
 the **/project/workshop/lab/gitops** folder.
 
-image:{% image_path che-gitops-export-result.png %}[Che - GitOps Export Result, 300]
+image::images/che-gitops-export-result.png[Che - GitOps Export Result, 300]
 
 '''
 
@@ -45,9 +45,9 @@ Gogs git server.
 
 `*Click on the below button called 'Developer Repository'*`
 
-[link={{ GOGS_URL }}]
+[link={GOGS_URL}]
 [window=_blank, align="center"]
-image::{% image_path developer-repository-button.png  %}[Developer Repository - Button, 300]
+image::images/developer-repository-button.png[Developer Repository - Button, 300]
 
 Then, `*click on 'Register'*` to register a new user with the following details:
 
@@ -59,10 +59,10 @@ Then, `*click on 'Register'*` to register a new user with the following details:
 |Value
 
 |Username 
-|user{{USER_ID}}
+|user{USER_ID}
 
 |Email
-|user{{USER_ID}}@none.com
+|user{USER_ID}@none.com
 
 |Password
 |{{OPENSHIFT_PASSWORD}}
@@ -72,14 +72,14 @@ Then, `*click on 'Register'*` to register a new user with the following details:
 
 |===
 
-image:{% image_path cd-gogs-signup.png %}[Sign Up Gogs,700]
+image::images/cd-gogs-signup.png[Sign Up Gogs,700]
 
 `*Click on 'Create New Account'*`. 
 You will be redirected to the sign in page. Sign in using the above username and password.
 
 `*Click on the plus icon*` as below and enter the following values
 
-image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
+image::images/cd-gogs-plus-icon.png[Create New Repository,900]
 
 .GitOps Repository
 [%header,cols=2*]
@@ -88,7 +88,7 @@ image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
 |Value
 
 |Owner*
-|user{{USER_ID}}
+|user{USER_ID}
 
 |Repository Name*
 |gitops-cn-project
@@ -113,7 +113,7 @@ image:{% image_path cd-gogs-plus-icon.png %}[Create New Repository,900]
 
 |===
 
-image:{% image_path gogs-gitops-new-repo.png %}[Create New Repository,700]
+image::images/gogs-gitops-new-repo.png[Create New Repository,700]
 
 `*Click on 'Create Repository' button*`.
 
@@ -126,19 +126,19 @@ The Git repository is created now.
 Now that you have a Git repository for the Inventory service, you should push the 
 source code into this Git repository.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
+In your {CHE_URL}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Close Repository' then run 'Git: Initialize Repository'*`
 
-image:{% image_path che-git-close.png %}[Che - Git Close, 600]
+image::images/che-git-close.png[Che - Git Close, 600]
 
-image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
+image::images/che-git-init.png[Che - Git Initialize, 600]
 
 `*Select the '/projects/workshop/labs/gitops' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
@@ -146,34 +146,34 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/gitops
-git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/gitops-cn-project.git
+git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
 ----
 
 Open the **Source Code Management (SCM) view** by clicking on `*'View' -> 'SCM menu'*`
 
 `*Click on '...' -> 'Stage All Changes'*`
 
-image:{% image_path che-scm-gitops-stage-all-changes.png %}[Che - SCM Stage All Changes, 500]
+image::images/che-scm-gitops-stage-all-changes.png[Che - SCM Stage All Changes, 500]
 
 `*Click on the 'check' icon and enter 'Initial' as commit message*`
 
-image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
+image::images/che-scm-commit.png[Che - SCM Commit, 900]
 
 `*Click on '...' -> 'Push'*`
 
-image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
+image::images/che-scm-push.png[Che - SCM Push, 500]
 
 `*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gogs credentials (user{{USER_ID}}/{{ OPENSHIFT_PASSWORD }})*`.
+Finally, `*enter your Gogs credentials (user{USER_ID}/{OPENSHIFT_PASSWORD})*`.
 
-image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
+image::images/che-scm-username.png[Che - SCM Username, 500]
 
-image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
+image::images/che-scm-password.png[Che - SCM Password, 500]
 
-Once done, in {{ GOGS_URL }}/user{{USER_ID}}/gitops-cn-project, `*refresh the page of your 'gitops-cn-project' repository*`. You should 
+Once done, in {GOGS_URL}/user{USER_ID}/gitops-cn-project, `*refresh the page of your 'gitops-cn-project' repository*`. You should 
 see the project files in the repository.
 
-image:{% image_path gogs-gitops-repo.png %}[GitOps Repository,900]
+image::images/gogs-gitops-repo.png[GitOps Repository,900]
 
 '''
 
@@ -181,7 +181,7 @@ image:{% image_path gogs-gitops-repo.png %}[GitOps Repository,900]
 
 [sidebar]
 --
-image:{% image_path argocd-logo.png %}[Argo CD Logo, 200]
+image::images/argocd-logo.png[Argo CD Logo, 200]
 
 https://argoproj.github.io/argo-cd/[Argo CD^] is a declarative, GitOps continuous delivery tool for Kubernetes.
 
@@ -198,15 +198,15 @@ deployments can track updates to branches, tags, or pinned to a specific version
 
 `*Click on the below button called 'Developer GitOps'*`
 
-[link={{ GITOPS_URL }}]
+[link={GITOPS_URL}]
 [window=_blank, align="center"]
-image::{% image_path developer-gitops-button.png  %}[Developer GitOps - Button, 300]
+image::images/developer-gitops-button.png[Developer GitOps - Button, 300]
 
-Then `*login as user{{USER_ID}}/{{ OPENSHIFT_PASSWORD }}*`, `*click on 'Allow selected permissions'*`
+Then `*login as user{USER_ID}/{OPENSHIFT_PASSWORD}*`, `*click on 'Allow selected permissions'*`
 
 Once completed, you will be redirected to the following page.
 
-image:{% image_path argocd-home.png %}[Argo CD - Home Page, 500]
+image::images/argocd-home.png[Argo CD - Home Page, 500]
 
 '''
 
@@ -214,7 +214,7 @@ image:{% image_path argocd-home.png %}[Argo CD - Home Page, 500]
 
 `*Select the 'Configuration menu' then click on your 'Repositories'*`
 
-image::{% image_path argocd-configure-repositories.png  %}[Argo CD - Configure Repositories, 500]
+image::images/argocd-configure-repositories.png[Argo CD - Configure Repositories, 500]
 
 `*Click on 'CONNECT REPO USING HTTPS'*` and enter the following:
 
@@ -228,7 +228,7 @@ image::{% image_path argocd-configure-repositories.png  %}[Argo CD - Configure R
 |git
 
 |Repository URL
-|http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/gitops-cn-project.git
+|http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
 
 |Username (optional)
 |_leave it empty_
@@ -254,7 +254,7 @@ Finally, `*Click on 'CONNECT'*`.
 
 Your GitOps repository is now added to Argo CD.
 
-image::{% image_path argocd-repository.png  %}[Argo CD - Repository, 800]
+image::images/argocd-repository.png[Argo CD - Repository, 800]
 
 '''
 
@@ -262,7 +262,7 @@ image::{% image_path argocd-repository.png  %}[Argo CD - Repository, 800]
 
 `*Select the 'Configuration menu' then click on your 'Projects'*`
 
-image::{% image_path argocd-configure-projects.png  %}[Argo CD - Configure Projects, 500]
+image::images/argocd-configure-projects.png[Argo CD - Configure Projects, 500]
 
 `*Click on 'NEW PROJECT'*` and enter the following:
 
@@ -273,16 +273,16 @@ image::{% image_path argocd-configure-projects.png  %}[Argo CD - Configure Proje
 |Value
 
 |Project Name
-|cn-project{{USER_ID}}
+|cn-project{USER_ID}
 
 |Project Description
 |This is my first GitOps project
 
 |Sources
-|http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/gitops-cn-project.git
+|http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
 
 |Destination
-|* / cn-project{{USER_ID}}
+|* / cn-project{USER_ID}
 
 |Whitelisted Cluster Resources
 |_leave it empty_
@@ -296,7 +296,7 @@ Finally, `*Click on 'CREATE'*`.
 
 Your GitOps project has been created in Argo CD.
 
-image::{% image_path argocd-project.png  %}[Argo CD - project, 800]
+image::images/argocd-project.png[Argo CD - project, 800]
 
 
 '''
@@ -305,7 +305,7 @@ image::{% image_path argocd-project.png  %}[Argo CD - project, 800]
 
 `*Select the 'Application menu' then click on your '+ New App'*` and enter the following details:
 
-image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Application, 500]
+image::images/argocd-configure-application.png[Argo CD - Configure Application, 500]
 
 .Application Configuration
 [%header,cols=3*]
@@ -316,11 +316,11 @@ image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Appl
 
 |GENERAL
 |Application Name
-|coolstore{{USER_ID}}
+|coolstore{USER_ID}
 
 |GENERAL
 |Project
-|cn-project{{USER_ID}}
+|cn-project{USER_ID}
 
 |GENERAL
 |SYNC POLICY
@@ -328,7 +328,7 @@ image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Appl
 
 |SOURCE
 |Repository URL
-|http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/gitops-cn-project.git
+|http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
 
 |SOURCE
 |Revision
@@ -344,7 +344,7 @@ image:{% image_path argocd-configure-application.png %}[Argo CD - Configure Appl
 
 |DESTINATION
 |Namespace
-|cn-project{{USER_ID}}
+|cn-project{USER_ID}
 
 |ALL OTHER SECTIONS
 |*
@@ -356,20 +356,20 @@ Finally, `*Click on 'CREATE'*`.
 
 Your Coolstore Application has been created in Argo CD.
 
-image::{% image_path argocd-outofsync-application.png  %}[Argo CD - OutOfSync Application, 500]
+image::images/argocd-outofsync-application.png[Argo CD - OutOfSync Application, 500]
 
 The application status is initially in yellow **OutOfSync** state since the application has yet to be 
-deployed into cn-project{{USER_ID}} OpenShift project, and no Kubernetes resources have been created.
+deployed into cn-project{USER_ID} OpenShift project, and no Kubernetes resources have been created.
 
 '''
 
 === Sync/Deploy The GitOps Application
 
-Let's deploy the Coolstore Application into cn-project{{USER_ID}}!
+Let's deploy the Coolstore Application into cn-project{USER_ID}!
 
 From the **Application menu**, `*Click on 'Sync > Synchronize'*`.
 
-image::{% image_path argocd-sync.png  %}[Argo CD - Sync, 800]
+image::images/argocd-sync.png[Argo CD - Sync, 800]
 
 This task retrieves the manifests from the GitOps Repository and performs _kubectl apply_ command of 
 the manifests. Your application is now running and you can now view its resource components, 
@@ -377,16 +377,16 @@ logs, events, and assessed health status.
 
 `*Click on your 'coolstore' application*` and you should see everything in green.
 
-image::{% image_path argocd-synced-application.png  %}[Argo CD - Synced Application, 800]
+image::images/argocd-synced-application.png[Argo CD - Synced Application, 800]
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*Select the 'cn-project{{USER_ID}}'*` to be taken to the project overview page.
+`*Select the 'cn-project{USER_ID}'*` to be taken to the project overview page.
 
-image:{% image_path openshift-app-deployed-by-argocd.png %}[OpenShift - Coolstore Project Deployed by Argo CD , 700]
+image::images/openshift-app-deployed-by-argocd.png[OpenShift - Coolstore Project Deployed by Argo CD , 700]
 
 You can see that all resources of your application have been created by Argo CD. 
 None of the services is deployed, up and running as we removed all automatic deployment triggers when exporting the configuration
-and there is no image available on your **cn-project{{USER_ID}}** project. **You are going to fix it in the next lab.**
+and there is no image available on your **cn-project{USER_ID}** project. **You are going to fix it in the next lab.**
 
 '''
 

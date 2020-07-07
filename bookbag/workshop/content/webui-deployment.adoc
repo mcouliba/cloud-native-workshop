@@ -6,7 +6,7 @@ In this lab you will learn about Node.js and will deploy the Node.js and Angular
 web frontend for the CoolStore online shop which uses the API Gateway services you deployed 
 in previous labs. 
 
-image:{% image_path coolstore-arch-webui-nodejs.png %}[API Gateway Pattern,400]
+image::images/coolstore-arch-webui-nodejs.png[API Gateway Pattern,400]
 
 '''
 
@@ -14,7 +14,7 @@ image:{% image_path coolstore-arch-webui-nodejs.png %}[API Gateway Pattern,400]
 
 [sidebar]
 --
-image:{% image_path nodejs-logo.png %}[Node.js, 400]
+image::images/nodejs-logo.png[Node.js, 400]
 
 https://nodejs.org/[Node.js^] is an open source, cross-platform runtime environment for developing server-side 
 applications using JavaScript. https://nodejs.org/[Node.js^] has an event-driven architecture capable of 
@@ -44,7 +44,7 @@ container image of it.
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on '+ Add' and select 'From Git'*`
 
-image:{% image_path openshift-add-from-git.png %}[OpenShift - Add from Git, 700]
+image::images/openshift-add-from-git.png[OpenShift - Add from Git, 700]
 
 Then, enter the following information:
 
@@ -102,7 +102,7 @@ you need to add a specific annotation when deploying a component without use it.
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'DC web-coolstore' -> 'Actions' -> 'Edit Annotations'*`
 
-image:{% image_path openshift-web-annotate.png %}[OpenShift - Web Annotate, 700]
+image::images/openshift-web-annotate.png[OpenShift - Web Annotate, 700]
 
 `*Add the new annotation*` in order to be compatible with odo usage.
 
@@ -124,12 +124,12 @@ image:{% image_path openshift-web-annotate.png %}[OpenShift - Web Annotate, 700]
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on the 'Open URL' icon of the Web Service*`
 
-image:{% image_path openshift-web-topology.png %}[OpenShift - Web Topology, 700]
+image::images/openshift-web-topology.png[OpenShift - Web Topology, 700]
 
 Your browser will be redirect on **your Web Service running on OpenShift**.
 You should be able to see the CoolStore application with all products and their inventory status.
 
-image:{% image_path coolstore-web.png %}[CoolStore Shop,840]
+image::images/coolstore-web.png[CoolStore Shop,840]
 
 '''
 

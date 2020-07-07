@@ -21,7 +21,7 @@ Red Hat OpenShift Service Mesh is logically split into a data plane and a contro
 
 * The **control plane** is responsible for managing and configuring proxies to route traffic, and configuring Mixers to enforce policies and collect telemetry.
 
-image:{% image_path servicemesh-architecture.png %}[Service Mesh Architecture,400]
+image::images/servicemesh-architecture.png[Service Mesh Architecture,400]
 
 The components that make up the data plane and the control plane are:
 
@@ -37,19 +37,19 @@ The components that make up the data plane and the control plane are:
 
 OpenShift Service Mesh automatically injects the sidecar into the Pod by specifying **sidecar.istio.io/inject:true** annotation in the DeploymentConfig.
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n cn-project{{USER_ID}} # <1>
-oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n cn-project{{USER_ID}} # <2>
-oc rollout latest dc/inventory-coolstore -n cn-project{{USER_ID}} # <3>
+oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n cn-project{USER_ID} # <1>
+oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n cn-project{USER_ID} # <2>
+oc rollout latest dc/inventory-coolstore -n cn-project{USER_ID} # <3>
 ----
 <1> Define the annotation to automatically inject an Istio sidecar
 <2> Wait for the Envoy Proxy to be up and running before starting the application
@@ -58,7 +58,7 @@ oc rollout latest dc/inventory-coolstore -n cn-project{{USER_ID}} # <3>
 To confirm that the application is successfully deployed, `*run this following command*`:
 
 ----
-$ oc get pods -ldeploymentconfig=inventory-coolstore -n cn-project{{USER_ID}}
+$ oc get pods -ldeploymentconfig=inventory-coolstore -n cn-project{USER_ID}
 NAME                        READY     STATUS    RESTARTS   AGE
 inventory-coolstore-4-dhfrm   2/2       Running   0          12s
 ----
@@ -71,21 +71,21 @@ The status should be **Running** and there should be **2/2** pods in the **Ready
 
 Now, we understand how to enable Service Mesh for one service, let's enable for Catalog and Gateway Services via a simple command.
 
-In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Service Mesh - Deploy'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Service Mesh - Deploy'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-servicemesh-deploy.png %}[Che - Service Mesh Deploy, 500]
+image::images/che-servicemesh-deploy.png[Che - Service Mesh Deploy, 500]
 
 To verify the deployment `*run this following command*`:
 
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ oc get pods -ldeploymentconfig=catalog-coolstore -n cn-project{{USER_ID}}
+$ oc get pods -ldeploymentconfig=catalog-coolstore -n cn-project{USER_ID}
 NAME                          READY     STATUS    RESTARTS   AGE
 catalog-coolstore-4-xnwfp   2/2       Running   0          39s
-$ oc get pods -ldeploymentconfig=gateway-coolstore -n cn-project{{USER_ID}}
+$ oc get pods -ldeploymentconfig=gateway-coolstore -n cn-project{USER_ID}
 NAME                        READY     STATUS    RESTARTS   AGE
 gateway-coolstore-4-h5g7t   2/2       Running   0          73s
 ----
@@ -108,12 +108,12 @@ to create an **Istio Gateway** and a **VirtualService** for the **Gateway Servic
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc create -n cn-project{{USER_ID}} -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
-sed s/PROJECT/cn-project{{USER_ID}}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -n cn-project{{USER_ID}} -f -
+oc create -n cn-project{USER_ID} -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
+sed s/PROJECT/cn-project{USER_ID}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -n cn-project{USER_ID} -f -
 ----
 
 To confirm that the **Istio Gateway** is properly configured, 
-`*click on http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{{USER_ID}}/api/products[http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{{USER_ID}}/api/products^]*`
+`*click on http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{USER_ID}/api/products[http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{USER_ID}/api/products^]*`
 
 You should have the following result:
 
@@ -141,8 +141,8 @@ You should have the following result:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc set env dc/web-coolstore -n cn-project{{USER_ID}} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{{USER_ID}}
-oc rollout latest dc/web-coolstore -n cn-project{{USER_ID}}
+oc set env dc/web-coolstore -n cn-project{USER_ID} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{USER_ID}
+oc rollout latest dc/web-coolstore -n cn-project{USER_ID}
 ----
 
 '''
@@ -158,7 +158,7 @@ IMPORTANT: Refresh your browser several times to generate traffic.
 === What is Kiali?
 [sidebar]
 --
-image:{% image_path kiali-logo.png %}[Kiali,400]
+image::images/kiali-logo.png[Kiali,400]
 
 A Microservice Architecture breaks up the monolith into many smaller pieces that are composed together. 
 Patterns to secure the communication between services like fault tolerance (via timeout, retry, circuit breaking, etc.) 
@@ -180,13 +180,13 @@ Kiali provides an interactive graph view of your namespace in real time, being a
 
 `*Click on the below button called 'Developer Observability'*`
 
-[link={{ KIALI_URL }}]
+[link={KIALI_URL}]
 [window=_blank, align="center"]
-image::{% image_path developer-observability-button.png  %}[Developer Observability - Button, 300]
+image::images/developer-observability-button.png[Developer Observability - Button, 300]
 
-Then, `*log in with OpenShift as user{{USER_ID}}/{{OPENSHIFT_PASSWORD}}'*`
+Then, `*log in with OpenShift as user{USER_ID}/{{OPENSHIFT_PASSWORD}}'*`
 
-image:{% image_path kiali-login.png %}[Kiali- Log In,300]`
+image::images/kiali-login.png[Kiali- Log In,300]`
 
 From the **'Graph' view**, `*enter the following configuration*`:
 
@@ -197,7 +197,7 @@ From the **'Graph' view**, `*enter the following configuration*`:
 |Value
 
 |Namespace 
-|cn-project{{USER_ID}}
+|cn-project{USER_ID}
 
 |Display
 |'Traffic Animation' checked
@@ -207,7 +207,7 @@ From the **'Graph' view**, `*enter the following configuration*`:
 The outcome is a graph with all the services, connected by the requests going through them. 
 You can see how the services interact with each other. 
 
-image:{% image_path kiali-graph.png %}[Kiali- Graph,900]
+image::images/kiali-graph.png[Kiali- Graph,900]
 
 '''
 
@@ -215,7 +215,7 @@ image:{% image_path kiali-graph.png %}[Kiali- Graph,900]
 
 [sidebar]
 --
-image:{% image_path jaeger-logo.png %}[Jaeger,400]
+image::images/jaeger-logo.png[Jaeger,400]
 
 Jaeger, inspired by Dapper and OpenZipkin, is a distributed tracing system released as open source by Uber Technologies. 
 It is used for monitoring and troubleshooting microservices-based distributed systems, including:
@@ -229,20 +229,20 @@ It is used for monitoring and troubleshooting microservices-based distributed sy
 https://www.kiali.io/[Kiali^] includes https://www.jaegertracing.io/[Jaeger Tracing^] to provide distributed tracing out of the box.
 --
 
-IMPORTANT: Because of certificates issues, you need first to access the main {{ JAEGER_URL }}[Jaeger Console^] to use it through Kiali.
+IMPORTANT: Because of certificates issues, you need first to access the main {JAEGER_URL}[Jaeger Console^] to use it through Kiali.
 
-In the {{ KIALI_URL }}[Kiali Console^], from **Graph view**, 
+In the {KIALI_URL}[Kiali Console^], from **Graph view**, 
 `*right-click on the gateway-service node and select 'Show Traces'*`.
 
-image:{% image_path kiali-show-traces.png %}[Kiali- Show Traces, 700]
+image::images/kiali-show-traces.png[Kiali- Show Traces, 700]
 
 You should be redirected to the **Distributed Tracing menu**.
 
-image:{% image_path kiali-traces-view.png %}[Kiali- Traces View,700]
+image::images/kiali-traces-view.png[Kiali- Traces View,700]
 
 Let’s `*click on one of trace title bar*`.
 
-image:{% image_path kiali-trace-detail-view.png %}[Kiali- Trace Detail View,700]
+image::images/kiali-trace-detail-view.png[Kiali- Trace Detail View,700]
 
 '''
 

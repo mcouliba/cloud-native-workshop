@@ -4,22 +4,22 @@ You find all urls, hostnames, usernames and passwords that are needed during the
 labs in this page. Note that the urls are also embedded inside each lab instructions.
 
 OPENSHIFT::
-{{ OPENSHIFT_CONSOLE_URL }}
+{OPENSHIFT_CONSOLE_URL}
 
 GOGS SERVER::
-{{ GOGS_URL }}
+{GOGS_URL}
 
 NEXUS MAVEN REPOSITORY::
-{{ NEXUS_URL }}
+{NEXUS_URL}
 
 CODEREADY WORKSPACES::
-{{ CODEREADY_WORKSPACES_URL }}
+{CODEREADY_WORKSPACES_URL}
 
 KIALI::
-{{ KIALI_URL }}
+{KIALI_URL}
 
 JAEGER::
-{{ JAEGER_URL }}
+{JAEGER_URL}
 
 KIBANA_URL::
-{{ KIBANA_URL }}
+{KIBANA_URL}

@@ -37,7 +37,7 @@ In {{GOGS_URL}}[Gogs^], `*create a new Repository for Inventory Service*` as fol
 |Value
 
 |Owner*
-|user{{USER_ID}}
+|user{USER_ID}
 
 |Repository Name*
 |inventory-quarkus
@@ -69,19 +69,19 @@ In {{GOGS_URL}}[Gogs^], `*create a new Repository for Inventory Service*` as fol
 Now that you have a Git repository for the Inventory service, you should push the 
 source code into this Git repository.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
+In your {CHE_URL}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Git: Close Repository' then run 'Git: Initialize Repository'*`
 
-image:{% image_path che-git-close.png %}[Che - Git Close, 600]
+image::images/che-git-close.png[Che - Git Close, 600]
 
-image:{% image_path che-git-init.png %}[Che - Git Initialize, 600]
+image::images/che-git-init.png[Che - Git Initialize, 600]
 
 `*Select the '/projects/workshop/labs/inventory-quarkus' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
@@ -89,34 +89,34 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/inventory-quarkus
-git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/inventory-quarkus
+git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus
 ----
 
 Open the **Source Code Management (SCM) view** by clicking on `*'View' -> 'SCM menu'*`
 
 `*Click on '...' -> 'Stage All Changes'*`
 
-image:{% image_path che-scm-stage-all-changes.png %}[Che - SCM Stage All Changes, 500]
+image::images/che-scm-stage-all-changes.png[Che - SCM Stage All Changes, 500]
 
 `*Click on the 'check' icon and enter 'Initial' as commit message*`
 
-image:{% image_path che-scm-commit.png %}[Che - SCM Commit, 900]
+image::images/che-scm-commit.png[Che - SCM Commit, 900]
 
 `*Click on '...' -> 'Push'*`
 
-image:{% image_path che-scm-push.png %}[Che - SCM Push, 500]
+image::images/che-scm-push.png[Che - SCM Push, 500]
 
 `*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gogs credentials (user{{USER_ID}}/{{ OPENSHIFT_PASSWORD }})*`.
+Finally, `*enter your Gogs credentials (user{USER_ID}/{OPENSHIFT_PASSWORD})*`.
 
-image:{% image_path che-scm-username.png %}[Che - SCM Username, 500]
+image::images/che-scm-username.png[Che - SCM Username, 500]
 
-image:{% image_path che-scm-password.png %}[Che - SCM Password, 500]
+image::images/che-scm-password.png[Che - SCM Password, 500]
 
-Once done, in {{GOGS_URL}}/user{{USER_ID}}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
+Once done, in {{GOGS_URL}}/user{USER_ID}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
 see the project files in the repository.
 
-image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
+image::images/cd-gogs-inventory-repo.png[Inventory Repository,900]
 
 '''
 
@@ -124,7 +124,7 @@ image:{% image_path cd-gogs-inventory-repo.png %}[Inventory Repository,900]
 
 [sidebar]
 --
-image:{% image_path tekton-logo.png %}[Tekton, 300]
+image::images/tekton-logo.png[Tekton, 300]
 
 OpenShift Pipelines is a cloud-native, continuous integration and continuous delivery (CI/CD) solution 
 for building pipelines based on  https://github.com/tektoncd/pipeline[Tekton Pipelines^] project.
@@ -149,7 +149,7 @@ The custom resources needed to define a pipeline are:
 * **TaskRun** - the result of running an instance of **Task**
 * **PipelineRun** - the result of running an instance of **Pipeline**, which includes a number of **TaskRun**
 
-image:{% image_path tekton-architecture.png %}[Tekton Architecture, 600]
+image::images/tekton-architecture.png[Tekton Architecture, 600]
 
 --
 
@@ -157,10 +157,10 @@ image:{% image_path tekton-architecture.png %}[Tekton Architecture, 600]
 
 === Create the Image Builder for Inventory Service
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
@@ -171,7 +171,7 @@ $ oc new-build java \
   --name=inventory-coolstore \
   --binary=true \
   --labels=app=coolstore,app.kubernetes.io/instance=inventory \
-  --namespace=cn-project{{USER_ID}}
+  --namespace=cn-project{USER_ID}
 ----
 
 You should have the following output:
@@ -213,7 +213,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task # <1>
@@ -265,7 +265,7 @@ Then, `*create a task to create the container image from the binary (s2i)*`.
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -305,7 +305,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline # <1>
@@ -365,7 +365,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{{USER_ID}} -f -
+$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource # <1>
@@ -375,7 +375,7 @@ spec:
   type: git # <3>
   params: # <4>
   - name: url
-    value: http://gogs-gogs-server.workshop-infra.svc:3000/user{{USER_ID}}/inventory-quarkus.git
+    value: http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus.git
   - name: revision
     value: master
 EOF
@@ -391,16 +391,16 @@ EOF
 
 Now that your pipeline is created and configured, let's trigger it.
 
-In your {{ CHE_URL }}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start Mine'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start Mine'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-pipeline-start-mine.png %}[Che - Pipeline Start Mine, 500]
+image::images/che-pipeline-start-mine.png[Che - Pipeline Start Mine, 500]
 
 Once done, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Pipelines' -> 'Last Run - my-pipeline-run'*`
 
-image:{% image_path openshift-pipeline-mine.png %}[OpenShift Pipeline,400]
+image::images/openshift-pipeline-mine.png[OpenShift Pipeline,400]
 
 Congratulations!! You have created and run your first **OpenShift Pipeline with Tekton**!!
 
@@ -411,17 +411,17 @@ Congratulations!! You have created and run your first **OpenShift Pipeline with 
 Now, you have learnt and understood how to create a simple **Pipeline** with **Task** and **PipelineResource**.
 Let's create more tasks and expand the existing pipeline.
 
-In your {{ CHE_URL }}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
-`*run 'Kubernetes: Use Namespace' and enter 'cn-project{{USER_ID}}'*`
+In your {CHE_URL}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
+`*run 'Kubernetes: Use Namespace' and enter 'cn-project{USER_ID}'*`
 
-image:{% image_path che-kubernetes-use-namespace.png %}[Che - Kubernetes Create, 500]
+image::images/che-kubernetes-use-namespace.png[Che - Kubernetes Create, 500]
 
 
 Then,`*double click on each following file to open it*` then 
 via the command menu (`*'View' -> 'Find Command...'*`),
 `*run 'Kubernetes: Create'*`
 
-image:{% image_path che-kubernetes-create.png %}[Che - Kubernetes Create, 500]
+image::images/che-kubernetes-create.png[Che - Kubernetes Create, 500]
 
 .OpenShift Pipeline
 [%header,cols=2*]
@@ -448,19 +448,19 @@ of your application.
 
 Once created, `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start Inventory'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-pipeline-start-inventory.png %}[Che - Pipeline Start Inventory, 500]
+image::images/che-pipeline-start-inventory.png[Che - Pipeline Start Inventory, 500]
 
 Back into the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Pipelines' -> 'Last Run - jar-pipeline-run'*`
 
-image:{% image_path openshift-pipeline-full.png %}[OpenShift Pipeline,900]
+image::images/openshift-pipeline-full.png[OpenShift Pipeline,900]
 
 Once finished, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*Select the 'cn-project{{USER_ID}}'*`.
+`*Select the 'cn-project{USER_ID}'*`.
 
-image:{% image_path openshift-tekton-inventory-deployed.png %}[OpenShift - Inventory Deployed by Tekton, 700]
+image::images/openshift-tekton-inventory-deployed.png[OpenShift - Inventory Deployed by Tekton, 700]
 
 Now, you can see that the **Inventory Service has been deployed by Tekton** and it is up and running.
 
@@ -473,21 +473,21 @@ Now, `*let's deploy the rest of the application wioth Tekton*`.
 
 For doing so, `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start All'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-pipeline-start-all.png %}[Che - Pipeline Start All, 500]
+image::images/che-pipeline-start-all.png[Che - Pipeline Start All, 500]
 
 Once executed, in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Pipelines' -> 'PL - git-pipeline' -> 'Pipeline Runs'*`
 
-image:{% image_path openshift-three-pipeline-run.png %}[3 OpenShift Pipeline Runs, 700]
+image::images/openshift-three-pipeline-run.png[3 OpenShift Pipeline Runs, 700]
 
 You should see 3 pipelines running for the 3 remaining services (Catalog, Gateway and Web).
 
 Finally , `*click on 'Topology'*` from the **Developer view** of the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^]
-and validate that the CoolStore application is deployed, up and running in the **cn-project{{USER_ID}}** project.
+and validate that the CoolStore application is deployed, up and running in the **cn-project{USER_ID}** project.
 
-image:{% image_path openshift-tekton-coolstore-deployed.png %}[OpenShift - Coolstore Deployed by Tekton, 700]
+image::images/openshift-tekton-coolstore-deployed.png[OpenShift - Coolstore Deployed by Tekton, 700]
 
 '''
 

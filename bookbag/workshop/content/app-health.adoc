@@ -57,17 +57,17 @@ dependencies which is already done for the **Catalog Service**.
 
 Verify that the health endpoint works for the **Catalog Service** using `*curl*`.
 
-In your {{ CHE_URL }}[Workspace^], open a new Terminal by `*clicking 
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
 on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image:{% image_path che-open-workshop-terminal.png %}[Che - Open OpenShift Terminal, 700]
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://catalog-coolstore.my-project{{USER_ID}}.svc:8080/actuator/health
+$ curl -w "\n" http://catalog-coolstore.my-project{USER_ID}.svc:8080/actuator/health
 ----
 
 You should have the following output:
@@ -89,7 +89,7 @@ $ oc set probe dc/catalog-coolstore \
     --initial-delay-seconds=30 \# <3>
     --failure-threshold=3 \# <4>
     --get-url=http://:8080/actuator/health \# <5>
-    --namespace=my-project{{USER_ID}}
+    --namespace=my-project{USER_ID}
 ----
 <1> **--liveness** is the option to setup a liveness probe to verify this container is running
 <2> **--readiness** is the option to setup a readiness probe to indicate when this container should receive traffic
@@ -128,7 +128,7 @@ It allows applications to provide information about their state to external view
 in cloud environments where automated processes must be able to determine whether the application should be discarded or restarted.
 
 Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus/pom.xml**. 
-In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
+In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
 
 [source,xml]
 .pom.xml
@@ -141,13 +141,13 @@ In your {{ CHE_URL }}[Workspace^], `*edit the '/projects/workshop/labs/inventory
 
 `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Build'*`
 
-image:{% image_path che-runtask.png %}[Che - RunTask, 500]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image:{% image_path che-inventory-build.png %}[Che - Inventory Build, 500]
+image::images/che-inventory-build.png[Che - Inventory Build, 500]
 
 Then, `*push the updated component to the OpenShift cluster*`.
 
-image:{% image_path che-openshift-push-again-inventory.png %}[Che - OpenShift Push Inventory, 400]
+image::images/che-openshift-push-again-inventory.png[Che - OpenShift Push Inventory, 400]
 
 Once completed, verify that the health endpoint works for the **Inventory Service** using `*curl*`
 
@@ -156,7 +156,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://inventory-coolstore.my-project{{USER_ID}}.svc:8080/health
+$ curl -w "\n" http://inventory-coolstore.my-project{USER_ID}.svc:8080/health
 ----
 
 You should have the following output:
@@ -179,10 +179,10 @@ Finally, `*Add the Liveness and Readiness Probes*` to the Service
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc rollout pause dc/inventory-coolstore --namespace=my-project{{USER_ID}}
-oc set probe dc/inventory-coolstore --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready --namespace=my-project{{USER_ID}}
-oc set probe dc/inventory-coolstore --liveness --initial-delay-seconds=180 --failure-threshold=3 --get-url=http://:8080/health/live --namespace=my-project{{USER_ID}}
-oc rollout resume dc/inventory-coolstore --namespace=my-project{{USER_ID}}
+oc rollout pause dc/inventory-coolstore --namespace=my-project{USER_ID}
+oc set probe dc/inventory-coolstore --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready --namespace=my-project{USER_ID}
+oc set probe dc/inventory-coolstore --liveness --initial-delay-seconds=180 --failure-threshold=3 --get-url=http://:8080/health/live --namespace=my-project{USER_ID}
+oc rollout resume dc/inventory-coolstore --namespace=my-project{USER_ID}
 ----
 
 OpenShift automatically restarts the Inventory pod and as soon as the health probes succeed, it is ready to receive traffic.
@@ -199,7 +199,7 @@ Verify that the health endpoint works for the **Gateway Service** using `*curl*`
 [source,shell]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://gateway-coolstore.my-project{{USER_ID}}.svc:8080/health
+$ curl -w "\n" http://gateway-coolstore.my-project{USER_ID}.svc:8080/health
 ----
 
 You should have the following output:
@@ -279,16 +279,16 @@ OpenShift provides container metrics out-of-the-box and displays how much memory
 each container has been consuming over time. 
 
 In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Advanced' -> 'Projects' then select your 'my-project{{USER_ID}}' project*`.
+`*click on 'Advanced' -> 'Projects' then select your 'my-project{USER_ID}' project*`.
 
 In the project overview, you can see the **Health** and **Resource Usage** sections
 
-image:{% image_path health-metrics-brief.png %}[Container Metrics,740]
+image::images/health-metrics-brief.png[Container Metrics,740]
 
 From the **Developer view**, `*select any Deployment Config (DC) and click on the associated Pod (P)*`
 
 In the pod overview, you can see a more detailed view of the pod consumption.
 
-image:{% image_path health-metrics-detailed.png %}[Container Metrics,900]
+image::images/health-metrics-detailed.png[Container Metrics,900]
 
 Well done! You are ready to move on to the next lab.

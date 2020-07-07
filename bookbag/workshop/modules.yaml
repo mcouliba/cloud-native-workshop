@@ -1,0 +1,49 @@
+modules:
+  introduction:
+    name: Introduction
+    exit_sign: Get your Developer Workspace
+  developer-workspace:
+    name: Get your Developer Workspace
+    exit_sign: Create Inventory Service as an Enterprise Microservice with Quarkus
+  inventory-quarkus:
+    name: Create Inventory Service as an Enterprise Microservice with Quarkus
+    exit_sign: Create Catalog Service as a Microservice with Spring Boot
+  catalog-spring-boot:
+    name: Create Catalog Service as a Microservice with Spring Boot
+    exit_sign: Create Gateway Service as a Reactive Microservice with Eclipse Vert.x
+  catalog-deployment:
+    name: Deploy Catalog Service as a Microservice with Spring Boot
+    exit_sign: Deploy Gateway Service
+  gateway-vertx:
+    name: Create Gateway Service as a Reactive Microservice with Eclipse Vert.x
+    exit_sign: Deploy Web UI as a Microservice with with Node.js and AngularJS
+  gateway-deployment:
+    name: Deploy Gateway Service
+    exit_sign: Deploy Web UI as a Microservice with with Node.js and AngularJS
+  webui-deployment:
+    name: Deploy Web UI as a Microservice with with Node.js and AngularJS
+    exit_sign: Monitor Application Health
+  app-health:
+    name: Monitor Application Health 
+    exit_sign: Service Resilience and Fault Tolerance
+  fault-tolerance:
+    name: Service Resilience and Fault Tolerance
+    exit_sign: Externalize Application Configuration
+  app-config:
+    name:  Externalize Application Configuration
+    exit_sign: GitOps Continuous Delivery with Argo CD
+  gitops-continuous-delivery:
+    name:  GitOps Continuous Delivery with Argo CD
+    exit_sign: Continuous Delivery with Openshift Pipelines
+  continuous-delivery-tekton:
+    name:  Continuous Delivery with Openshift Pipelines
+    exit_sign: Microservice Tracing with Service Mesh
+  service-mesh:
+    name:  Microservice Tracing with Service Mesh
+    exit_sign: A/B Testing with Service Mesh
+  abtesting:
+    name:  A/B Testing with Service Mesh
+    exit_sign: "Appendix: Lab Env Info"
+  env-info:
+    name: "Appendix: Lab Env Info"
+    exit_sign: Finish Workshop

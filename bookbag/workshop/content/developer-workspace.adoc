@@ -1,4 +1,7 @@
-== Get Your Developer Workspace
+:CHE_URL: %CHE_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/staging-project{USER_ID}
 
 _5 MINUTE EXERCISE_
 
@@ -9,7 +12,7 @@ and getting familiar with the OpenShift CLI and OpenShift Web Console.
 
 [sidebar]
 --
-image:{% image_path codereadyworkspaces-logo.png %}[CodeReady Workspaces, 400]
+image::images/codereadyworkspaces-logo.png[CodeReady Workspaces, 400]
 
 https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^] is a Kubernetes-native IDE and developer collaboration platform.
 
@@ -52,19 +55,19 @@ to this file.
 
 `*Click on the below button called 'Developer Workspace'*`
 
-[link={{ CHE_URL }}/dashboard/#/ide/user{{USER_ID}}/wksp-cloud-native]
+[link={CHE_URL}/dashboard/#/ide/user{USER_ID}/wksp-cloud-native]
 [window=_blank, align="center"]
-image::{% image_path developer-workspace-button.png  %}[Developer Workspace - Button, 300]
+image::images/developer-workspace-button.svg[Developer Workspace - Button, 300]
 
-Then `*login as user{{USER_ID}}/{{ OPENSHIFT_PASSWORD }}*`, `*click on 'Allow selected permissions'*` and let's the magic happens...
+Then `*login as user{USER_ID}/{OPENSHIFT_PASSWORD}*`, `*click on 'Allow selected permissions'*` and let's the magic happens...
 
-image:{% image_path che-login.png %}[Che - Login, 500]
+image::images/che-login.png[Che - Login, 500]
 
-image:{% image_path che-openshift-authorize-access.png %}[Che - OpenShift OAuth Authorize Access, 600]
+image::images/che-openshift-authorize-access.png[Che - OpenShift OAuth Authorize Access, 600]
 
 Once completed, you will have a fully functional Browser-based IDE within the source code already imported.
 
-image:{% image_path che-workspace.png %}[Che - Workspace, 800]
+image::images/che-workspace.png[Che - Workspace, 800]
 
 '''
 
@@ -73,7 +76,7 @@ image:{% image_path che-workspace.png %}[Che - Workspace, 800]
 [sidebar]
 .OpenShift Connector
 --
-image:{% image_path openshiftconnect-logo.png %}[OpenShift Connector logo, 150]
+image::images/openshiftconnect-logo.png[OpenShift Connector logo, 150]
 
 https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
 is a Visual Studio (VS) Code extension for interacting with Red Hat OpenShift cluster with more improved features for a seamless developer experience.
@@ -104,13 +107,13 @@ the running OpenShift cluster.
 
 === Connect Your Workspace to Your OpenShift User
 
-First, in your {{ CHE_URL }}[Workspace^], `*open the 'OpenShift' View*` by clicking on the OpenShift icon of the left hand side.
+First, in your {CHE_URL}[Workspace^], `*open the 'OpenShift' View*` by clicking on the OpenShift icon of the left hand side.
 
-image:{% image_path che-openshift-view.png %}[Che - OpenShift View, 300]
+image::images/che-openshift-view.png[Che - OpenShift View, 300]
 
 Then, `*click the 'Log in to cluster' icon and confirm you want to connect to a different cluster*`
 
-image:{% image_path che-openshift-login-popup.png %}[Che - OpenShift View, 500]
+image::images/che-openshift-login-popup.png[Che - OpenShift View, 500]
 
 Finally, `*enter the following information*`:
 
@@ -130,7 +133,7 @@ Finally, `*enter the following information*`:
 |$(plus) Add new user...
 
 |Provide Username for basic authentication to the API Server
-|user{{USER_ID}}
+|user{USER_ID}
 
 |Provide Password for basic authentication to the API Server
 |{{OPENSHIFT_PASSWORD}}
@@ -139,17 +142,17 @@ Finally, `*enter the following information*`:
 
 You should see 2 projects in the **OpenShift View** as following:
 
-image:{% image_path che-openshift-login.png %}[Che - OpenShift View, 300]
+image::images/che-openshift-login.png[Che - OpenShift View, 300]
 
-* The **'cn-project{{USER_ID}}' project** will be used as a **Staging Environment**.
-* The **'user{{USER_ID}}-che' project** contains your **Developer Workspace** up and running
+* The **'cn-project{USER_ID}' project** will be used as a **Staging Environment**.
+* The **'user{USER_ID}-che' project** contains your **Developer Workspace** up and running
 
 So, as you can see, you are missing the **Development Environment**. Let's create it!
 
-In your {{ CHE_URL }}[Workspace^], from **'OpenShift' View**, 
+In your {CHE_URL}[Workspace^], from **'OpenShift' View**, 
 `*right-click on the cluster URL and select 'New Project'*`
 
-image:{% image_path che-openshift-new-project.png %}[Che - OpenShift New Project, 500]
+image::images/che-openshift-new-project.png[Che - OpenShift New Project, 500]
 
 Finally, `*enter the following information*`:
 
@@ -160,7 +163,7 @@ Finally, `*enter the following information*`:
 |Value
 
 |Provide Project name.
-|my-project{{USER_ID}}
+|my-project{USER_ID}
 
 |===
 
@@ -175,17 +178,17 @@ perform various tasks via a browser.
 
 [link={{OPENSHIFT_CONSOLE_URL}}]
 [window=_blank, align="center"]
-image::{% image_path developer-console-button.png  %}[Developer Workspace - Button, 300]
+image::images/developer-console-button.png[Developer Workspace - Button, 300]
 
-`*Enter your username and password (user{{USER_ID}}/{{OPENSHIFT_PASSWORD}})*` and 
+`*Enter your username and password (user{USER_ID}/{{OPENSHIFT_PASSWORD}})*` and 
 then log in. After you have authenticated to the web console, you will be presented with a
 list of projects that your user has permission to work with. 
 
-`*Select the 'Developer View' then your 'my-project{{USER_ID}}'*` to be taken to the project overview page
+`*Select the 'Developer View' then your 'my-project{USER_ID}'*` to be taken to the project overview page
 which will list all of the routes, services, deployments, and pods that you have
 running as part of your project. There's nothing there now, but that's about to
 change.
 
-image:{% image_path openshift-empty-project.png %}[OpenShift - Empty Project, 700]
+image::images/openshift-empty-project.png[OpenShift - Empty Project, 700]
 
 Now you are ready to get started with the labs!

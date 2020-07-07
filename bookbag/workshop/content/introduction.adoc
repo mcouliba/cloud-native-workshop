@@ -6,7 +6,7 @@ In this workshop you will learn how to develop and deploy a microservices based 
 
 The overall architecture of the application that you will deploy is the following:
 
-image:{% image_path coolstore-arch.png %}[API Gateway Pattern, 400]
+image::images/coolstore-arch.png[Coolstore Architecture, 400]
 
 During the various steps of the the workshop you will use CodeReady Workspaces, an online IDE that is running on Red Hat OpenShift to write, test and deploy these services:
 
@@ -17,7 +17,7 @@ During the various steps of the the workshop you will use CodeReady Workspaces, 
 
 The outcome is an online store with a catalog of product items and an inventory of stock:
 
-image:{% image_path coolstore-web.png %}[CoolStore Shop,840]
+image::images/coolstore-web.png[CoolStore Shop,840]
 
 In addition to the application code, you will learn how to deploy the various services to OpenShift and how to use it to route the trafic to these services and monitor them.
 
