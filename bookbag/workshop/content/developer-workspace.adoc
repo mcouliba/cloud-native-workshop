@@ -1,7 +1,7 @@
 :CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
 
 _5 MINUTE EXERCISE_
 
@@ -12,6 +12,7 @@ and getting familiar with the OpenShift CLI and OpenShift Web Console.
 
 [sidebar]
 --
+[window=_blank, align="center"]
 image::images/codereadyworkspaces-logo.png[CodeReady Workspaces, 400]
 
 https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^] is a Kubernetes-native IDE and developer collaboration platform.
@@ -59,11 +60,17 @@ to this file.
 [window=_blank, align="center"]
 image::images/developer-workspace-button.svg[Developer Workspace - Button, 300]
 
-Then `*login as user{USER_ID}/{OPENSHIFT_PASSWORD}*`, `*click on 'Allow selected permissions'*` and let's the magic happens...
+Then `*login as user{USER_ID}/{OPENSHIFT_PASSWORD}*` and let's the magic happens...
 
 image::images/che-login.png[Che - Login, 500]
 
+
+[TIP]
+====
+If you have the following screen, please `*click on 'Allow selected permissions'*`
+
 image::images/che-openshift-authorize-access.png[Che - OpenShift OAuth Authorize Access, 600]
+====
 
 Once completed, you will have a fully functional Browser-based IDE within the source code already imported.
 
@@ -76,6 +83,7 @@ image::images/che-workspace.png[Che - Workspace, 800]
 [sidebar]
 .OpenShift Connector
 --
+[window=_blank, align="center"]
 image::images/openshiftconnect-logo.png[OpenShift Connector logo, 150]
 
 https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
@@ -136,7 +144,7 @@ Finally, `*enter the following information*`:
 |user{USER_ID}
 
 |Provide Password for basic authentication to the API Server
-|{{OPENSHIFT_PASSWORD}}
+|{OPENSHIFT_PASSWORD}
 
 |===
 
@@ -175,7 +183,7 @@ perform various tasks via a browser.
 
 `*Click on the below button called 'Developer Console'*`
 
-[link={{OPENSHIFT_CONSOLE_URL}}]
+[link={OPENSHIFT_CONSOLE_URL}]
 [window=_blank, align="center"]
 image::images/developer-console-button.png[Developer Workspace - Button, 300]
 

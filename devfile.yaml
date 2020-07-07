@@ -79,7 +79,7 @@ commands:
               {
                 "type": "che",
                 "label": "Inventory - Compile (Dev Mode)",
-                "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev",
+                "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev -Ddebug=false",
                 "target": {
                     "workingDir": "/projects/workshop/labs/inventory-quarkus",
                     "component": "workshop-tools"

@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 public class InventoryResource {
 
     @Inject
-    private EntityManager em;
+    EntityManager em;
 
     @GET
     @Path("/{itemId}")
