@@ -4,9 +4,6 @@
 :USER_ID: %USER_ID%
 :OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
 
-
-== Enterprise Microservices with Quarkus
-
 _45 MINUTE EXERCISE_
 
 In this lab you will learn about building microservices using Quarkus.
@@ -237,7 +234,6 @@ Now let's write some code and create a domain model and a RESTful endpoint to cr
 `*Create the 'src/main/java/com/redhat/cloudnative/Inventory.java' file`* as following:
 
 [source,java,role=copy]
-.Inventory.java
 ----
 package com.redhat.cloudnative;
 
@@ -247,13 +243,13 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import java.io.Serializable;
 
-@Entity // <1>
-@Table(name = "INVENTORY") // <2>
+@Entity
+@Table(name = "INVENTORY")
 public class Inventory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id // <3>
+    @Id
     private String itemId;
 
     @Column
@@ -306,7 +302,7 @@ quarkus.hibernate-orm.database.generation=drop-and-create
 quarkus.hibernate-orm.log.sql=true
 quarkus.hibernate-orm.sql-load-script=import.sql
 
-%prod.quarkus.package.uber-jar=true # <1>
+%prod.quarkus.package.uber-jar=true
 ----
 <1> An **uber-jar** contains all the dependencies required packaged in the **jar** to enable running the 
 application with **java -jar**. By default, in Quarkus, the generation of the uber-jar is disabled. With the

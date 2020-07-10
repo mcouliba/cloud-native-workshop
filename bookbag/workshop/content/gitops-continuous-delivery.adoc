@@ -65,10 +65,10 @@ Then, `*click on 'Register'*` to register a new user with the following details:
 |user{USER_ID}@none.com
 
 |Password
-|{{OPENSHIFT_PASSWORD}}
+|{OPENSHIFT_PASSWORD}
 
 | Re-Type
-|{{OPENSHIFT_PASSWORD}}
+|{OPENSHIFT_PASSWORD}
 
 |===
 
@@ -379,7 +379,7 @@ logs, events, and assessed health status.
 
 image::images/argocd-synced-application.png[Argo CD - Synced Application, 800]
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*Select the 'cn-project{USER_ID}'*` to be taken to the project overview page.
 
 image::images/openshift-app-deployed-by-argocd.png[OpenShift - Coolstore Project Deployed by Argo CD , 700]

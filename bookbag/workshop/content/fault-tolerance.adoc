@@ -37,7 +37,7 @@ application pods and ensuring the specified number of instances for each applica
 is running. Therefore the number of pods you want to scale to should be defined on the 
 deployment config.
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Topology' -> 'DC web-coolstore' -> 'Overview' then click once on the up arrows 
 on the right side of the pod blue circle*`.
 
@@ -49,7 +49,7 @@ it will be automatically added to the load-balancer.
 You can verify that the new pod is added to the load balancer by checking the details of the 
 Web UI service resource. 
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Topology' -> 'DC web-coolstore' -> 'Resources' -> 'S web-coolstore' -> 'Pods'*`.
 
 image::images/openshift-service-web.png[OpenShift Service Web, 700]
@@ -246,7 +246,7 @@ $ oc delete pods -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
 ----
 
 You need to be fast for this one! 
-`*Switch on the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the 'Developer view', and click on 'DC catalog'*` 
+`*Switch on the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the 'Developer view', and click on 'DC catalog'*` 
 
 image::images/openshift-catalog-failed.png[Che - OpenShift Catalog Failed, 700]
 

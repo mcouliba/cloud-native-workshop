@@ -3,7 +3,7 @@
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
 :OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
 
-_5 MINUTE EXERCISE_
+_10 MINUTE EXERCISE_
 
 In this lab you will learn about providing your Developer Workspace with a Kubernetes-native development platform 
 and getting familiar with the OpenShift CLI and OpenShift Web Console.
@@ -187,7 +187,7 @@ perform various tasks via a browser.
 [window=_blank, align="center"]
 image::images/developer-console-button.png[Developer Workspace - Button, 300]
 
-`*Enter your username and password (user{USER_ID}/{{OPENSHIFT_PASSWORD}})*` and 
+`*Enter your username and password (user{USER_ID}/{OPENSHIFT_PASSWORD})*` and 
 then log in. After you have authenticated to the web console, you will be presented with a
 list of projects that your user has permission to work with. 
 

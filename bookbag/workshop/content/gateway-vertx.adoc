@@ -1,10 +1,7 @@
 :markup-in-source: verbatim,attributes,quotes
-:APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
 :CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
-
-== Reactive Microservices with Eclipse Vert.x
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
 
 _15 MINUTE EXERCISE_
 
@@ -71,15 +68,15 @@ import io.vertx.reactivex.core.AbstractVerticle;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.handler.StaticHandler;
 
-public class GatewayVerticle extends AbstractVerticle { // <1>
+public class GatewayVerticle extends AbstractVerticle {
     @Override
-    public void start(Future<Void> future) { // <2>
-        Router router = Router.router(vertx); // <3>
+    public void start(Future<Void> future) {
+        Router router = Router.router(vertx);
 
-        router.get("/*").handler(StaticHandler.create("assets")); // <4>
+        router.get("/*").handler(StaticHandler.create("assets"));
 
         vertx.createHttpServer().requestHandler(router)
-            .listen(Integer.getInteger("http.port", 8080)); // <5>
+            .listen(Integer.getInteger("http.port", 8080));
     }
 }
 ----
@@ -152,8 +149,8 @@ public class GatewayVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
         router.route().handler(CorsHandler.create("*").allowedMethod(HttpMethod.GET));
         router.get("/*").handler(StaticHandler.create("assets"));
-        router.get("/health").handler(this::health); # <1>
-        router.get("/api/products").handler(this::products); # <2>
+        router.get("/health").handler(this::health);
+        router.get("/api/products").handler(this::products);
 
         ConfigRetriever retriever = ConfigRetriever.create(vertx);
         retriever.getConfig(ar -> {
@@ -162,8 +159,8 @@ public class GatewayVerticle extends AbstractVerticle {
             } else {
                 JsonObject config = ar.result();
 
-                String catalogApiHost = config.getString("COMPONENT_CATALOG_HOST", "localhost"); # <3>
-                Integer catalogApiPort = config.getInteger("COMPONENT_CATALOG_PORT", 9001); # <3>
+                String catalogApiHost = config.getString("COMPONENT_CATALOG_HOST", "localhost");
+                Integer catalogApiPort = config.getInteger("COMPONENT_CATALOG_PORT", 9001);
 
                 catalog = WebClient.create(vertx,
                     new WebClientOptions()
@@ -172,8 +169,8 @@ public class GatewayVerticle extends AbstractVerticle {
 
                 LOG.info("Catalog Service Endpoint: " + catalogApiHost + ":" + catalogApiPort.toString());
 
-                String inventoryApiHost = config.getString("COMPONENT_INVENTORY_HOST", "localhost"); # <3>
-                Integer inventoryApiPort = config.getInteger("COMPONENT_INVENTORY_PORT", 9001); # <3>
+                String inventoryApiHost = config.getString("COMPONENT_INVENTORY_HOST", "localhost");
+                Integer inventoryApiPort = config.getInteger("COMPONENT_INVENTORY_PORT", 9001);
 
                 inventory = WebClient.create(vertx,
                     new WebClientOptions()
@@ -191,7 +188,7 @@ public class GatewayVerticle extends AbstractVerticle {
         });
     }
 
-    private void products(RoutingContext rc) { # <4>
+    private void products(RoutingContext rc) {
         // Retrieve catalog
         catalog
             .get("/api/catalog")
@@ -220,7 +217,7 @@ public class GatewayVerticle extends AbstractVerticle {
             );
     }
 
-    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) { # <5>
+    private Single<JsonObject> getAvailabilityFromInventory(JsonObject product) {
         // Retrieve the inventory for a given product
         return inventory
             .get("/api/inventory/" + product.getString("itemId"))
@@ -237,7 +234,7 @@ public class GatewayVerticle extends AbstractVerticle {
             });
     }
 
-    private void health(RoutingContext rc) { # <6>
+    private void health(RoutingContext rc) {
         // Check Catalog and Inventory Service up and running
         catalog.get("/").rxSend()
             .subscribe(
@@ -372,7 +369,7 @@ containers for the project.
 '''
 === Test your Service
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on the 'Open URL' icon of the Gateway Service*`
 
 image::images/openshift-gateway-topology.png[OpenShift - Gateway Topology, 700]

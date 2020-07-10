@@ -1,10 +1,8 @@
 :markup-in-source: verbatim,attributes,quotes
-:APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
-:CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
-
-== Web UI with Node.js and AngularJS 
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
+:WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
+:WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
 
 _10 MINUTE EXERCISE_
 
@@ -46,7 +44,7 @@ In this lab, you will fully use Openshift https://docs.openshift.com/container-p
 OpenShift will obtain the application code directly from the source repository then build and deploy a 
 container image of it.
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on '+ Add' and select 'From Git'*`
 
 image::images/openshift-add-from-git.png[OpenShift - Add from Git, 700]
@@ -60,10 +58,10 @@ Then, enter the following information:
 |Value
 
 |Git Repo URL
-|{{WORKSHOP_GIT_REPO}}
+|{WORKSHOP_GIT_REPO}
 
 |Git Reference
-|{{WORKSHOP_GIT_REF}}
+|{WORKSHOP_GIT_REF}
 
 |Context Dir
 |/labs/web-nodejs
@@ -104,7 +102,7 @@ Then, enter the following information:
 For the integration with the https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^] plugin, 
 you need to add a specific annotation when deploying a component without use it.
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'DC web-coolstore' -> 'Actions' -> 'Edit Annotations'*`
 
 image::images/openshift-web-annotate.png[OpenShift - Web Annotate, 700]
@@ -126,7 +124,7 @@ image::images/openshift-web-annotate.png[OpenShift - Web Annotate, 700]
 
 === Test your Service
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on the 'Open URL' icon of the Web Service*`
 
 image::images/openshift-web-topology.png[OpenShift - Web Topology, 700]

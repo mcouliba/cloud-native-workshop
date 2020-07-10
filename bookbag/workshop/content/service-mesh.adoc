@@ -113,7 +113,7 @@ sed s/PROJECT/cn-project{USER_ID}/g /projects/workshop/labs/gateway-vertx/opensh
 ----
 
 To confirm that the **Istio Gateway** is properly configured, 
-`*click on http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{USER_ID}/api/products[http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{USER_ID}/api/products^]*`
+`*click on http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}/api/products[http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}/api/products^]*`
 
 You should have the following result:
 
@@ -141,7 +141,7 @@ You should have the following result:
 [source,shell]
 .>_ workshop-tools terminal
 ----
-oc set env dc/web-coolstore -n cn-project{USER_ID} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{{APPS_HOSTNAME_SUFFIX}}/cn-project{USER_ID}
+oc set env dc/web-coolstore -n cn-project{USER_ID} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}
 oc rollout latest dc/web-coolstore -n cn-project{USER_ID}
 ----
 
@@ -184,7 +184,7 @@ Kiali provides an interactive graph view of your namespace in real time, being a
 [window=_blank, align="center"]
 image::images/developer-observability-button.png[Developer Observability - Button, 300]
 
-Then, `*log in with OpenShift as user{USER_ID}/{{OPENSHIFT_PASSWORD}}'*`
+Then, `*log in with OpenShift as user{USER_ID}/{OPENSHIFT_PASSWORD}'*`
 
 image::images/kiali-login.png[Kiali- Log In,300]`
 

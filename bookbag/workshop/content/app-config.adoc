@@ -59,7 +59,7 @@ making it simple to re-create complex deployments by just deploying a single tem
 be parameterized to get input for fields like service names and generate values for fields like passwords.
 ====
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], `*click on '+ Add' and select 'Database'*`
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], `*click on '+ Add' and select 'Database'*`
 
 image::images/openshift-add-database.png[OpenShift - Add database, 700]
 
@@ -240,7 +240,7 @@ at **/deployments/config/application.properties **
 
 [TIP]
 ====
-You can see the content of the config map in the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^] or by using `*oc describe cm inventory*` command.
+You can see the content of the config map in the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^] or by using `*oc describe cm inventory*` command.
 ====
 
 The Inventory pod gets restarted automatically due to the configuration changes. Wait till it's ready, 
@@ -471,7 +471,7 @@ This secret has three encrypted properties defined as **database-name**, **datab
 the PostgreSQL database name, username and password values. These values are injected in the PostgreSQL container as 
 environment variables and used to initialize the database.
 
-In the {{OPENSHIFT_CONSOLE_URL}}[OpenShift Web Console^], from the **Developer view**,
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'DC catalog-postgresql' -> 'DC catalog-postgresql' -> 'Environment'*`. Notice the values 
 from the secret are defined as env vars on the deployment:
 
