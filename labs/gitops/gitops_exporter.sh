@@ -21,7 +21,7 @@ do
     DEPLOYMENTCONFIG_YAML=${DIRECTORY}/${COMPONENT_NAME}-deploymentconfig.yaml
 
     ## Secret
-    oc get secret -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${SECRET_YAML}
+    oc get secret -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${SECRET_YAML}
 
     yq delete --inplace  ${SECRET_YAML} items[*].metadata.namespace
     yq delete --inplace  ${SECRET_YAML} items[*].metadata.uid
@@ -30,7 +30,7 @@ do
     yq delete --inplace  ${SECRET_YAML} items[*].metadata.resourceVersion
 
     ## Service
-    oc get service -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${SERVICE_YAML}
+    oc get service -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${SERVICE_YAML}
 
     yq delete --inplace  ${SERVICE_YAML} items[*].metadata.namespace
     yq delete --inplace  ${SERVICE_YAML} items[*].metadata.uid
@@ -45,7 +45,7 @@ do
     sed -i "s/8080-tcp/http/g" ${SERVICE_YAML}
 
     ## Route
-    oc get route -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${ROUTE_YAML}
+    oc get route -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${ROUTE_YAML}
 
     yq delete --inplace  ${ROUTE_YAML} items[*].metadata.namespace
     yq delete --inplace  ${ROUTE_YAML} items[*].metadata.uid
@@ -61,7 +61,7 @@ do
     sed -i "s/8080-tcp/http/g" ${ROUTE_YAML}
 
     ## ConfigMap
-    oc get configmap -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${CONFIGMAP_YAML}
+    oc get configmap -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${CONFIGMAP_YAML}
 
     yq delete --inplace  ${CONFIGMAP_YAML} items[*].metadata.namespace
     yq delete --inplace  ${CONFIGMAP_YAML} items[*].metadata.uid
@@ -70,7 +70,7 @@ do
     yq delete --inplace  ${CONFIGMAP_YAML} items[*].metadata.resourceVersion
 
     ## Imagestream
-    oc get imagestream -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${IMAGESTREAM_YAML}
+    oc get imagestream -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${IMAGESTREAM_YAML}
 
     yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.namespace
     yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.uid
@@ -82,7 +82,7 @@ do
     sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${IMAGESTREAM_YAML}
 
     ## Build Config
-    oc get buildconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${BUILDCONFIG_YAML}
+    oc get buildconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${BUILDCONFIG_YAML}
 
     yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.namespace
     yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.uid
@@ -93,7 +93,7 @@ do
     sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${BUILDCONFIG_YAML}
 
     ## Deployment Config
-    oc get deploymentconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --export > ${DEPLOYMENTCONFIG_YAML}
+    oc get deploymentconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${DEPLOYMENTCONFIG_YAML}
 
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].metadata.namespace
     yq delete --inplace  ${DEPLOYMENTCONFIG_YAML} items[*].metadata.uid

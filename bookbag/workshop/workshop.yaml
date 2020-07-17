@@ -14,4 +14,5 @@ modules:
     - continuous-delivery-tekton
     - fault-tolerance
     - service-mesh
+    - traffic-routing
     - env-info

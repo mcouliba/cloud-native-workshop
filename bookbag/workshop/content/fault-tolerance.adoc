@@ -1,7 +1,7 @@
 :markup-in-source: verbatim,attributes,quotes
 :CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
 
 _30 MINUTE EXERCISE_
 
@@ -69,7 +69,7 @@ strategy to round robin:
 [source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-oc annotate route/web-coolstore haproxy.router.openshift.io/balance=roundrobin -n my-project{USER_ID}
+oc annotate route/web-coolstore haproxy.router.openshift.io/balance=roundrobin -n cn-project{USER_ID}
 ----
 ====
 
@@ -137,7 +137,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 [source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-oc set resources dc/web-coolstore --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi -n my-project{USER_ID}
+oc set resources dc/web-coolstore --limits=cpu=400m,memory=512Mi --requests=cpu=200m,memory=256Mi -n cn-project{USER_ID}
 ----
 
 TIP: CPU is measured in units called millicores. Each node in a cluster inspects the 
@@ -155,7 +155,7 @@ the CPU consumption passes 40% utilization:
 [source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-oc autoscale dc/web-coolstore --min 1 --max 5 --cpu-percent=40 -n my-project{USER_ID}
+oc autoscale dc/web-coolstore --min 1 --max 5 --cpu-percent=40 -n cn-project{USER_ID}
 ----
 
 All set! Now the Web UI can scale automatically to multiple instances if the load on the CoolStore 
@@ -166,7 +166,7 @@ installed within your workspace.
 [source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-ab -c 100 -n 80000 -s 5 http://web-coolstore.my-project{USER_ID}.svc:8080/
+ab -c 100 -n 80000 -s 5 http://web-coolstore.cn-project{USER_ID}.svc:8080/
 ----
 
 [NOTE]
@@ -232,7 +232,7 @@ pod to verify how OpenShift starts the pod again. First, check the Catalog pod t
 [source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-oc get pods -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
+oc get pods -l deploymentconfig=catalog-coolstore -n cn-project{USER_ID}
 ----
 <1> The **-l** options tells the command to list pods that have the **deploymentconfig=catalog** label 
 assigned to them. You can see pods labels using **oc get pods --show-labels** command.
@@ -251,7 +251,7 @@ catalog-coolstore-6-gp5jz   1/1       Running   0          47m
 [source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-oc delete pods -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
+oc delete pods -l deploymentconfig=catalog-coolstore -n cn-project{USER_ID}
 ----
 
 You need to be fast for this one! 

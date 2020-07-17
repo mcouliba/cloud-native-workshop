@@ -1,3 +1,11 @@
+:markup-in-source: verbatim,attributes,quotes
+:CHE_URL: %CHE_URL%
+:KIALI_URL: %KIALI_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
+:WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
+:WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
+
 _10 MINUTE EXERCISE_
 
 In this lab you will see how you can use *OpenShift Service Mesh* to do some A/B testing using and route traffic between 2 versions of the Catalog service.
@@ -57,19 +65,26 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc patch dc/catalog-coolstore-v2 --patch \
-  '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}'
+oc patch deployment/catalog-coolstore-v2 --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}'
 ----
 
 To confirm that the application is successfully deployed, `*run this following command*`:
 
-[source,shell]
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc get pods -ldeploymentconfig=catalog-coolstore-v2
+oc get pods -ldeploymentconfig=catalog-coolstore-v2
+
+----
+
+You should get an output as following:
+
+[source%nowrap,shell,subs="{markup-in-source}"]
+.>_ workshop-tools terminal
+----
 NAME                           READY     STATUS    RESTARTS   AGE
 catalog-coolstore-v2-3-n2bmf   2/2       Running   0          24s
 ----
@@ -99,10 +114,10 @@ If the traffic is matched, then it is sent to a named destination service (or su
 
 In the Terminal window, `*issue the following command*`:
 
-[source,shell]
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat << EOF | oc create -f -
+cat << EOF | oc apply -n cn-project{USER_ID} -f -
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -139,7 +154,7 @@ image::images/che-gateway-traffic.png[Che - Gateway Traffic, 500]
 In the window called **'>_ Gateway - Generate Traffic terminal'**, 
 you likely see **'Gateway => Catalog Spring Boot (v1)'** or **'Gateway => Catalog GoLang (v2)'**
 
-image::images/ che-run-gateway-90-10.png[Terminal - RunGatewayService,200]
+image::images/che-run-gateway-90-10.png[Terminal - RunGatewayService,200]
 
 TIP: You can also go to the Web interface and refresh the page to see that product descriptions is sometimes in uppercase (v2) or not (v1).
 
@@ -155,17 +170,14 @@ In {KIALI_URL}[Kiali Console^], from the **'Graph' view**,
 |Namespace 
 |cn-project{USER_ID}
 
-|Display
-|'Traffic Animation' checked
-
-|Display
-|'Traffic Animation' checked
+|Type Graph
+|Versioned app graph
 
 |Edge Label
 |Requests percentage
 
-|Fetching
-|Last 5 min
+|Display
+|'Traffic Animation' checked
 
 |===
 
@@ -180,10 +192,10 @@ So you will route all the traffic to **Catalog Service v2**.
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat << EOF | oc replace -f -
+cat << EOF | oc apply -n cn-project{USER_ID} -f -
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -205,7 +217,7 @@ EOF
 
 Now, you likely see only *'Gateway => Catalog GoLang (v2)'* in the **'>_ Gateway - Generate Traffic terminal'**.
 
-image::images/ che-run-gateway-100-0.png[Terminal - RunGatewayService,200]
+image::images/che-run-gateway-100-0.png[Terminal - RunGatewayService,200]
 
 And from {KIALI_URL}[Kiali Console^], you can visualize that **100%** of the traffic is switching gradually to **Catalog Service v2**.
 

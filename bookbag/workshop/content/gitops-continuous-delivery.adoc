@@ -1,4 +1,10 @@
-== GitOps Continuous Delivery with Argo CD
+:markup-in-source: verbatim,attributes,quotes
+:CHE_URL: %CHE_URL%
+:GOGS_URL: %GOGS_URL%
+:GITOPS_URL: %GITOPS_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
 
 _20 MINUTE EXERCISE_
 
@@ -18,7 +24,7 @@ image::images/che-gitops-export.png[Che - GitOps Export, 500]
 
 A terminal should be opened with the following output:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}"]
 .>_ GitOps Export
 ----
 --- Export Kubernetes resources for GitOps from my-project{USER_ID} to cn-project{USER_ID} ---
@@ -142,7 +148,7 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/gitops

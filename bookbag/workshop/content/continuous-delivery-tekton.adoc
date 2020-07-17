@@ -1,4 +1,9 @@
-==  Automating Deployments Using OpenShift Pipelines
+:markup-in-source: verbatim,attributes,quotes
+:CHE_URL: %CHE_URL%
+:GOGS_URL: %GOGS_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
 
 _30 MINUTE EXERCISE_
 
@@ -85,7 +90,7 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/inventory-quarkus
@@ -164,10 +169,10 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc new-build java \
+oc new-build java \
   --name=inventory-coolstore \
   --binary=true \
   --labels=app=coolstore,app.kubernetes.io/instance=inventory \
@@ -176,7 +181,7 @@ $ oc new-build java \
 
 You should have the following output:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}"]
 .>_ workshop-tools terminal
 ----
     Java Applications 
@@ -210,27 +215,27 @@ First, `*create a task to generate the binary (JAR) using Maven*`.
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
+cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: Task # <1>
+kind: Task
 metadata:
-  name: maven-build # <2>
+  name: maven-build
 spec:
-  inputs: # <3>
+  inputs:
     resources:
     - name: source-repo
       type: git 
-  outputs: # <4>
+  outputs:
     resources:
     - name: source-repo
       type: git    
-  steps: # <5>
+  steps:
   - name: build
-    image: 'maven:3.6.0-jdk-8-slim'
+    image: 'maven:3.6.3-openjdk-11-slim'
     workingdir: /workspace/source-repo
     command:
     - /usr/bin/mvn
@@ -248,7 +253,7 @@ spec:
     args: 
     - '-c'
     - 'cp /workspace/source-repo/target/*.jar /workspace/output/source-repo/ROOT.jar'
-  volumes: # <6>
+  volumes:
   - name: m2-folder
     emptyDir: {}
 EOF
@@ -262,10 +267,10 @@ EOF
 
 Then, `*create a task to create the container image from the binary (s2i)*`.
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
+cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: Task
@@ -302,26 +307,26 @@ with each other via their inputs and outputs.
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
+cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: Pipeline # <1>
+kind: Pipeline
 metadata:
-  name: my-pipeline # <2>
+  name: my-pipeline
 spec:
-  resources: # <3>
+  resources:
     - name: component-git
       type: git
-  params: # <4>
+  params:
     - name: componentName
       default: sample
       description: The name of the component
-  tasks: # <5>
+  tasks:
     - name: build-jar
-      taskRef: # <6>
+      taskRef:
         name: maven-build
       resources:
         inputs:
@@ -362,18 +367,18 @@ and can be output by a **Task**.
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF | oc create --namespace=cn-project{USER_ID} -f -
+cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: PipelineResource # <1>
+kind: PipelineResource 
 metadata:
-  name: inventory-git # <2>
+  name: inventory-git
 spec:
-  type: git # <3>
-  params: # <4>
+  type: git
+  params:
   - name: url
     value: http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus.git
   - name: revision

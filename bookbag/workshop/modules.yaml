@@ -40,9 +40,9 @@ modules:
     exit_sign: Microservice Tracing with Service Mesh
   service-mesh:
     name:  Microservice Tracing with Service Mesh
-    exit_sign: A/B Testing with Service Mesh
-  abtesting:
-    name:  A/B Testing with Service Mesh
+    exit_sign: Traffic Routing with Service Mesh
+  traffic-routing:
+    name:  Traffic Routing with Service Mesh
     exit_sign: "Appendix: Lab Env Info"
   env-info:
     name: "Appendix: Lab Env Info"
