@@ -335,6 +335,9 @@ You need to push your component first in order to create a Route for it.
 |Select port to expose
 |8080/tcp
 
+|Do you want to secure new URL?
+|No
+
 |===
 
 Once this completes, your application should be up and running. OpenShift runs the different components of 

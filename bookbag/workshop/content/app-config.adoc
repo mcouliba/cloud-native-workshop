@@ -1,4 +1,7 @@
-== Managing Application Configuration
+:markup-in-source: verbatim,attributes,quotes
+:CHE_URL: %CHE_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
 
 _15 MINUTE EXERCISE_
 
@@ -162,10 +165,10 @@ In Quarkus, Driver is a build time property and cannot be overridden. So as you 
 technology, you need to change the 'quarkus.datasource.driver' parameter 
 in **/projects/workshop/labs/inventory-quarkus/src/main/resources/applications.properties** and rebuild the application.
 
-In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file and replace the
-'JDBC Driver - H2' dependency*`
+In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file and add the
+'JDBC Driver - MariaDB' dependency*`
 
-[source,xml]
+[source,xml,subs="{markup-in-source}",role=copy]
 .pom.xml
 ----
     <dependency>
@@ -174,14 +177,15 @@ In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-qua
     </dependency>
 ----
 
-Then `*change the 'quarkus.datasource.driver' parameter from 
+Then `*add the '%prod.quarkus.datasource.driver' parameter in 
  the '/projects/workshop/labs/inventory-quarkus/src/main/resources/applications.properties' file*` as following
 
-[source,properties]
+[source,properties,subs="{markup-in-source}",role=copy]
 .application.properties
 ----
-quarkus.datasource.driver=org.mariadb.jdbc.Driver
+%prod.quarkus.datasource.driver=org.mariadb.jdbc.Driver
 ----
+<1> With the **%prod** prefix, this option is only activated when building the jar intended for deployments.
 
 [WARNING]
 ====
@@ -207,11 +211,11 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF > /projects/inventory-openshift-application.properties
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{USER_ID}.svc:3306/inventorydb# <1>
+cat <<EOF > /projects/inventory-openshift-application.properties
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{USER_ID}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 EOF
@@ -223,12 +227,12 @@ This name will be resolved by the internal DNS server exposed by OpenShift and a
 And then `*create a Config Map*` that you will use to overlay on the default **application.properties** which is 
 packaged in the Inventory JAR archive:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n my-project{USER_ID}# <1>
-oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n my-project{USER_ID} # <2>
-oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{USER_ID}# <3>
+oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n my-project{USER_ID}
+oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n my-project{USER_ID}
+oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{USER_ID}
 ----
 <1> Config maps hold key-value pairs. An **Inventory Config Map**
 is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
@@ -247,15 +251,15 @@ The Inventory pod gets restarted automatically due to the configuration changes.
 and then verify that the config map is in fact injected into the container by `*running 
 a shell command inside the Inventory Container*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n my-project{USER_ID} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
+oc rsh -n my-project{USER_ID} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
 ----
 
 You should have the following output:
 
-[source,properties]
+[source,properties,subs="{markup-in-source}"]
 ----
 quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{USER_ID}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
@@ -265,10 +269,10 @@ quarkus.datasource.password=inventory
 You can also connect to Inventory MariaDB database and check if the seed data is 
 loaded into the database.
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n my-project{USER_ID} dc/inventory-mariadb
+oc rsh -n my-project{USER_ID} dc/inventory-mariadb
 ----
 
 Once connected to the MariaDB container, `*run the following*`:
@@ -278,11 +282,16 @@ Once connected to the MariaDB container, `*run the following*`:
 Run this command inside the Inventory MariaDB container, after opening a remote shell to it.
 ====
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-sh-4.2$ mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD --host=$HOSTNAME --execute="select * from INVENTORY" $MYSQL_DATABASE
+mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD --host=$HOSTNAME --execute="select * from INVENTORY" $MYSQL_DATABASE
+----
 
+You should have the following output:
+
+[source,json,subs="{markup-in-source}"]
+----
 +--------+----------+
 | itemId | quantity |
 +--------+----------+
@@ -294,7 +303,14 @@ sh-4.2$ mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD --host=$HOSTNAME --e
 | 444434 |       32 |
 | 444435 |       53 |
 +--------+----------+
-sh-4.2$ exit
+----
+
+`*Finally, exit from inside the database container*`:
+
+[source,shell,subs="{markup-in-source}",role=copy]
+.>_ workshop-tools terminal
+----
+exit
 ----
 
 You have now created a config map that holds the configuration content for Inventory and can be updated 
@@ -319,11 +335,11 @@ configuration using an alternative **application.properties** backed by a config
 
 Let's create the Spring Boot configuration content using the database credentials and create the Config Map.
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ cat <<EOF > /projects/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project{USER_ID}.svc:5432/catalogdb#<1>
+cat <<EOF > /projects/catalog-openshift-application.properties
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project{USER_ID}.svc:5432/catalogdb
 spring.datasource.username=catalog
 spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver
@@ -337,7 +353,7 @@ This name will be resolved by the internal DNS server exposed by OpenShift and a
 And then `*create a Config Map*` that you will use to overlay on the default **application.properties** which is 
 packaged in the Catalog JAR archive:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
 oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project{USER_ID}
@@ -360,35 +376,41 @@ need to grant permission to the Spring Boot service account to access the OpenSh
 config maps. 
 
 .>_ workshop-tools terminal
+[source,shell,subs="{markup-in-source}",role=copy]
 ----
-$ oc policy add-role-to-user view -n my-project{USER_ID} -z default
+oc policy add-role-to-user view -n my-project{USER_ID} -z default
 ----
 
 `*Delete the Catalog Pod*` to make it start again and look for the config maps:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc delete pod -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
+oc delete pod -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
 ----
 
 When the Catalog container is ready, verify that the PostgreSQL database is being 
 used. Check the Catalog pod logs:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc logs -c catalog-coolstore dc/catalog-coolstore -n my-project{USER_ID} | grep hibernate.dialect
+oc logs -c catalog-coolstore dc/catalog-coolstore -n my-project{USER_ID} | grep hibernate.dialect
+----
 
+You should have the following output:
+
+[source,logs,subs="{markup-in-source}"]
+----
 2017-08-10 21:07:51.670  INFO 1 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL95Dialect
 ----
 
 You can also connect to the Catalog PostgreSQL database and verify that the seed data is loaded:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc rsh -n my-project{USER_ID} dc/catalog-postgresql
+oc rsh -n my-project{USER_ID} dc/catalog-postgresql
 ----
 
 Once connected to the PostgreSQL container, run the following:
@@ -398,11 +420,16 @@ Once connected to the PostgreSQL container, run the following:
 Run this command inside the Catalog PostgreSQL container, after opening a remote shell to it.
 ====
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-sh-4.2$ psql catalogdb -U catalog -c "select item_id, name, price from product"
+psql catalogdb -U catalog -c "select item_id, name, price from product"
+----
 
+You should have the following output:
+
+[source,logs,subs="{markup-in-source}"]
+----
  item_id |            name             | price
  ----
  329299  | Red Fedora                  | 34.99
@@ -413,9 +440,15 @@ sh-4.2$ psql catalogdb -U catalog -c "select item_id, name, price from product"
  444434  | Pebble Smart Watch          |    24
  444435  | Oculus Rift                 |   106
  444436  | Lytro Camera                |  44.3
-(8 rows)
+ (8 rows)
+----
 
-sh-4.2$ exit
+`*Finally, exit from inside the database container*`:
+
+[source,shell,subs="{markup-in-source}",role=copy]
+.>_ workshop-tools terminal
+----
+exit
 ----
 
 '''
@@ -444,11 +477,16 @@ You won't create any secrets in this lab; however, you have already created two 
 the PostgreSQL and MariaDB databases. The Database template by default stores 
 the database credentials in a secret in the project in which it's being created:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc describe secret catalog-postgresql
+oc describe secret catalog-postgresql
+----
 
+You should have the following output:
+
+[source,logs,subs="{markup-in-source}"]
+----
 Name:            catalog-postgresql
 Namespace:       coolstore
 Labels:          app=catalog

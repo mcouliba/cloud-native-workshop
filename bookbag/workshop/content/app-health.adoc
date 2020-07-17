@@ -1,4 +1,7 @@
-== Monitoring Application Health 
+:markup-in-source: verbatim,attributes,quotes
+:CHE_URL: %CHE_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
 
 _15 MINUTE EXERCISE_
 
@@ -64,15 +67,15 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://catalog-coolstore.my-project{USER_ID}.svc:8080/actuator/health
+curl -w "\n" http://catalog-coolstore.my-project{USER_ID}.svc:8080/actuator/health
 ----
 
 You should have the following output:
 
-[source,json]
+[source,json,subs="{markup-in-source}"]
 ----
 {"status":"UP"}
 ----
@@ -80,15 +83,15 @@ You should have the following output:
 Like mentioned, health probes are defined on a deployment config for each pod. Add liveness and readiness probes can be done at the same time 
 if you want to define the same health endpoint and parameters for both liveness and readiness probes.
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ oc set probe dc/catalog-coolstore \
-    --liveness \# <1>
-    --readiness \# <2>
-    --initial-delay-seconds=30 \# <3>
-    --failure-threshold=3 \# <4>
-    --get-url=http://:8080/actuator/health \# <5>
+oc set probe dc/catalog-coolstore \
+    --liveness \
+    --readiness \
+    --initial-delay-seconds=30 \
+    --failure-threshold=3 \
+    --get-url=http://:8080/actuator/health \
     --namespace=my-project{USER_ID}
 ----
 <1> **--liveness** is the option to setup a liveness probe to verify this container is running
@@ -130,7 +133,7 @@ in cloud environments where automated processes must be able to determine whethe
 Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus/pom.xml**. 
 In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
 
-[source,xml]
+[source,xml,subs="{markup-in-source}",role=copy]
 .pom.xml
 ----
     <dependency>
@@ -153,15 +156,15 @@ Once completed, verify that the health endpoint works for the **Inventory Servic
 
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://inventory-coolstore.my-project{USER_ID}.svc:8080/health
+curl -w "\n" http://inventory-coolstore.my-project{USER_ID}.svc:8080/health
 ----
 
 You should have the following output:
 
-[source,json]
+[source,json,subs="{markup-in-source}"]
 ----
 {
     "status": "UP",
@@ -176,7 +179,7 @@ You should have the following output:
 
 Finally, `*Add the Liveness and Readiness Probes*` to the Service
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
 oc rollout pause dc/inventory-coolstore --namespace=my-project{USER_ID}
@@ -196,15 +199,15 @@ which is enabled by adding **io.vertx:vertx-health-check** as a dependency to th
 
 Verify that the health endpoint works for the **Gateway Service** using `*curl*`
 
-[source,shell]
+[source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-$ curl -w "\n" http://gateway-coolstore.my-project{USER_ID}.svc:8080/health
+curl -w "\n" http://gateway-coolstore.my-project{USER_ID}.svc:8080/health
 ----
 
 You should have the following output:
 
-[source,json]
+[source,json,subs="{markup-in-source}"]
 ----
 {"status":"UP"}
 ----

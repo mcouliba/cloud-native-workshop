@@ -302,7 +302,7 @@ by using the following inputs:
 |/projects/workshop/labs/gateway-vertx
 
 |Select binary file
-|$(file-zip) catalog-1.0-SNAPSHOT.jar
+|$(file-zip) gateway-1.0-SNAPSHOT.jar
 
 |Provide Component name
 |gateway
@@ -331,6 +331,9 @@ You need to push your component first in order to create a Route for it.
 
 |Select port to expose
 |8080/tcp
+
+|Do you want to secure new URL?
+|No
 
 |===
 

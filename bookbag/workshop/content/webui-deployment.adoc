@@ -73,7 +73,7 @@ Then, enter the following information:
 |Node.js
 
 |Builder Image Version
-|10-SCL
+|12
 
 |Application Name
 |coolstore

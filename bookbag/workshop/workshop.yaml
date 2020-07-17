@@ -9,9 +9,9 @@ modules:
     - gateway-vertx
     - webui-deployment
     - app-health
-    - fault-tolerance
     - app-config
     - gitops-continuous-delivery
     - continuous-delivery-tekton
+    - fault-tolerance
     - service-mesh
     - env-info

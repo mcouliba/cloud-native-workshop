@@ -499,6 +499,9 @@ image::images/che-openshift-url-inventory.png[Che - OpenShift URL Inventory, 400
 |Select port to expose
 |8080/tcp
 
+|Do you want to secure new URL?
+|No
+
 |===
 
 Finally, `*push again the component to the OpenShift cluster*` to create the Route on OpenShift Cluster.
@@ -507,7 +510,7 @@ image::images/che-openshift-push-again-inventory.png[Che - OpenShift Push Invent
 
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
-[source,bash]
+[source,bash,subs="{markup-in-source}"]
 .>_ OpenShift
 ----
 bash-5.0$ odo push
