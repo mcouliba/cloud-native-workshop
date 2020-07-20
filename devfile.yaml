@@ -135,6 +135,16 @@ commands:
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "Inner Loop - Deploy Coolstore",
+                  "command": "./deploy_coolstore.sh",
+                  "target": {
+                      "workingDir": "/projects/workshop/labs/solutions",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
               }
             ]
           }
