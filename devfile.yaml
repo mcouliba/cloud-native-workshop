@@ -39,16 +39,6 @@ commands:
               },
               {
                 "type": "che",
-                "label": "Pipeline - Start Inventory",
-                "command": "echo \"------ START ------\" && tkn pipeline start jar-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} && echo \"------  END  ------\"",
-                "target": {
-                    "workingDir": "/projects/workshop/labs/pipelines/inventory",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
-              {
-                "type": "che",
                 "label": "Catalog - Run",
                 "command": "mvn spring-boot:run",
                 "target": {
@@ -82,16 +72,6 @@ commands:
                 "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev -Ddebug=false",
                 "target": {
                     "workingDir": "/projects/workshop/labs/inventory-quarkus",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
-              {
-                "type": "che",
-                "label": "Pipeline - Start Mine",
-                "command": "echo \"------ START ------\" && tkn pipeline start my-pipeline --resource component-git=inventory-git --param componentName=inventory-coolstore --serviceaccount pipeline --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user} && echo \"------  END  ------\"",
-                "target": {
-                    "workingDir": "/projects/workshop/labs/pipelines",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
