@@ -210,6 +210,9 @@ image::images/developer-gitops-button.png[Developer GitOps - Button, 300]
 
 Then `*login as user{USER_ID}/{OPENSHIFT_PASSWORD}*`, `*click on 'Allow selected permissions'*`
 
+[window=_blank, align="center"]
+image::images/argocd-login-page.png[Argo CD - Login Page, 500]
+
 Once completed, you will be redirected to the following page.
 
 image::images/argocd-home.png[Argo CD - Home Page, 500]
