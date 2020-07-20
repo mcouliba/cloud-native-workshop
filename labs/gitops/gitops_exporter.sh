@@ -40,7 +40,7 @@ do
     yq delete --inplace  ${SERVICE_YAML} items[*].spec.clusterIP
 
     # Specific changes for Staging Environment with Istio
-    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.selector.app "coolstore"
+    yq write --inplace ${SERVICE_YAML} items[*].spec.selector.app "coolstore"
     
     sed -i "s/8080-tcp/http/g" ${SERVICE_YAML}
 
