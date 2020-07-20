@@ -18,7 +18,7 @@ components:
         port: 8080
       - name: localhost-9000
         port: 9000
-  - id: redhat/workshop-tools/3.1
+  - id: redhat/workshop-tools/3.2.0
     type: chePlugin
     alias: workshop-tools
 commands:
