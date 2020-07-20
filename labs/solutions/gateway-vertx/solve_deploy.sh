@@ -22,3 +22,4 @@ odo link inventory --component gateway --port 8080
 odo link catalog --component gateway --port 8080
 
 oc annotate --overwrite dc/gateway-coolstore app.openshift.io/connects-to='catalog,inventory'
+oc label dc gateway-coolstore app.openshift.io/runtime=vertx --overwrite

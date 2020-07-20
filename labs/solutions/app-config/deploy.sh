@@ -16,8 +16,7 @@ then
         --param=POSTGRESQL_DATABASE=catalogdb \
         --param=POSTGRESQL_USER=catalog \
         --param=POSTGRESQL_PASSWORD=catalog \
-        --labels=app=coolstore,app.kubernetes.io/instance=catalog-postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/part-of=coolstore
-
+        --labels=app=coolstore,app.kubernetes.io/instance=catalog-postgresql,app.kubernetes.io/name=postgresql,app.kubernetes.io/part-of=coolstore,app.openshift.io/runtime=postgresql
 
     oc new-app mariadb-ephemeral \
         --param=DATABASE_SERVICE_NAME=inventory-mariadb \
@@ -25,7 +24,7 @@ then
         --param=MYSQL_USER=inventory \
         --param=MYSQL_PASSWORD=inventory \
         --param=MYSQL_ROOT_PASSWORD=inventoryadmin \
-        --labels=app=coolstore,app.kubernetes.io/instance=inventory-mariadb,app.kubernetes.io/name=mariadb,app.kubernetes.io/part-of=coolstore
+        --labels=app=coolstore,app.kubernetes.io/instance=inventory-mariadb,app.kubernetes.io/name=mariadb,app.kubernetes.io/part-of=coolstore,app.openshift.io/runtime=mariadb
 
 
     cp $DIRECTORY/pom.xml $DIRECTORY/../../inventory-quarkus

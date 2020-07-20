@@ -15,3 +15,5 @@ odo create java:11 catalog --context /projects/workshop/labs/catalog-spring-boot
 odo push
 odo url create catalog --port 8080
 odo push
+
+oc label dc catalog-coolstore app.openshift.io/runtime=spring --overwrite
