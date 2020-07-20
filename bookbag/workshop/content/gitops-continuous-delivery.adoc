@@ -325,11 +325,11 @@ image::images/argocd-configure-application.png[Argo CD - Configure Application, 
 
 |GENERAL
 |Application Name
-|coolstore{USER_ID}
+|cn-project{USER_ID}
 
 |GENERAL
 |Project
-|cn-project{USER_ID}
+|default
 
 |GENERAL
 |SYNC POLICY

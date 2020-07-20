@@ -396,18 +396,33 @@ EOF
 
 Now that your pipeline is created and configured, let's trigger it.
 
-In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start Mine'*`
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'my-pipeline'*`
 
-image::images/che-runtask.png[Che - RunTask, 500]
+image::images/openshift-my-pipeline.png[OpenShift Pipeline,900]
 
-image::images/che-pipeline-start-mine.png[Che - Pipeline Start Mine, 500]
+Then, `*click on 'Actions' -> 'Start'*`
 
-Once done, in the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Pipelines' -> 'Last Run - my-pipeline-run'*`
+image::images/openshift-my-pipeline-start.png[OpenShift Pipeline,900]
 
-image::images/openshift-pipeline-mine.png[OpenShift Pipeline,400]
+Finally, `*enter the following parameters*`
+
+.Pipeline Parameters
+[%header,cols=2*]
+|===
+|Name 
+|Value
+
+|componentName
+|inventory-coolstore
+
+|===
+
+image::images/openshift-my-pipeline-config.png[OpenShift Pipeline,900]
 
 Congratulations!! You have created and run your first **OpenShift Pipeline with Tekton**!!
+
+image::images/openshift-my-pipeline-run.png[OpenShift Pipeline,400]
 
 '''
 
@@ -451,19 +466,24 @@ of your application.
 
 |===
 
-Once created, `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start Inventory'*`
+Once created, trigger the **Inventory Pipeline**.
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'jar-pipeline' -> 'Actions' -> 'Start'*` and the following parameters
 
-image::images/che-runtask.png[Che - RunTask, 500]
+.Pipeline Parameters
+[%header,cols=2*]
+|===
+|Name 
+|Value
 
-image::images/che-pipeline-start-inventory.png[Che - Pipeline Start Inventory, 500]
+|componentName
+|inventory-coolstore
 
-Back into the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Pipelines' -> 'Last Run - jar-pipeline-run'*`
+|===
 
-image::images/openshift-pipeline-full.png[OpenShift Pipeline,900]
+image::images/openshift-jar-pipeline-run.png[OpenShift Pipeline,900]
 
-Once finished, in the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
-`*Select the 'cn-project{USER_ID}'*`.
+Once finished,from the **Topology view**, `*select the 'cn-project{USER_ID}'*`.
 
 image::images/openshift-tekton-inventory-deployed.png[OpenShift - Inventory Deployed by Tekton, 700]
 
