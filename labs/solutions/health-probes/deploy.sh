@@ -13,6 +13,7 @@ cp $DIRECTORY/pom.xml $DIRECTORY/../../inventory-quarkus
 cd /projects/workshop/labs/inventory-quarkus
 mvn clean package -DskipTests
 odo push
+oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite
 
 oc rollout pause dc/inventory-coolstore
 oc set probe dc/inventory-coolstore --readiness --initial-delay-seconds=10 --failure-threshold=3 --get-url=http://:8080/health/ready

@@ -32,7 +32,8 @@ then
     cd /projects/workshop/labs/inventory-quarkus
     mvn clean package -DskipTests
     odo push
-
+    oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite
+    
     cat <<EOF > /projects/inventory-openshift-application.properties
 quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
