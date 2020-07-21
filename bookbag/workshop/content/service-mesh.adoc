@@ -54,8 +54,11 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n cn-project{USER_ID}
+
 oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n cn-project{USER_ID}
+
 oc rollout latest dc/inventory-coolstore -n cn-project{USER_ID}
+
 ----
 <1> Define the annotation to automatically inject an Istio sidecar
 <2> Wait for the Envoy Proxy to be up and running before starting the application
@@ -98,7 +101,9 @@ To verify the deployment `*run this following command*`:
 .>_ workshop-tools terminal
 ----
 oc get pods -ldeploymentconfig=catalog-coolstore -n cn-project{USER_ID}
+
 oc get pods -ldeploymentconfig=gateway-coolstore -n cn-project{USER_ID}
+
 ----
 
 You should get an output as following:
@@ -132,7 +137,9 @@ to create an **Istio Gateway** and a **VirtualService** for the **Gateway Servic
 .>_ workshop-tools terminal
 ----
 oc create -n cn-project{USER_ID} -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
+
 sed s/PROJECT/cn-project{USER_ID}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -n cn-project{USER_ID} -f -
+
 ----
 
 To confirm that the **Istio Gateway** is properly configured, 
@@ -165,7 +172,9 @@ You should have the following result:
 .>_ workshop-tools terminal
 ----
 oc set env dc/web-coolstore -n cn-project{USER_ID} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}
+
 oc rollout latest dc/web-coolstore -n cn-project{USER_ID}
+
 ----
 
 '''

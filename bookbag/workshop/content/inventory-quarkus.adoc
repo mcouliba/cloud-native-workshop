@@ -294,7 +294,7 @@ You don't need to press a save button! Che automatically saves the changes made 
 .application.properties
 [source,bash,role=copy]
 ----
-quarkus.datasource.url=jdbc:h2:mem:inventory;DB_CLOSE_ON_EXIT=FALSE
+quarkus.datasource.url=jdbc:h2:mem:inventory;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
 quarkus.datasource.driver=org.h2.Driver
 quarkus.datasource.username=sa
 quarkus.datasource.password=sa
@@ -308,7 +308,7 @@ quarkus.hibernate-orm.sql-load-script=import.sql
 application with **java -jar**. By default, in Quarkus, the generation of the uber-jar is disabled. With the
 **%prod** prefix, this option is only activated when building the jar intended for deployments.
 
-`*Create the 'src/main/resources/import.sql' file`* as following:
+`*Update the 'src/main/resources/import.sql' file`* as following:
 [source,sql,role=copy]
 .import.sql
 ----
@@ -320,11 +320,6 @@ INSERT INTO INVENTORY(itemId, quantity) VALUES (165954, 43);
 INSERT INTO INVENTORY(itemId, quantity) VALUES (444434, 32);
 INSERT INTO INVENTORY(itemId, quantity) VALUES (444435, 53);
 ----
-
-[CAUTION]
-====
-BE SURE not to create **import.sql** under 'src/main/resources/META-INF/resources'
-====
 
 '''
 

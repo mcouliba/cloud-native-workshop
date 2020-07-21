@@ -267,49 +267,6 @@ image::images/argocd-repository.png[Argo CD - Repository, 800]
 
 '''
 
-=== Create your GitOps Project 
-
-`*Select the 'Configuration menu' then click on your 'Projects'*`
-
-image::images/argocd-configure-projects.png[Argo CD - Configure Projects, 500]
-
-`*Click on 'NEW PROJECT'*` and enter the following:
-
-.Repository Configuration
-[%header,cols=2*]
-|===
-|Parameter 
-|Value
-
-|Project Name
-|cn-project{USER_ID}
-
-|Project Description
-|This is my first GitOps project
-
-|Sources
-|http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
-
-|Destination
-|* / cn-project{USER_ID}
-
-|Whitelisted Cluster Resources
-|_leave it empty_
-
-|Orphaned Resource Monitoring
-|_leave it empty_
-
-|===
-
-Finally, `*Click on 'CREATE'*`.
-
-Your GitOps project has been created in Argo CD.
-
-image::images/argocd-project.png[Argo CD - project, 800]
-
-
-'''
-
 === Create a GitOps Application
 
 `*Select the 'Application menu' then click on your '+ New App'*` and enter the following details:
