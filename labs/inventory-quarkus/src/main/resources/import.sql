@@ -1,1 +1,1 @@
-To Be Updated
+-- SQL queries to run to initialize the database
