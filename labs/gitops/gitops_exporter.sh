@@ -28,6 +28,7 @@ do
     yq delete --inplace  ${SECRET_YAML} items[*].metadata.selfLink
     yq delete --inplace  ${SECRET_YAML} items[*].metadata.creationTimestamp
     yq delete --inplace  ${SECRET_YAML} items[*].metadata.resourceVersion
+    yq delete --inplace  ${SECRET_YAML} items[*].metadata.ownerReferences
 
     ## Service
     oc get service -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml > ${SERVICE_YAML}
@@ -38,9 +39,11 @@ do
     yq delete --inplace  ${SERVICE_YAML} items[*].metadata.creationTimestamp
     yq delete --inplace  ${SERVICE_YAML} items[*].metadata.resourceVersion
     yq delete --inplace  ${SERVICE_YAML} items[*].spec.clusterIP
+    yq delete --inplace  ${SERVICE_YAML} items[*].metadata.ownerReferences
 
     # Specific changes for Staging Environment with Istio
-    yq write --inplace ${SERVICE_YAML} items[*].spec.selector.app "coolstore"
+    yq delete --inplace  ${SERVICE_YAML} items[*].spec.selector
+    yq write --inplace ${SERVICE_YAML} items[*].spec.selector.app ${COMPONENT_NAME%-coolstore}
     
     sed -i "s/8080-tcp/http/g" ${SERVICE_YAML}
 
@@ -52,6 +55,7 @@ do
     yq delete --inplace  ${ROUTE_YAML} items[*].metadata.selfLink
     yq delete --inplace  ${ROUTE_YAML} items[*].metadata.creationTimestamp
     yq delete --inplace  ${ROUTE_YAML} items[*].metadata.resourceVersion
+    yq delete --inplace  ${ROUTE_YAML} items[*].metadata.ownerReferences
     yq delete --inplace  ${ROUTE_YAML} items[*].status.ingress[*].conditions[*].lastTransitionTime
     yq delete --inplace  ${ROUTE_YAML} items[*].status.ingress[*].host
     yq delete --inplace  ${ROUTE_YAML} items[*].status.ingress[*].routerCanonicalHostname
@@ -120,8 +124,8 @@ do
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.triggers null
 
     # Specific changes for Staging Environment with Istio
-    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.selector.app "coolstore"
-    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.app "coolstore"
+    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.selector.app ${COMPONENT_NAME%-coolstore}
+    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.app ${COMPONENT_NAME%-coolstore}
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.[app.kubernetes.io/instance] ${COMPONENT_NAME%-coolstore}
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.[maistra.io/expose-route] '"true"'
 
