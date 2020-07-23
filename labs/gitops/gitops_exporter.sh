@@ -44,6 +44,7 @@ do
     # Specific changes for Staging Environment with Istio
     yq delete --inplace  ${SERVICE_YAML} items[*].spec.selector
     yq write --inplace ${SERVICE_YAML} items[*].spec.selector.app ${COMPONENT_NAME%-coolstore}
+    yq write --inplace ${SERVICE_YAML} items[*].metadata.labels.app ${COMPONENT_NAME%-coolstore}
     
     sed -i "s/8080-tcp/http/g" ${SERVICE_YAML}
 
@@ -124,6 +125,7 @@ do
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.triggers null
 
     # Specific changes for Staging Environment with Istio
+    yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].metadata.labels.app ${COMPONENT_NAME%-coolstore}
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.selector.app ${COMPONENT_NAME%-coolstore}
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.app ${COMPONENT_NAME%-coolstore}
     yq write --inplace ${DEPLOYMENTCONFIG_YAML} items[*].spec.template.metadata.labels.[app.kubernetes.io/instance] ${COMPONENT_NAME%-coolstore}
