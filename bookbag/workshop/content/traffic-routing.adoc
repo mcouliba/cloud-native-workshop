@@ -50,7 +50,7 @@ Then, `*enter the following information and click on 'Create' button*` :
 |Checked
 
 |Labels
-|app=coolstore app.kubernetes.io/instance=catalog app.kubernetes.io/name=golang app.kubernetes.io/part-of=coolstore version=2.0
+|app=catalog app.kubernetes.io/instance=catalog app.kubernetes.io/name=golang app.kubernetes.io/part-of=coolstore version=2.0
 
 |===
 

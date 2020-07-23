@@ -1,6 +1,7 @@
 :markup-in-source: verbatim,attributes,quotes
 :CHE_URL: %CHE_URL%
 :KIALI_URL: %KIALI_URL%
+:JAEGER_URL: %JAEGER_URL%
 :USER_ID: %USER_ID%
 :APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
@@ -264,14 +265,13 @@ It is used for monitoring and troubleshooting microservices-based distributed sy
 https://www.kiali.io/[Kiali^] includes https://www.jaegertracing.io/[Jaeger Tracing^] to provide distributed tracing out of the box.
 --
 
-IMPORTANT: Because of certificates issues, you need first to access the main {JAEGER_URL}[Jaeger Console^] to use it through Kiali.
-
 In the {KIALI_URL}[Kiali Console^], from **Graph view**, 
 `*right-click on the gateway-service node and select 'Show Traces'*`.
 
 image::images/kiali-show-traces.png[Kiali- Show Traces, 700]
 
-You should be redirected to the **Distributed Tracing menu**.
+You should be redirected to the {JAEGER_URL}[Jaeger Console^].
+`*Log in as user{USER_ID}/{OPENSHIFT_PASSWORD}'*`
 
 image::images/kiali-traces-view.png[Kiali- Traces View,700]
 
