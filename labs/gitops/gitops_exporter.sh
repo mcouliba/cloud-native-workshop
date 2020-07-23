@@ -94,6 +94,8 @@ do
     yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.selfLink
     yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.creationTimestamp
     yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.resourceVersion
+    yq delete --inplace  ${BUILDCONFIG_YAML} items[*].status
+    
     sed -i "s/nodeSelector: .*/nodeSelector: {}/g" ${BUILDCONFIG_YAML}
     sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${BUILDCONFIG_YAML}
 
