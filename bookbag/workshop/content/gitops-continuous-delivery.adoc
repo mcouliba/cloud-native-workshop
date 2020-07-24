@@ -1,6 +1,6 @@
 :markup-in-source: verbatim,attributes,quotes
 :CHE_URL: %CHE_URL%
-:GOGS_URL: %GOGS_URL%
+:GIT_URL: %GIT_URL%
 :GITOPS_URL: %GITOPS_URL%
 :USER_ID: %USER_ID%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
@@ -47,45 +47,22 @@ image::images/che-gitops-export-result.png[Che - GitOps Export Result, 300]
 
 The first step is to store all Kubernetes/OpenShift resources in 
 a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
-Gogs git server.
+Gitea git server.
 
 `*Click on the below button called 'Developer Repository'*`
 
-[link={GOGS_URL}]
+[link={GIT_URL}]
 [window=_blank, align="center"]
 image::images/developer-repository-button.png[Developer Repository - Button, 300]
 
-Then, `*click on 'Register'*` to register a new user with the following details:
+Then, `*click on 'Sign In' and login via OpenShift as user{USER_ID}/{OPENSHIFT_PASSWORD}*`
 
+image::images/gitea-signin.png[Sign Up Gitea,700]
 
-.Gogs Registration
-[%header,cols=2*]
-|===
-|Parameter
-|Value
+Create a new repository *'gitops-cn-project'*.
+`*Click on the plus icon*` as below and enter the following values:
 
-|Username 
-|user{USER_ID}
-
-|Email
-|user{USER_ID}@none.com
-
-|Password
-|{OPENSHIFT_PASSWORD}
-
-| Re-Type
-|{OPENSHIFT_PASSWORD}
-
-|===
-
-image::images/cd-gogs-signup.png[Sign Up Gogs,700]
-
-`*Click on 'Create New Account'*`. 
-You will be redirected to the sign in page. Sign in using the above username and password.
-
-`*Click on the plus icon*` as below and enter the following values
-
-image::images/cd-gogs-plus-icon.png[Create New Repository,900]
+image::images/gitea-plus-icon.png[Create New Repository,900]
 
 .GitOps Repository
 [%header,cols=2*]
@@ -105,6 +82,12 @@ image::images/cd-gogs-plus-icon.png[Create New Repository,900]
 |Description
 |_leave it empty_
 
+|Template
+|_leave it empty_
+
+|Issue Labels
+|_leave it empty_
+
 |.gitignore
 |_leave it empty_
 
@@ -117,9 +100,12 @@ image::images/cd-gogs-plus-icon.png[Create New Repository,900]
 |Intialize this repository with selected files and templates
 |_unchecked_
 
+|Default Branch
+|master
+
 |===
 
-image::images/gogs-gitops-new-repo.png[Create New Repository,700]
+image::images/gitea-new-repo.png[Create New Repository,700]
 
 `*Click on 'Create Repository' button*`.
 
@@ -132,54 +118,37 @@ The Git repository is created now.
 Now that you have a Git repository for the Inventory service, you should push the 
 source code into this Git repository.
 
-In your {CHE_URL}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
-`*run 'Git: Close Repository' then run 'Git: Initialize Repository'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'GitOps - Commit'*`
 
-image::images/che-git-close.png[Che - Git Close, 600]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image::images/che-git-init.png[Che - Git Initialize, 600]
+image::images/che-gitops-commit.png[Che - GitOps Export, 500]
 
-`*Select the '/projects/workshop/labs/gitops' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
+A terminal should be opened with the following output:
 
-In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
-
-image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
-
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
-
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
+[source,shell,subs="{markup-in-source}"]
+.>_ GitOps Commit
 ----
-cd /projects/workshop/labs/gitops
-git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
+Initialized empty Git repository in /projects/workshop/labs/gitops/.git/
+[master (root-commit) 2f074b4] Initial
+ 28 files changed, 1064 insertions(+)
+ [...]
+Enumerating objects: 25, done.
+Counting objects: 100% (25/25), done.
+Delta compression using up to 16 threads.
+Compressing objects: 100% (25/25), done.
+Writing objects: 100% (25/25), 5.79 KiB | 5.79 MiB/s, done.
+Total 25 (delta 16), reused 0 (delta 0)
+remote: . Processing 1 references
+remote: Processed 1 references in total
+To http://gitea-server.gitea.svc:3000/user{USER_ID}/gitops-cn-project.git
+ * [new branch]      master -> master
 ----
 
-Open the **Source Code Management (SCM) view** by clicking on `*'View' -> 'SCM menu'*`
-
-`*Click on '...' -> 'Stage All Changes'*`
-
-image::images/che-scm-gitops-stage-all-changes.png[Che - SCM Stage All Changes, 500]
-
-`*Click on the 'check' icon and enter 'Initial' as commit message*`
-
-image::images/che-scm-commit.png[Che - SCM Commit, 900]
-
-`*Click on '...' -> 'Push'*`
-
-image::images/che-scm-push.png[Che - SCM Push, 500]
-
-`*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gogs credentials (user{USER_ID}/{OPENSHIFT_PASSWORD})*`.
-
-image::images/che-scm-username.png[Che - SCM Username, 500]
-
-image::images/che-scm-password.png[Che - SCM Password, 500]
-
-Once done, in {GOGS_URL}/user{USER_ID}/gitops-cn-project, `*refresh the page of your 'gitops-cn-project' repository*`. You should 
+Once done, in {GIT_URL}/user{USER_ID}/gitops-cn-project, `*refresh the page of your 'gitops-cn-project' repository*`. You should 
 see the project files in the repository.
 
-image::images/gogs-gitops-repo.png[GitOps Repository,900]
+image::images/gitea-gitops-repo.png[GitOps Repository,900]
 
 '''
 
@@ -221,7 +190,7 @@ image::images/argocd-home.png[Argo CD - Home Page, 500]
 
 === Add your Newly Created GitOps Repository 
 
-`*Select the 'Configuration menu' then click on your 'Repositories'*`
+`*Select the 'Configuration menu' then click on 'Repositories'*`
 
 image::images/argocd-configure-repositories.png[Argo CD - Configure Repositories, 500]
 
@@ -237,7 +206,7 @@ image::images/argocd-configure-repositories.png[Argo CD - Configure Repositories
 |git
 
 |Repository URL
-|http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
+|http://gitea-gitea-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
 
 |Username (optional)
 |_leave it empty_
@@ -269,7 +238,7 @@ image::images/argocd-repository.png[Argo CD - Repository, 800]
 
 === Create a GitOps Application
 
-`*Select the 'Application menu' then click on your '+ New App'*` and enter the following details:
+`*Select the 'Application menu' then click on '+ New App'*` and enter the following details:
 
 image::images/argocd-configure-application.png[Argo CD - Configure Application, 500]
 
@@ -294,7 +263,7 @@ image::images/argocd-configure-application.png[Argo CD - Configure Application, 
 
 |SOURCE
 |Repository URL
-|http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
+|http://gitea-gitea-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
 
 |SOURCE
 |Revision

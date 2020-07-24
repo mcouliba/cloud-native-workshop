@@ -1,6 +1,6 @@
 :markup-in-source: verbatim,attributes,quotes
 :CHE_URL: %CHE_URL%
-:GOGS_URL: %GOGS_URL%
+:GIT_URL: %GIT_URL%
 :USER_ID: %USER_ID%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
 :OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
@@ -33,7 +33,7 @@ the platform and enables defining truly complex workflows directly from within O
 The first step for any deployment pipeline is to store all code and configurations in 
 a source code repository.
 
-In {GOGS_URL}[Gogs^], `*create a new Repository for Inventory Service*` as following:
+In {GIT_URL}[Gitea^], `*create a new Repository for Inventory Service*` as following:
 
 .Inventory Repository
 [%header,cols=2*]
@@ -94,7 +94,7 @@ In the window called **'>_ workshop-tools terminal'**, `*execute the following c
 .>_ workshop-tools terminal
 ----
 cd /projects/workshop/labs/inventory-quarkus
-git remote add origin http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus
+git remote add origin http://gitea-gitea-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus
 ----
 
 Open the **Source Code Management (SCM) view** by clicking on `*'View' -> 'SCM menu'*`
@@ -112,16 +112,16 @@ image::images/che-scm-commit.png[Che - SCM Commit, 900]
 image::images/che-scm-push.png[Che - SCM Push, 500]
 
 `*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gogs credentials (user{USER_ID}/{OPENSHIFT_PASSWORD})*`.
+Finally, `*enter your Gitea credentials (user{USER_ID}/{OPENSHIFT_PASSWORD})*`.
 
 image::images/che-scm-username.png[Che - SCM Username, 500]
 
 image::images/che-scm-password.png[Che - SCM Password, 500]
 
-Once done, in {GOGS_URL}/user{USER_ID}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
+Once done, in {GIT_URL}/user{USER_ID}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
 see the project files in the repository.
 
-image::images/cd-gogs-inventory-repo.png[Inventory Repository,900]
+image::images/cd-gitea-inventory-repo.png[Inventory Repository,900]
 
 '''
 
@@ -380,7 +380,7 @@ spec:
   type: git
   params:
   - name: url
-    value: http://gogs-gogs-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus.git
+    value: http://gitea-gitea-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus.git
   - name: revision
     value: master
 EOF
