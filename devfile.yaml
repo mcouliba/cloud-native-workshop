@@ -58,16 +58,6 @@ commands:
               },
               {
                 "type": "che",
-                "label": "GitOps - Export",
-                "command": "./gitops_exporter.sh my-project${CHE_WORKSPACE_NAMESPACE#user} cn-project${CHE_WORKSPACE_NAMESPACE#user}",
-                "target": {
-                    "workingDir": "/projects/workshop/labs/gitops",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
-              {
-                "type": "che",
                 "label": "Inventory - Compile (Dev Mode)",
                 "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev -Ddebug=false",
                 "target": {
@@ -122,6 +112,26 @@ commands:
                   "command": "./deploy_coolstore.sh",
                   "target": {
                       "workingDir": "/projects/workshop/labs/solutions",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "GitOps - Export",
+                "command": "./gitops_exporter.sh my-project${CHE_WORKSPACE_NAMESPACE#user} cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/gitops",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "GitOps - Commit",
+                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git; git add *.yaml; git commit -m \"Initial\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
+                  "target": {
+                      "workingDir": "/projects/workshop/labs/gitops",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
