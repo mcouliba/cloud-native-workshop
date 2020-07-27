@@ -259,7 +259,7 @@ image::images/argocd-configure-application.png[Argo CD - Configure Application, 
 
 |GENERAL
 |SYNC POLICY
-|MANUAL
+|Manual
 
 |SOURCE
 |Repository URL

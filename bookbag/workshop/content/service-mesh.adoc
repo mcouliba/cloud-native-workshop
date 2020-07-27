@@ -90,7 +90,7 @@ The status should be **Running** and there should be **2/2** pods in the **Ready
 
 Now, we understand how to enable Service Mesh for one service, let's enable for Catalog and Gateway Services via a simple command.
 
-In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Service Mesh - Deploy'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Service Mesh - Deploy Catalog and Gateway'*`
 
 image::images/che-runtask.png[Che - RunTask, 500]
 

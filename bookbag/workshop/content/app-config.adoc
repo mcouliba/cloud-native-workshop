@@ -163,7 +163,7 @@ which you have already packaged within the Inventory Maven project.
 
 In Quarkus, Driver is a build time property and cannot be overridden. So as you are going to change the database
 technology, you need to change the 'quarkus.datasource.driver' parameter 
-in **/projects/workshop/labs/inventory-quarkus/src/main/resources/applications.properties** and rebuild the application.
+in **/projects/workshop/labs/inventory-quarkus/src/main/resources/application.properties** and rebuild the application.
 
 In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file and add the
 'JDBC Driver - MariaDB' dependency*`
@@ -178,7 +178,7 @@ In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-qua
 ----
 
 Then `*add the '%prod.quarkus.datasource.driver' parameter in 
- the '/projects/workshop/labs/inventory-quarkus/src/main/resources/applications.properties' file*` as following
+ the '/projects/workshop/labs/inventory-quarkus/src/main/resources/application.properties' file*` as following
 
 [source,properties,subs="{markup-in-source}",role=copy]
 .application.properties
