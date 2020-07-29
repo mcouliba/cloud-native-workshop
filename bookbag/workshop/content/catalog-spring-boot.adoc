@@ -2,7 +2,7 @@
 :markup-in-source: verbatim,attributes,quotes
 :CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}/graph
 
 _35 MINUTE EXERCISE_
 
@@ -255,16 +255,24 @@ image::images/che-runtask.png[Che - RunTask, 500]
 
 image::images/che-catalog-run.png[Che - Catalog Run, 500]
 
-When you see **Started CatalogApplication** in the logs, you can access the 
-Catalog REST API.
+When pop-ups appear, `*confirm you want to expose the 9000 port*`.
 
-`*Click on the 'My Workspace' white box in the right menu, then 'User Runtimes' -> 'maven' -> 'localhost-9000'*`.
+image::images/che-expose-9000-port.png[Che - Expose Port, 500]
 
-image::images/che-localhost.png[Che - Localhost, 500]
+And finally `*click on 'Open Link'*`.
+
+image::images/che-open-9000-link.png[Che - Open Link, 500]
 
 Your browser will be redirect on **your Catalog Service running inside your Workspace**.
 
 image::images/catalog-service.png[Catalog Service,500]
+
+[NOTE]
+====
+If you have the following result on the 'Preview' window, please `*click on the refresh icon of this same window`*,
+
+image::images/che-preview-na.png[Che - Preview Not Available, 500]
+====
 
 Then `*click on 'Test it'*`. You should have the following output:
 

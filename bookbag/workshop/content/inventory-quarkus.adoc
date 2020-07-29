@@ -2,7 +2,7 @@
 :APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
 :CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}/graph
 
 _45 MINUTE EXERCISE_
 
@@ -179,13 +179,24 @@ image::images/che-runtask.png[Che - RunTask, 500]
 
 image::images/che-inventory-compile.png[Che - Inventory Development Mode, 500]
 
-Then, `*click on the 'My Workspace' white box in the right menu, then 'User Runtimes' -> 'maven' -> 'localhost-8080'*`.
+When pop-ups appear, `*confirm you want to expose the 8080 port*`.
 
-image::images/che-localhost.png[Che - Localhost, 500]
+image::images/che-expose-8080-port.png[Che - Expose Port, 500]
+
+And finally `*click on 'Open Link'*`.
+
+image::images/che-open-8080-link.png[Che - Open Link, 500]
 
 Your browser will be redirect on **your Inventory Service running inside your Workspace**.
 
 image::images/che-quarkus-preview.png[Che - Quarkus Preview, 500]
+
+[NOTE]
+====
+If you have the following result on the 'Preview' window, please `*click on the refresh icon of this same window`*,
+
+image::images/che-preview-na.png[Che - Preview Not Available, 500]
+====
 
 `*Modify the 'src/main/resources/META-INF/resources/index.html' file*` as following
 

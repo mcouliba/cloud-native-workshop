@@ -1,7 +1,7 @@
 :CHE_URL: %CHE_URL%
 :USER_ID: %USER_ID%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
-:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}/graph
 
 _10 MINUTE EXERCISE_
 
@@ -115,42 +115,17 @@ the running OpenShift cluster.
 
 === Connect Your Workspace to Your OpenShift User
 
-First, in your {CHE_URL}[Workspace^], `*open the 'OpenShift' View*` by clicking on the OpenShift icon of the left hand side.
+First, in your {CHE_URL}[Workspace^], 
+`*click on 'Terminal' -> 'Run Task...' ->  'OpenShift - Login'*`
+
+image::images/che-runtask.png[Che - RunTask, 500]
+
+image::images/che-openshift-login.png[Che - OpenShift Login, 500]
+
+
+Then, `*open the 'OpenShift' View*`, you should see at least 1 project as following:
 
 image::images/che-openshift-view.png[Che - OpenShift View, 300]
-
-Then, `*click the 'Log in to cluster' icon and confirm you want to connect to a different cluster*`
-
-image::images/che-openshift-login-popup.png[Che - OpenShift View, 500]
-
-Finally, `*enter the following information*`:
-
-.OpenShift Log in
-[%header,cols=2*]
-|===
-|Parameter 
-|Value
-
-|Select the way to log in to the cluster.
-|Credentials
-
-|Provide cluster URL to connect.
-|https://172.30.0.1:443
-
-|Select username for basic authentication to the API Server
-|$(plus) Add new user...
-
-|Provide Username for basic authentication to the API Server
-|user{USER_ID}
-
-|Provide Password for basic authentication to the API Server
-|{OPENSHIFT_PASSWORD}
-
-|===
-
-You should see at least 1 project in the **OpenShift View** as following:
-
-image::images/che-openshift-login.png[Che - OpenShift View, 300]
 
 * The **'cn-project{USER_ID}' project** will be used as a **Staging Environment**.
 
