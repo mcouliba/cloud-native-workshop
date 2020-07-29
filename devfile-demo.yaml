@@ -21,6 +21,16 @@ commands:
           {
             "tasks": [
               {
+                  "type": "che",
+                  "label": "OpenShift - Login",
+                  "command": "oc login $(oc whoami --show-server) --username=${CHE_WORKSPACE_NAMESPACE} --password=openshift --insecure-skip-tls-verify",
+                  "target": {
+                      "workingDir": "/projects/workshop",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
+              {
                 "type": "che",
                 "label": "Gateway - Generate Traffic",
                 "command": "./runGatewayService.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}",
@@ -125,6 +135,36 @@ commands:
                   "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git; git add *.yaml; git commit -m \"Initial\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
                   "target": {
                       "workingDir": "/projects/workshop/labs/gitops",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "Inventory - Code",
+                  "command": "./solve.sh",
+                  "target": {
+                      "workingDir": "/projects/workshop/labs/solutions/inventory-quarkus",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "Catalog & Gateway - Code & Deploy",
+                  "command": "cd catalog-spring-boot;./solve_deploy.sh;cd ..;cd gateway-vertx;./solve_deploy.sh;cd ..;",
+                  "target": {
+                      "workingDir": "/projects/workshop/labs/solutions",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "Probes & Config - Deploy",
+                  "command": "cd health-probes; ./deploy.sh; cd ..; cd app-config; ./deploy.sh; cd ..;",
+                  "target": {
+                      "workingDir": "/projects/workshop/labs/solutions",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []

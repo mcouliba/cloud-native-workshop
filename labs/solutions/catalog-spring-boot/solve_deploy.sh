@@ -17,3 +17,5 @@ odo url create catalog --port 8080
 odo push
 
 oc label dc catalog-coolstore app.openshift.io/runtime=spring --overwrite
+
+echo "Catalog Spring-Boot Deployed"

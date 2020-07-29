@@ -26,3 +26,5 @@ oc rollout pause dc/web-coolstore
 oc set probe dc/web-coolstore --readiness --initial-delay-seconds=10 --timeout-seconds=1 --get-url=http://:8080/
 oc set probe dc/web-coolstore --liveness --initial-delay-seconds=180 --timeout-seconds=1 --get-url=http://:8080/
 oc rollout resume dc/web-coolstore
+
+echo "Health Probes Done"

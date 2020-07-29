@@ -61,3 +61,5 @@ EOF
     oc annotate --overwrite dc/catalog-coolstore app.openshift.io/connects-to='catalog-postgresql'
     oc annotate --overwrite dc/inventory-coolstore app.openshift.io/connects-to='inventory-mariadb'
 fi
+
+echo "Application Configuration Externalization Done"

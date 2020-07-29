@@ -1,6 +1,6 @@
-##########################
-# gateway-vertx Solution #
-##########################
+##############################
+# inventory-quarkus Solution #
+##############################
 
 DIRECTORY=`dirname $0`
 
@@ -17,3 +17,5 @@ odo url create inventory --port 8080
 odo push
 
 oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite
+
+echo "Inventory Quarkus Deployed"
