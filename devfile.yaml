@@ -1,6 +1,6 @@
-apiVersion: '1.0.0'
 metadata:
   name: demo
+apiVersion: 1.0.0
 projects:
   - name: workshop
     source:
