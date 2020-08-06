@@ -9,6 +9,8 @@ oc policy add-role-to-user view -z default
 
 oc set probe dc/catalog-coolstore  --liveness --readiness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/actuator/health
 
+echo "Catalog Service Health Probes Done"
+
 cp $DIRECTORY/pom.xml $DIRECTORY/../../inventory-quarkus
 cd /projects/workshop/labs/inventory-quarkus
 mvn clean package -DskipTests
@@ -20,11 +22,12 @@ oc set probe dc/inventory-coolstore --readiness --initial-delay-seconds=10 --fai
 oc set probe dc/inventory-coolstore --liveness --initial-delay-seconds=180 --failure-threshold=3 --get-url=http://:8080/health/live
 oc rollout resume dc/inventory-coolstore
 
-oc set probe dc/gateway-coolstore  --liveness --readiness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/health
+echo "Inventory Service Health Probes Done"
 
-oc rollout pause dc/web-coolstore
-oc set probe dc/web-coolstore --readiness --initial-delay-seconds=10 --timeout-seconds=1 --get-url=http://:8080/
-oc set probe dc/web-coolstore --liveness --initial-delay-seconds=180 --timeout-seconds=1 --get-url=http://:8080/
-oc rollout resume dc/web-coolstore
+oc set probe dc/gateway-coolstore  --liveness --readiness --period-seconds=5 --get-url=http://:8080/health
 
-echo "Health Probes Done"
+echo "Gateway Service Health Probes Done"
+
+oc set probe deployment/web-coolstore --readiness --liveness --period-seconds=5 --get-url=http://:8080/
+
+echo "Web Service Health Probes Done"

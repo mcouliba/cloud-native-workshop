@@ -1,5 +1,5 @@
 metadata:
-  name: demo
+  name: wksp-cloud-native
 projects:
   - name: workshop
     source:
@@ -20,6 +20,16 @@ commands:
       - referenceContent: |
           {
             "tasks": [
+              {
+                  "type": "che",
+                  "label": "OpenShift - Login",
+                  "command": "oc login $(oc whoami --show-server) --username=${CHE_WORKSPACE_NAMESPACE} --password=openshift --insecure-skip-tls-verify",
+                  "target": {
+                      "workingDir": "/projects/workshop",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
               {
                 "type": "che",
                 "label": "Gateway - Generate Traffic",
@@ -91,6 +101,16 @@ commands:
               },
               {
                 "type": "che",
+                "label": "Catalog - Generate Traffic",
+                "command": "for i in {1..60}; do if [ $(curl -s -w \"%{http_code}\" -o /dev/null http://catalog-coolstore.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:8080/actuator/health) == \"200\" ]; then MSG=\"\\033[0;32mThe request to Catalog Service has succeeded\\033[0m\"; else MSG=\"\\033[0;31mERROR - The request to Catalog Service has failed\\033[0m\"; fi;echo -e $MSG;sleep 2s done",
+                "target": {
+                    "workingDir": "/projects/workshop",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
                 "label": "Pipeline - Start All",
                 "command": "./deploy_coolstore_by_tekton.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}",
                 "target": {
@@ -98,6 +118,16 @@ commands:
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "Probes - Configure Gateway & Web",
+                  "command": "oc project my-project${CHE_WORKSPACE_NAMESPACE#user}; oc set probe dc/gateway-coolstore  --liveness --readiness --period-seconds=5 --get-url=http://:8080/health;oc set probe deployment/web-coolstore  --liveness --readiness --period-seconds=5 --get-url=http://:8080/;echo \"Health Probes Done\"",
+                  "target": {
+                      "workingDir": "/projects/workshop",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
               },
               {
                   "type": "che",

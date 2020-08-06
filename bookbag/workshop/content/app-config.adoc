@@ -204,48 +204,40 @@ Then, `*push the updated component to the OpenShift cluster*`.
 image::images/che-openshift-push-again-inventory.png[Che - OpenShift Push Inventory, 400]
 
 Now, let's create the Quarkus configuration content using the database credentials.
-In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
 
-image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Config Maps' then click on the 'Create Config Map' button*`.
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+image::images/openshift-create-configmap.png[Che - OpenShift Create Config Map, 900]
+
+Then `*replace the content*` with the following input:
+
+[source,yaml,subs="{markup-in-source}",role=copy]
+----
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory
+  namespace: my-project{USER_ID}
+  labels:
+    app: coolstore
+    app.kubernetes.io/instance: inventory
+data:
+  application.properties: |-
+    quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{USER_ID}.svc:3306/inventorydb
+    quarkus.datasource.username=inventory
+    quarkus.datasource.password=inventory
+----
+
+And then `*configure the container to use the newly Config Map and overlay on the default application.properties*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
 .>_ workshop-tools terminal
 ----
-cat <<EOF > /projects/inventory-openshift-application.properties
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project{USER_ID}.svc:3306/inventorydb
-quarkus.datasource.username=inventory
-quarkus.datasource.password=inventory
-EOF
-----
-
-<1> The hostname defined for the MariaDB connection-url (inventory-mariadb) corresponds to the MariaDB service name published on OpenShift. 
-This name will be resolved by the internal DNS server exposed by OpenShift and accessible to containers running on OpenShift.
-
-And then `*create a Config Map*` that you will use to overlay on the default **application.properties** which is 
-packaged in the Inventory JAR archive:
-
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties -n my-project{USER_ID}
-oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory -n my-project{USER_ID}
 oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{USER_ID}
 ----
-<1> Config maps hold key-value pairs. An **Inventory Config Map**
-is created with **application.properties** as the key and the **content of the inventory-openshift-application.properties** as the 
-value. Whenever a config map is injected into a container, it would appear as a file with the same 
-name as the key, at specified path on the filesystem.
-<2> Add **app** and **app.kubernetes.io/instance** labels to the ConfigMap
-<3> Mounts the content of the **Inventory Config Map** as a file inside the **Inventory container**
+<1> Mounts the content of the **Inventory Config Map** as a file inside the **Inventory container**
 at **/deployments/config/application.properties **
-
-[TIP]
-====
-You can see the content of the config map in the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^] or by using `*oc describe cm inventory*` command.
-====
 
 The Inventory pod gets restarted automatically due to the configuration changes. Wait till it's ready, 
 and then verify that the config map is in fact injected into the container by `*running 
@@ -335,29 +327,31 @@ configuration using an alternative **application.properties** backed by a config
 
 Let's create the Spring Boot configuration content using the database credentials and create the Config Map.
 
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-cat <<EOF > /projects/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project{USER_ID}.svc:5432/catalogdb
-spring.datasource.username=catalog
-spring.datasource.password=catalog
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.jpa.hibernate.ddl-auto=create
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
-EOF
-----
-<1> The hostname defined for the PostgreSQL connection-url (catalog-postgresql) corresponds to the PostgreSQL service name published on OpenShift. 
-This name will be resolved by the internal DNS server exposed by OpenShift and accessible to containers running on OpenShift.
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Config Maps' then click on the 'Create Config Map' button*`.
 
-And then `*create a Config Map*` that you will use to overlay on the default **application.properties** which is 
-packaged in the Catalog JAR archive:
+image::images/openshift-create-configmap.png[Che - OpenShift Create Config Map, 900]
 
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
+Then `*replace the content*` with the following input:
+
+[source,yaml,subs="{markup-in-source}",role=copy]
 ----
-oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties -n my-project{USER_ID}
-oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog -n my-project{USER_ID}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: catalog
+  namespace: my-project{USER_ID}
+  labels:
+    app: coolstore
+    app.kubernetes.io/instance: catalog
+data:
+  application.properties: |-
+    spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project%USER_ID%.svc:5432/catalogdb
+    spring.datasource.username=catalog
+    spring.datasource.password=catalog
+    spring.datasource.driver-class-name=org.postgresql.Driver
+    spring.jpa.hibernate.ddl-auto=create
+    spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 ----
 
 The https://github.com/spring-cloud-incubator/spring-cloud-kubernetes[Spring Cloud Kubernetes^] plug-in implements 
