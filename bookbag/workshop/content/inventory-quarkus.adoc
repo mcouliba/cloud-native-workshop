@@ -323,6 +323,7 @@ application with **java -jar**. By default, in Quarkus, the generation of the ub
 [source,sql,role=copy]
 .import.sql
 ----
+INSERT INTO INVENTORY(itemId, quantity) VALUES (100000, 0);
 INSERT INTO INVENTORY(itemId, quantity) VALUES (329299, 35);
 INSERT INTO INVENTORY(itemId, quantity) VALUES (329199, 12);
 INSERT INTO INVENTORY(itemId, quantity) VALUES (165613, 45);
