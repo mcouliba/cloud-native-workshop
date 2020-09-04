@@ -45,7 +45,6 @@ which is there to bootstrap the Spring Boot application.
 `*Examine 'com.redhat.cloudnative.catalog.CatalogApplication' class*` in the **/projects/workshop/labs/catalog-spring-boot/src/main** directory:
 
 [source,java]
-.CatalogApplication.java
 ----
 package com.redhat.cloudnative.catalog;
 
@@ -90,7 +89,6 @@ image::images/springboot-catalog-arch.png[Catalog RESTful Service,640]
 In your {CHE_URL}[Workspace^], `*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/Product.java' file`* 
 
 [source,java,role=copy]
-.Product.java
 ----
 package com.redhat.cloudnative.catalog;
 
@@ -179,7 +177,6 @@ In your {CHE_URL}[Workspace^],
 `*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/ProductRepository.java' file`*.
 
 [source,java,role=copy]
-.ProductRepository.java
 ----
 package com.redhat.cloudnative.catalog;
 
@@ -205,7 +202,6 @@ In your {CHE_URL}[Workspace^],
 `*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/CatalogController.java' file`*.
 
 [source,java,role=copy]
-.CatalogController.java
 ----
 package com.redhat.cloudnative.catalog;
 

@@ -71,7 +71,6 @@ Then, `*from the Terminal tab, run the following command*`:
 image::images/openshift-inventory-pkill.png[OpenShift Inventory pkill, 700]
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>inventory-coolstore terminal
 ----
 pkill -STOP java
 ----
@@ -114,7 +113,6 @@ Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus
 In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
 
 [source,xml,subs="{markup-in-source}",role=copy]
-.pom.xml
 ----
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -142,7 +140,6 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 curl -w "\n" http://inventory-coolstore.my-project{USER_ID}.svc:8080/health
 ----
@@ -289,7 +286,6 @@ In your {CHE_URL}[Workspace^], in the window called **'>_ workshop-tools termina
 `*execute the following commands*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 curl -w "\n" http://catalog-coolstore.my-project{USER_ID}.svc:8080/actuator/health
 ----

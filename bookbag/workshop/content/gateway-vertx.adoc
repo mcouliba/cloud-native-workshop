@@ -58,7 +58,6 @@ Although you can have multiple, there is currently only one Verticle created in 
 `*Examine 'GatewayVerticle' class*` in the **com.redhat.cloudnative.gateway** package in the **/projects/workshop/labs/gateway-vertx/src** directory.
 
 [source,java]
-.GatewayVerticle.java
 ----
 package com.redhat.cloudnative.gateway;
 
@@ -113,7 +112,6 @@ image::images/coolstore-arch.png[API Gateway Pattern,400]
 `*Replace the content of '/projects/workshop/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java'*` class with the following:
 
 [source,java,role=copy]
-.GatewayVerticle.java
 ----
 package com.redhat.cloudnative.gateway;
 

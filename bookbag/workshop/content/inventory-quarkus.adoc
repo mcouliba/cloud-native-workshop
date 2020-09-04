@@ -62,7 +62,6 @@ on the different Quarkus dependencies. In addition, you can see the **quarkus-ma
 of the application and also providing the development mode.
 
 [source,xml]
-.pom.xml
 ----
 <dependencyManagement>
     <dependencies>
@@ -97,7 +96,6 @@ of the application and also providing the development mode.
 If we focus on the dependencies section, you can see the following extensions:
 
 [source,xml]
-.pom.xml
 ----
     <dependency>
         <groupId>io.quarkus</groupId>
@@ -133,7 +131,6 @@ If we focus on the dependencies section, you can see the following extensions:
 `*Examine 'src/main/java/com/redhat/cloudnative/InventoryResource.java' file*`:
 
 [source,java]
-.InventoryResource.java
 ----
 package com.redhat.cloudnative;
 
@@ -200,8 +197,7 @@ image::images/che-preview-na.png[Che - Preview Not Available, 500]
 
 `*Modify the 'src/main/resources/META-INF/resources/index.html' file*` as following
 
-[source,java,role=copy]
-.index.html
+[source,html,role=copy]
 ----
 <!DOCTYPE html>
 <html lang="en">
@@ -302,7 +298,6 @@ You don't need to press a save button! Che automatically saves the changes made 
 
 `*Update the 'src/main/resources/application.properties' file*` to match with the following content:
 
-.application.properties
 [source,bash,role=copy]
 ----
 quarkus.datasource.url=jdbc:h2:mem:inventory;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
@@ -321,7 +316,6 @@ application with **java -jar**. By default, in Quarkus, the generation of the ub
 
 `*Update the 'src/main/resources/import.sql' file`* as following:
 [source,sql,role=copy]
-.import.sql
 ----
 INSERT INTO INVENTORY(itemId, quantity) VALUES (100000, 0);
 INSERT INTO INVENTORY(itemId, quantity) VALUES (329299, 35);
@@ -342,7 +336,6 @@ Quarkus uses JAX-RS standard for building REST services.
 `*Modify the 'src/main/java/com/redhat/cloudnative/InventoryResource.java' file*` to match with:
 
 [source,java,role=copy]
-.InventoryResource.java
 ----
 package com.redhat.cloudnative;
 
@@ -465,7 +458,6 @@ image::images/che-openshift-push-inventory.png[Che - OpenShift Push Inventory, 4
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
 [source,bash]
-.>_ OpenShift
 ----
 bash-5.0$ odo push
 Validation
@@ -518,7 +510,6 @@ image::images/che-openshift-push-again-inventory.png[Che - OpenShift Push Invent
 You should get an output in a **'>_ OpenShift' Terminal Window** as following:
 
 [source,bash,subs="{markup-in-source}"]
-.>_ OpenShift
 ----
 bash-5.0$ odo push
 Validation

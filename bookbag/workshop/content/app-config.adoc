@@ -169,7 +169,6 @@ In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-qua
 'JDBC Driver - MariaDB' dependency*`
 
 [source,xml,subs="{markup-in-source}",role=copy]
-.pom.xml
 ----
     <dependency>
         <groupId>io.quarkus</groupId>
@@ -181,7 +180,6 @@ Then `*add the '%prod.quarkus.datasource.driver' parameter in
  the '/projects/workshop/labs/inventory-quarkus/src/main/resources/application.properties' file*` as following
 
 [source,properties,subs="{markup-in-source}",role=copy]
-.application.properties
 ----
 %prod.quarkus.datasource.driver=org.mariadb.jdbc.Driver
 ----
@@ -232,7 +230,6 @@ data:
 And then `*configure the container to use the newly Config Map and overlay on the default application.properties*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{USER_ID}
 ----
@@ -244,7 +241,6 @@ and then verify that the config map is in fact injected into the container by `*
 a shell command inside the Inventory Container*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc rsh -n my-project{USER_ID} -c inventory-coolstore dc/inventory-coolstore cat /deployments/config/application.properties
 ----
@@ -262,7 +258,6 @@ You can also connect to Inventory MariaDB database and check if the seed data is
 loaded into the database.
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc rsh -n my-project{USER_ID} dc/inventory-mariadb
 ----
@@ -275,7 +270,6 @@ Run this command inside the Inventory MariaDB container, after opening a remote 
 ====
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD --host=$HOSTNAME --execute="select * from INVENTORY" $MYSQL_DATABASE
 ----
@@ -300,7 +294,6 @@ You should have the following output:
 `*Finally, exit from inside the database container*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 exit
 ----
@@ -369,7 +362,6 @@ Since you do want Spring Boot to discover the config maps inside the **my-projec
 need to grant permission to the Spring Boot service account to access the OpenShift REST API and find the 
 config maps. 
 
-.>_ workshop-tools terminal
 [source,shell,subs="{markup-in-source}",role=copy]
 ----
 oc policy add-role-to-user view -n my-project{USER_ID} -z default
@@ -378,7 +370,6 @@ oc policy add-role-to-user view -n my-project{USER_ID} -z default
 `*Delete the Catalog Pod*` to make it start again and look for the config maps:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc delete pod -l deploymentconfig=catalog-coolstore -n my-project{USER_ID}
 ----
@@ -387,7 +378,6 @@ When the Catalog container is ready, verify that the PostgreSQL database is bein
 used. Check the Catalog pod logs:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc logs -c catalog-coolstore dc/catalog-coolstore -n my-project{USER_ID} | grep hibernate.dialect
 ----
@@ -402,7 +392,6 @@ You should have the following output:
 You can also connect to the Catalog PostgreSQL database and verify that the seed data is loaded:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc rsh -n my-project{USER_ID} dc/catalog-postgresql
 ----
@@ -415,7 +404,6 @@ Run this command inside the Catalog PostgreSQL container, after opening a remote
 ====
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 psql catalogdb -U catalog -c "select item_id, name, price from product"
 ----
@@ -440,7 +428,6 @@ You should have the following output:
 `*Finally, exit from inside the database container*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 exit
 ----
@@ -472,7 +459,6 @@ the PostgreSQL and MariaDB databases. The Database template by default stores
 the database credentials in a secret in the project in which it's being created:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc describe secret catalog-postgresql
 ----
