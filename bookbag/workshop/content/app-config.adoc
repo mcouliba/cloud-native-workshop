@@ -281,6 +281,7 @@ You should have the following output:
 +--------+----------+
 | itemId | quantity |
 +--------+----------+
+| 100000 |        0 |
 | 165613 |       45 |
 | 165614 |       87 |
 | 165954 |       43 |
@@ -412,17 +413,18 @@ You should have the following output:
 
 [source,logs,subs="{markup-in-source}"]
 ----
- item_id |            name             | price
- ----
- 329299  | Red Fedora                  | 34.99
- 329199  | Forge Laptop Sticker        |   8.5
- 165613  | Solid Performance Polo      |  17.8
- 165614  | Ogio Caliber Polo           | 28.75
- 165954  | 16 oz. Vortex Tumbler       |     6
- 444434  | Pebble Smart Watch          |    24
- 444435  | Oculus Rift                 |   106
- 444436  | Lytro Camera                |  44.3
- (8 rows)
+  item_id |              name               | price 
+  ---------+---------------------------------+-------
+  100000  | Red Fedora                      | 34.99
+  329299  | Quarkus T-shirt                 |    10
+  329199  | Pronounced Kubernetes           |     9
+  165613  | Knit socks                      |  4.15
+  444434  | Red Hat Impact T-shirt          |     9
+  444435  | Quarkus twill cap               |    13
+  165614  | Quarkus H2Go water bottle       | 14.45
+  444437  | Nanobloc Universal Webcam Cover |  2.75
+  165954  | Patagonia Refugio pack 28L      |     6
+  (9 rows)
 ----
 
 `*Finally, exit from inside the database container*`:
