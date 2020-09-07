@@ -206,7 +206,7 @@ image::images/argocd-configure-repositories.png[Argo CD - Configure Repositories
 |git
 
 |Repository URL
-|http://gitea-gitea-server.workshop-infra.svc:3000/user{USER_ID}/gitops-cn-project.git
+|http://gitea-server.gitea.svc:3000/user{USER_ID}/gitops-cn-project.git
 
 |Username (optional)
 |_leave it empty_
