@@ -11,8 +11,10 @@ components:
     type: chePlugin
     alias: workshop-tools
     env:
-      - value: '-Xmx2048m -Duser.home=/home/theia'
-        name: MAVEN_OPTS
+      - name: MAVEN_OPTS
+        value: '-Xmx2048m -Duser.home=/home/theia'
+      - name: MAVEN_MIRROR_URL
+        value: http://nexus.opentlc-shared.svc:8081/repository/maven-all-public 
 apiVersion: 1.0.0
 commands:
   - name: Configure tasks
