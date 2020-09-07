@@ -160,6 +160,16 @@ commands:
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "Inventory - Commit",
+                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git; git add *; git commit -m \"Initial\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git",
+                  "target": {
+                      "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
               }
             ]
           }
