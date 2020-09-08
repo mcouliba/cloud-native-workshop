@@ -25,7 +25,6 @@ image::images/che-gitops-export.png[Che - GitOps Export, 500]
 A terminal should be opened with the following output:
 
 [source,shell,subs="{markup-in-source}"]
-.>_ GitOps Export
 ----
 --- Export Kubernetes resources for GitOps from my-project{USER_ID} to cn-project{USER_ID} ---
 Exporting resources for inventory-coolstore...
@@ -115,19 +114,17 @@ The Git repository is created now.
 
 === Push The Configuration to the Git Repository
 
-Now that you have a Git repository for the Inventory service, you should push the 
-source code into this Git repository.
+Now that you have a Git repository for the configuration, you should push it into this Git repository.
 
 In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'GitOps - Commit'*`
 
 image::images/che-runtask.png[Che - RunTask, 500]
 
-image::images/che-gitops-commit.png[Che - GitOps Export, 500]
+image::images/che-gitops-commit.png[Che - GitOps Commit, 500]
 
 A terminal should be opened with the following output:
 
 [source,shell,subs="{markup-in-source}"]
-.>_ GitOps Commit
 ----
 Initialized empty Git repository in /projects/workshop/labs/gitops/.git/
 [master (root-commit) 2f074b4] Initial

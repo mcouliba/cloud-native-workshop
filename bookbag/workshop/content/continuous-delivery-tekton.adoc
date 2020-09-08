@@ -74,49 +74,31 @@ In {GIT_URL}[Gitea^], `*create a new Repository for Inventory Service*` as follo
 Now that you have a Git repository for the Inventory service, you should push the 
 source code into this Git repository.
 
-In your {CHE_URL}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
-`*run 'Git: Close Repository' then run 'Git: Initialize Repository'*`
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Inventory - Commit'*`
 
-image::images/che-git-close.png[Che - Git Close, 600]
+image::images/che-runtask.png[Che - RunTask, 500]
 
-image::images/che-git-init.png[Che - Git Initialize, 600]
+image::images/che-inventory-commit.png[Che - Inventory Commit, 500]
 
-`*Select the '/projects/workshop/labs/inventory-quarkus' folder, click on 'Initialize Repository' -> 'Add to Workspace'*`
+A terminal should be opened with the following output:
 
-In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
-
-image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
-
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
-
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
+[source,shell,subs="{markup-in-source}"]
 ----
-cd /projects/workshop/labs/inventory-quarkus
-git remote add origin http://gitea-gitea-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus
+Initialized empty Git repository in /projects/workshop/labs/inventory-quarkus/.git/
+[master (root-commit) f7b9db7] Initial
+ 12 files changed, 831 insertions(+)
+ [...]
+Enumerating objects: 29, done.
+Counting objects: 100% (29/29), done.
+Delta compression using up to 16 threads.
+Compressing objects: 100% (20/20), done.
+Writing objects: 100% (29/29), 10.76 KiB | 3.59 MiB/s, done.
+Total 29 (delta 1), reused 0 (delta 0)
+remote: . Processing 1 references
+remote: Processed 1 references in total
+To http://gitea-server.gitea.svc:3000/user{USER_ID}/inventory-quarkus.git
+ * [new branch]      master -> master
 ----
-
-Open the **Source Code Management (SCM) view** by clicking on `*'View' -> 'SCM menu'*`
-
-`*Click on '...' -> 'Stage All Changes'*`
-
-image::images/che-scm-stage-all-changes.png[Che - SCM Stage All Changes, 500]
-
-`*Click on the 'check' icon and enter 'Initial' as commit message*`
-
-image::images/che-scm-commit.png[Che - SCM Commit, 900]
-
-`*Click on '...' -> 'Push'*`
-
-image::images/che-scm-push.png[Che - SCM Push, 500]
-
-`*Click on the 'OK' button*` to publish the new **master branch**. 
-Finally, `*enter your Gitea credentials (user{USER_ID}/{OPENSHIFT_PASSWORD})*`.
-
-image::images/che-scm-username.png[Che - SCM Username, 500]
-
-image::images/che-scm-password.png[Che - SCM Password, 500]
 
 Once done, in {GIT_URL}/user{USER_ID}/inventory-quarkus, `*refresh the page of your 'inventory-quarkus' repository*`. You should 
 see the project files in the repository.
@@ -170,7 +152,6 @@ image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 oc new-build java \
   --name=inventory-coolstore \
@@ -182,7 +163,6 @@ oc new-build java \
 You should have the following output:
 
 [source,shell,subs="{markup-in-source}"]
-.>_ workshop-tools terminal
 ----
     Java Applications 
     ----------------- 
@@ -216,7 +196,6 @@ First, `*create a task to generate the binary (JAR) using Maven*`.
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
@@ -268,7 +247,6 @@ EOF
 Then, `*create a task to create the container image from the binary (s2i)*`.
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
@@ -308,7 +286,6 @@ with each other via their inputs and outputs.
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
@@ -368,7 +345,6 @@ and can be output by a **Task**.
 In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
 ----
 cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
 ---
