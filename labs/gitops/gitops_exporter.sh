@@ -16,8 +16,6 @@ do
     SERVICE_YAML=${DIRECTORY}/${COMPONENT_NAME}-service.yaml
     ROUTE_YAML=${DIRECTORY}/${COMPONENT_NAME}-route.yaml
     CONFIGMAP_YAML=${DIRECTORY}/${COMPONENT_NAME}-configmap.yaml
-    IMAGESTREAM_YAML=${DIRECTORY}/${COMPONENT_NAME}-imagestream.yaml
-    BUILDCONFIG_YAML=${DIRECTORY}/${COMPONENT_NAME}-buildconfig.yaml
     DEPLOYMENTCONFIG_YAML=${DIRECTORY}/${COMPONENT_NAME}-deploymentconfig.yaml
     DEPLOYMENT_YAML=${DIRECTORY}/${COMPONENT_NAME}-deployment.yaml
 
@@ -90,39 +88,6 @@ do
         yq delete --inplace  ${CONFIGMAP_YAML} items[*].metadata.managedFields
     fi
 
-    ## Imagestream
-    oc get imagestream -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --ignore-not-found > ${IMAGESTREAM_YAML}
-
-    if [ -s ${IMAGESTREAM_YAML} ]
-    then
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.namespace
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.uid
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.selfLink
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.creationTimestamp
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.resourceVersion
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.generation
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].metadata.managedFields
-        yq delete --inplace  ${IMAGESTREAM_YAML} items[*].status.tags
-        sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${IMAGESTREAM_YAML}
-    fi
-
-    ## Build Config
-    oc get buildconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --ignore-not-found > ${BUILDCONFIG_YAML}
-
-    if [ -s ${BUILDCONFIG_YAML} ]
-    then
-        yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.namespace
-        yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.uid
-        yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.selfLink
-        yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.creationTimestamp
-        yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.resourceVersion
-        yq delete --inplace  ${BUILDCONFIG_YAML} items[*].metadata.managedFields
-        yq delete --inplace  ${BUILDCONFIG_YAML} items[*].status
-        yq write --inplace ${BUILDCONFIG_YAML} items[*].spec.triggers null
-        
-        sed -i "s/nodeSelector: .*/nodeSelector: {}/g" ${BUILDCONFIG_YAML}
-        sed -i "s/${DEV_PROJECT}/${PROJECT}/g" ${BUILDCONFIG_YAML}
-    fi 
     ## Deployment Config
     oc get deploymentconfig -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --ignore-not-found > ${DEPLOYMENTCONFIG_YAML}
 
@@ -180,6 +145,8 @@ do
         yq delete --inplace  ${DEPLOYMENT_YAML} items[*].metadata.resourceVersion
         yq delete --inplace  ${DEPLOYMENT_YAML} items[*].metadata.generation
         yq delete --inplace  ${DEPLOYMENT_YAML} items[*].metadata.managedFields
+        yq delete --inplace  ${DEPLOYMENT_YAML} items[*].metadata.annotations.[deployment.kubernetes.io/revision]
+        yq delete --inplace  ${DEPLOYMENT_YAML} items[*].metadata.annotations.[image.openshift.io/triggers]
         yq delete --inplace  ${DEPLOYMENT_YAML} items[*].spec.template.spec.initContainers
         yq delete --inplace  ${DEPLOYMENT_YAML} items[*].spec.template.spec.containers[0].command
         yq delete --inplace  ${DEPLOYMENT_YAML} items[*].spec.template.spec.containers[0].args
