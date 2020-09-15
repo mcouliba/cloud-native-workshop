@@ -104,7 +104,7 @@ commands:
               {
                 "type": "che",
                 "label": "Catalog - Generate Traffic",
-                "command": "for i in {1..60}; do if [ $(curl -s -w \"%{http_code}\" -o /dev/null http://catalog-coolstore.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:8080/actuator/health) == \"200\" ]; then MSG=\"\\033[0;32mThe request to Catalog Service has succeeded\\033[0m\"; else MSG=\"\\033[0;31mERROR - The request to Catalog Service has failed\\033[0m\"; fi;echo -e $MSG;sleep 2s done",
+                "command": "for i in {1..60}; do if [ $(curl -s -w \"%{http_code}\" -o /dev/null http://catalog-coolstore.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:8080/actuator/health) == \"200\" ]; then MSG=\"\\033[0;32mThe request to Catalog Service has succeeded\\033[0m\"; else MSG=\"\\033[0;31mERROR - The request to Catalog Service has failed\\033[0m\"; fi;echo -e $MSG;sleep 2s; done",
                 "target": {
                     "workingDir": "/projects/workshop",
                     "component": "workshop-tools"
