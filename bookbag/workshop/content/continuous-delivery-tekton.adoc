@@ -142,47 +142,148 @@ image::images/tekton-architecture.png[Tekton Architecture, 600]
 
 '''
 
-=== Create the Image Builder for Inventory Service
+=== Create an ImageStream
 
-In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+The container image you are about to create will be stored into the internal image registry of the OpenShift cluster by using
+an https://docs.openshift.com/container-platform/4.5/openshift_images/image-streams-manage.html[**ImageStream**^].
 
-image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
+It provides an abstraction for referencing container images from within OpenShift Container Platform. The imagestream and its 
+tags allow you to see what images are available and ensure that you are using the specific image you need even if the image 
+in the repository changes.
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Search' -> 'Resources' -> 'IS ImageStream' -> 'Create Image Stream'*`.
 
-[source,shell,subs="{markup-in-source}",role=copy]
+image::images/openshift-create-imagestream.png[OpenShift - Create ImageStream, 500]
+
+`*Then update the content as following:*`
+
+[source,yaml,subs="{markup-in-source}",role=copy]
 ----
-oc new-build java \
-  --name=inventory-coolstore \
-  --binary=true \
-  --labels=app=coolstore,app.kubernetes.io/instance=inventory \
-  --namespace=cn-project{USER_ID}
-----
-
-You should have the following output:
-
-[source,shell,subs="{markup-in-source}"]
-----
-    Java Applications 
-    ----------------- 
-    Platform for building and running plain Java applications (fat-jar and flat classpath)
-
-    Tags: builder, java
-
-    * A source build using binary input will be created
-      * The resulting image will be pushed to image stream tag "inventory-coolstore:latest"
-      * A binary build was created, use 'start-build --from-dir' to trigger a new build
-
---> Creating resources with label app=coolstore,app.kubernetes.io/instance=inventory ...
-    imagestream.image.openshift.io "inventory-coolstore" created
-    buildconfig.build.openshift.io "inventory-coolstore" created
---> Success
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: inventory-coolstore
+  namespace: cn-project{USER_ID}
 ----
 
+`*Then click on 'create'*`. Your ImageStream for the Inventory Service is now created.
 
+image::images/openshift-inventory-imagestream.png[OpenShift - Inventory ImageStream, 500]
 
 '''
+
+=== Create a Shared Workspace
+
+**Workspaces** allow **Tasks** to declare parts of the filesystem that need to be provided at runtime by TaskRuns. 
+
+A TaskRun can make these parts of the filesystem available in many ways: using a read-only ConfigMap or Secret, an existing PersistentVolumeClaim shared with other Tasks, create a PersistentVolumeClaim from a provided VolumeClaimTemplate, or simply an emptyDir that is discarded when the TaskRun completes.
+
+**Workspaces** are similar to Volumes except that they allow a Task author to defer to users and their TaskRuns when deciding which class of storage to use.
+
+`*Let's create a shared Volume for our pipeline*`
+
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Search' -> 'Resources' -> 'PVC PersistentVolumeClaim' -> 'Create Persistent Volume Claim'*`.
+
+image::images/openshift-create-pvc.png[OpenShift - Create PVC, 500]
+
+`*Enter the following configuration*`:
+
+.Inventory PVC
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Storage Class
+|gp2
+
+|Persistent Volume Claim Name *
+|inventory-cicd-pvc
+
+|Access Mode *
+|Single User (RWO)
+
+|Size *
+|512 MiB
+
+|Use label selectors to request storage
+|_unchecked_
+
+|===
+
+Finally, `*Click on 'Create'*`. The Shared Storage for your pipeline is ready.
+
+image::images/openshift-inventory-pvc.png[OpenShift - Inventory PVC, 500]
+
+'''
+
+=== Triggers
+
+[source,yaml,subs="{markup-in-source}",role=copy]
+----
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: java-pipeline-triggertemplate
+spec:
+  params:
+    - name: git-revision
+    - name: git-commit-message
+    - name: git-repo-url
+    - name: git-repo-name
+    - name: content-type
+    - name: pusher-name
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1alpha1
+      kind: PipelineResource
+      metadata:
+        name: app-git-$(params.git-repo-name)-$(uid)
+        namespace: cn-project{USER_ID}
+      spec:
+        type: git
+        params:
+        - name: revision
+          value: $(params.git-revision)
+        - name: url
+          value: $(params.git-repo-url)
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: java-pipeline-$(params.git-repo-name)-$(uid)
+        namespace: cn-project{USER_ID}
+      spec:
+        pipelineRef:
+          name: java-pipeline
+        resources:
+          - name: app-git
+            resourceRef:
+              name: app-git-$(params.git-repo-name)-$(uid)
+        params:
+          - name: app-name
+            value: inventory
+        workspaces:
+          - name: shared-workspace
+            persistentvolumeclaim:
+              claimName: java-pipeline-pvc
+----
+
+[source,yaml,subs="{markup-in-source}",role=copy]
+----
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: java-pipeline-listener
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - bindings:
+        - kind: ClusterTriggerBinding
+          ref: github-push
+      template:
+        name: java-pipeline-triggertemplate
+----
 
 === Create a Tekton Task
 

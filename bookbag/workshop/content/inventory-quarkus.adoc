@@ -221,7 +221,7 @@ image::images/che-preview-na.png[Che - Preview Not Available, 500]
         </div>
         <div class="container">
             <footer>
-                <p>&copy; Red Hat 2019</p>
+                <p>&copy; Red Hat 2020</p>
             </footer>
         </div>
     </body>
