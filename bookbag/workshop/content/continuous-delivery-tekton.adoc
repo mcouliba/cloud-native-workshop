@@ -154,7 +154,7 @@ in the repository changes.
 In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Search' -> 'Resources' -> 'IS ImageStream' -> 'Create Image Stream'*`.
 
-image::images/openshift-create-imagestream.png[OpenShift - Create ImageStream, 500]
+image::images/openshift-create-imagestream.png[OpenShift - Create ImageStream, 700]
 
 `*Then update the content as following:*`
 
@@ -169,11 +169,111 @@ metadata:
 
 `*Then click on 'create'*`. Your ImageStream for the Inventory Service is now created.
 
-image::images/openshift-inventory-imagestream.png[OpenShift - Inventory ImageStream, 500]
+image::images/openshift-inventory-imagestream.png[OpenShift - Inventory ImageStream, 900]
 
 '''
 
-=== Create a Shared Workspace
+=== Create a Pipeline
+
+A **Pipeline** defines a number of **Task** that should be executed and how they interact 
+with each other via *Workspace*.
+
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'Create Pipeline'*`.
+
+image::images/openshift-create-pipeline.png[OpenShift - Create Pipeline, 700]
+
+`*Specify 'inventory-pipeline' as Name then click on 'Select task' and select 'git-clone' task.*`
+
+image::images/openshift-add-git-clone-task.png[OpenShift - Add Git Clone Task, 500]
+
+`*Click on the newly created 'git-clone' task and enter the following configuration*`:
+
+.git-clone cluster task
+[%header,cols=2*]
+|===
+|Display Name
+|git-clone
+
+|url
+|http://gitea-server.gitea.svc:3000/user{USER_ID}/inventory-quarkus.git
+
+|revision
+|master
+
+|refspec
+|_Leave it blank_
+
+|submodules
+|true
+
+|depth
+|1
+
+|refspec
+|_Leave it blank_
+
+|sslVerify
+|true
+
+|subdirectory
+|_Leave it blank_
+
+|deleteExisting
+|true
+
+|httpProxy
+|_Leave it blank_
+
+|httpsProxy
+|_Leave it blank_
+
+|noProxy
+|_Leave it blank_
+
+|===
+
+Once done, let's add other tasks. `*Click on the blue plus icon at the left hand side of the 'git-clone' task*`
+
+image::images/openshift-add-task.png[OpenShift - Add task, 500]
+
+`*Then click on 'Select task' and select 's2i-java-11' task*`
+
+`*Click on the newly created 's2i-java-11' task and enter the following configuration*`:
+
+.s2i-java-11 cluster task
+[%header,cols=2*]
+|===
+|Display Name
+|s2i-java-11
+
+|PATH_CONTEXT
+|.
+
+|TLSVERIFY
+|false
+
+|MAVEN_ARGS_APPEND
+|_Leave it blank_
+
+|MAVEN_CLEAR_REPO
+|false
+
+|MAVEN_MIRROR_URL
+|http://nexus.opentlc-shared.svc:8081/repository/maven-all-public
+
+|Image*
+|image-registry.openshift-image-registry.svc:5000/cn-project{USER_ID}/inventory-coolstore
+
+|===
+
+Once done, `*click on 'Create'*`. Your simple Pipeline is now created.
+
+image::images/openshift-simple-pipeline.png[OpenShift - Simple Pipeline, 700]
+
+'''
+
+=== Attach a Shared Workspace to the Pipeline
 
 **Workspaces** allow **Tasks** to declare parts of the filesystem that need to be provided at runtime by TaskRuns. 
 
@@ -181,12 +281,10 @@ A TaskRun can make these parts of the filesystem available in many ways: using a
 
 **Workspaces** are similar to Volumes except that they allow a Task author to defer to users and their TaskRuns when deciding which class of storage to use.
 
-`*Let's create a shared Volume for our pipeline*`
-
 In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on 'Search' -> 'Resources' -> 'PVC PersistentVolumeClaim' -> 'Create Persistent Volume Claim'*`.
 
-image::images/openshift-create-pvc.png[OpenShift - Create PVC, 500]
+image::images/openshift-create-pvc.png[OpenShift - Create PVC, 700]
 
 `*Enter the following configuration*`:
 
@@ -200,7 +298,7 @@ image::images/openshift-create-pvc.png[OpenShift - Create PVC, 500]
 |gp2
 
 |Persistent Volume Claim Name *
-|inventory-cicd-pvc
+|inventory-pipeline-pvc
 
 |Access Mode *
 |Single User (RWO)
@@ -213,9 +311,90 @@ image::images/openshift-create-pvc.png[OpenShift - Create PVC, 500]
 
 |===
 
-Finally, `*Click on 'Create'*`. The Shared Storage for your pipeline is ready.
+Then, `*Click on 'Create'*`. The Shared Storage for your pipeline is ready.
 
 image::images/openshift-inventory-pvc.png[OpenShift - Inventory PVC, 500]
+
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'PL inventory-pipeline' -> 'YAML'*`
+
+image::images/openshift-inventory-pipeline-yaml.png[OpenShift - Inventory Pipeline YAML, 700]
+
+`*Add the three (3) workspace configurations*` as following:
+
+[source,yaml,subs="{markup-in-source}"]
+----
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  [...]
+  name: inventory-pipeline
+  namespace: cn-project{USER_ID}
+  [...]
+spec:
+  **workspaces:
+    - name: shared-workspace**
+  tasks:
+    - name: git-clone
+      params:
+        [...]
+      taskRef:
+        [...]
+      **workspaces:
+        - name: output
+          workspace: shared-workspace**
+    - name: s2i-java-11
+      params:
+        [...]
+      taskRef:
+        [...]
+      runAfter:
+        [...]
+      **workspaces:
+        - name: source
+          workspace: shared-workspace**
+----
+
+Finally, `*Click on 'Save'*`. A shared workspace is now configured into your Pipeline.
+
+'''
+
+=== Run the Pipeline
+
+Now that your pipeline is created and configured, let's run it.
+
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'PL inventory-pipeline' -> 'Actions' -> 'Start'*`
+
+image::images/openshift-start-inventory-pipeline.png[OpenShift Start Inventory Pipeline,900]
+
+`*Enter the following parameters then click on 'Start'*`
+
+.Pipeline Parameters
+[%header,cols=3*]
+|===
+|Name 
+|Type
+|Value
+
+|shared-workspace
+|PVC
+|PVC inventory-pipeline-pvc
+
+|===
+
+image::images/openshift-inventory-pipeline-parameters.png[OpenShift Inventory Pipeline Parameters,500]
+
+Congratulations!! You have created and run your first **Pipeline on OpenShift**!!
+
+image::images/openshift-inventory-pipeline-run.png[OpenShift Inventory Pipeline Run,700]
+
+'''
+
+=== Expand your Pipeline to deploy from Argo CD
+
+You have learnt and understood how to create a simple **Pipeline**.
+Now, let's `*create a task to deploy the OpenShift Configuration from Argo CD*` and add it the existing pipeline.
 
 '''
 
@@ -376,130 +555,6 @@ spec:
         - '--follow'
 EOF
 ----
-
-'''
-
-=== Create a Pipeline
-
-A **Pipeline** defines a number of **Task** that should be executed and how they interact 
-with each other via their inputs and outputs.
-
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
-
-[source,shell,subs="{markup-in-source}",role=copy]
-----
-cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
----
-apiVersion: tekton.dev/v1alpha1
-kind: Pipeline
-metadata:
-  name: my-pipeline
-spec:
-  resources:
-    - name: component-git
-      type: git
-  params:
-    - name: componentName
-      default: sample
-      description: The name of the component
-  tasks:
-    - name: build-jar
-      taskRef:
-        name: maven-build
-      resources:
-        inputs:
-          - name: source-repo
-            resource: component-git
-        outputs:
-          - name: source-repo
-            resource: component-git
-    - name: build-image
-      taskRef:
-        name: s2i-jar
-      runAfter:
-        - build-jar
-      resources:
-        inputs:
-          - name: source-repo
-            resource: component-git
-            from: 
-              - build-jar
-      params:
-        - name: componentName
-          value: '\$(params.componentName)'
-EOF
-----
-<1> Defines Tekton **Pipeline** Kubernetes resource 
-<2> Name of the **Pipeline**
-<3> **resources** defines which **PipelineResources** of which types the **Pipeline** will be using in its **Tasks**
-<4> **params** defines input parameters that must be supplied to the **Pipeline** and to its **Tasks**
-<5> **tasks** defines which **Tasks** to run and how to run them
-<6> References to a Tekton **Task**
-
-'''
-
-=== Create a Pipeline Resource
-
-A **PipelineResource** in a pipeline are the set of objects that are going to be used as inputs to a **Task** 
-and can be output by a **Task**.
-
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
-
-[source,shell,subs="{markup-in-source}",role=copy]
-----
-cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
----
-apiVersion: tekton.dev/v1alpha1
-kind: PipelineResource 
-metadata:
-  name: inventory-git
-spec:
-  type: git
-  params:
-  - name: url
-    value: http://gitea-gitea-server.workshop-infra.svc:3000/user{USER_ID}/inventory-quarkus.git
-  - name: revision
-    value: master
-EOF
-----
-<1> Defines Tekton **PipelineResource** Kubernetes resource 
-<2> Name of the **PipelineResource**
-<3> Type of the **PipelineResource**, a GitHub source which contains your application code.
-<4> Params of the Git **PipelineResource** 
-
-'''
-
-=== Run the Pipeline
-
-Now that your pipeline is created and configured, let's trigger it.
-
-In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Pipelines' -> 'my-pipeline'*`
-
-image::images/openshift-my-pipeline.png[OpenShift Pipeline,900]
-
-Then, `*click on 'Actions' -> 'Start'*`
-
-image::images/openshift-my-pipeline-start.png[OpenShift Pipeline,900]
-
-Finally, `*enter the following parameters*`
-
-.Pipeline Parameters
-[%header,cols=2*]
-|===
-|Name 
-|Value
-
-|componentName
-|inventory-coolstore
-
-|===
-
-image::images/openshift-my-pipeline-config.png[OpenShift Pipeline,900]
-
-Congratulations!! You have created and run your first **OpenShift Pipeline with Tekton**!!
-
-image::images/openshift-my-pipeline-run.png[OpenShift Pipeline,400]
 
 '''
 
