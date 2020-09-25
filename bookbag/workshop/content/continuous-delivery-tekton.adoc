@@ -391,235 +391,239 @@ image::images/openshift-inventory-pipeline-run.png[OpenShift Inventory Pipeline 
 
 '''
 
-=== Expand your Pipeline to deploy from Argo CD
+=== Create a custom Task
 
 You have learnt and understood how to create a simple **Pipeline**.
 Now, let's `*create a task to deploy the OpenShift Configuration from Argo CD*` and add it the existing pipeline.
-
-'''
-
-=== Triggers
-
-[source,yaml,subs="{markup-in-source}",role=copy]
-----
-apiVersion: triggers.tekton.dev/v1alpha1
-kind: TriggerTemplate
-metadata:
-  name: java-pipeline-triggertemplate
-spec:
-  params:
-    - name: git-revision
-    - name: git-commit-message
-    - name: git-repo-url
-    - name: git-repo-name
-    - name: content-type
-    - name: pusher-name
-  resourcetemplates:
-    - apiVersion: tekton.dev/v1alpha1
-      kind: PipelineResource
-      metadata:
-        name: app-git-$(params.git-repo-name)-$(uid)
-        namespace: cn-project{USER_ID}
-      spec:
-        type: git
-        params:
-        - name: revision
-          value: $(params.git-revision)
-        - name: url
-          value: $(params.git-repo-url)
-    - apiVersion: tekton.dev/v1beta1
-      kind: PipelineRun
-      metadata:
-        name: java-pipeline-$(params.git-repo-name)-$(uid)
-        namespace: cn-project{USER_ID}
-      spec:
-        pipelineRef:
-          name: java-pipeline
-        resources:
-          - name: app-git
-            resourceRef:
-              name: app-git-$(params.git-repo-name)-$(uid)
-        params:
-          - name: app-name
-            value: inventory
-        workspaces:
-          - name: shared-workspace
-            persistentvolumeclaim:
-              claimName: java-pipeline-pvc
-----
-
-[source,yaml,subs="{markup-in-source}",role=copy]
-----
-apiVersion: triggers.tekton.dev/v1alpha1
-kind: EventListener
-metadata:
-  name: java-pipeline-listener
-spec:
-  serviceAccountName: pipeline
-  triggers:
-    - bindings:
-        - kind: ClusterTriggerBinding
-          ref: github-push
-      template:
-        name: java-pipeline-triggertemplate
-----
-
-=== Create a Tekton Task
 
 A **Task** consists of a collection of steps that are executed sequentially. 
 
 Each **Task** is executed in a separate container within the same pod. 
 They can also have inputs and outputs in order to interact with other tasks in the pipeline.
 
-First, `*create a task to generate the binary (JAR) using Maven*`.
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Search' -> 'Task' -> 'T Task' -> 'Create Task'*`.
 
-[source,shell,subs="{markup-in-source}",role=copy]
+`*Then update the content as following:*`
+
+[source,yaml,subs="{markup-in-source}",role=copy]
 ----
-cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
----
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: maven-build
+  name: argocd-task-sync-and-wait
+  namespace: cn-project{USER_ID}
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/tags: deploy
+    tekton.dev/displayName: "argocd"
 spec:
-  inputs:
-    resources:
-    - name: source-repo
-      type: git 
-  outputs:
-    resources:
-    - name: source-repo
-      type: git    
+  description: >-
+    This task syncs (deploys) an Argo CD application and waits for it to be healthy.
+    To do so, it requires the address of the Argo CD server and some form of
+    authentication either a username/password or an authentication token.
+  params:
+    - name: application-name
+      description: name of the application to sync
+  stepTemplate:
+    envFrom:
+      - configMapRef:
+          name: argocd-env-configmap  # used for server address
+      - secretRef:
+          name: argocd-env-secret  # used for authentication (username/password or auth token)
   steps:
-  - name: build
-    image: 'maven:3.6.3-openjdk-11-slim'
-    workingdir: /workspace/source-repo
-    command:
-    - /usr/bin/mvn
-    args:
-    - clean 
-    - package 
-    - '-DskipTests' 
-    volumeMounts:
-    - mountPath: /.m2
-      name: m2-folder
-  - name: copy-jar
-    image: 'registry.access.redhat.com/ubi8/ubi-minimal:latest'
-    command:
-    - /usr/bin/bash
-    args: 
-    - '-c'
-    - 'cp /workspace/source-repo/target/*.jar /workspace/output/source-repo/ROOT.jar'
-  volumes:
-  - name: m2-folder
-    emptyDir: {}
-EOF
+    - name: login
+      image: argoproj/argocd:v1.7.6
+      script: |
+        if [ -z $ARGOCD_AUTH_TOKEN ]; then
+          yes | argocd login $ARGOCD_SERVER --username=$ARGOCD_USERNAME --password=$ARGOCD_PASSWORD --plaintext;
+        fi
+    - name: sync
+      image: argoproj/argocd:v1.7.6
+      script: |
+        argocd app sync cn-project{USER_ID} --label app.kubernetes.io/instance=$(params.application-name)
+    - name: wait
+      image: argoproj/argocd:v1.7.6
+      script: |
+        argocd app wait -l app.kubernetes.io/instance=$(params.application-name) --health
 ----
-<1> Defines Tekton **Task** Kubernetes resource 
-<2> Name of the **Task**
-<3> **inputs** defines paramaters or input resources needed by the **Task**
-<4> **outputs** defines resources to be uploaded and shared with next **Steps**/**Tasks**
-<5> **steps** defines the body of the **Task**.
-<6> **volumes** defines Kubernetes volumes that you want to make available to the **Task**
 
-Then, `*create a task to create the container image from the binary (s2i)*`.
+`*Then click on 'create'*`. Your Argo CD Task is now created.
 
-[source,shell,subs="{markup-in-source}",role=copy]
+image::images/openshift-argocd-task.png[OpenShift - ArgoCD Task, 500]
+
+Now let's define the Argo CD server endpoint as well as the credentials to access to.
+
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Config Maps' then click on the 'Create Config Map' button*`.
+
+image::images/openshift-create-configmap.png[Che - OpenShift Create Config Map, 900]
+
+Then `*replace the content*` with the following input:
+
+[source,yaml,subs="{markup-in-source}",role=copy]
 ----
-cat <<EOF | oc apply --namespace=cn-project{USER_ID} -f -
----
-apiVersion: tekton.dev/v1alpha1
-kind: Task
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: s2i-jar
-spec:
-  inputs:
-    resources:
-      - name: source-repo
-        type: git
-    params:
-      - name: componentName
-        default: sample
-        description: The name of the component
-  steps:
-    - name: build-image
-      image: 'quay.io/openshift/origin-cli:latest'
-      command:
-        - /usr/bin/oc
-      args:
-        - start-build
-        - \$(inputs.params.componentName)
-        - '--from-file=/workspace/source-repo/ROOT.jar'
-        - '--follow'
-EOF
+  name: argocd-env-configmap
+  namespace: cn-project{USER_ID}
+data:
+  ARGOCD_SERVER: argocd-server.argocd.svc
 ----
+
+`*Click on the 'Create button. Then click on 'Secret' then click on the 'Create Secret' button*`.
+
+image::images/openshift-create-keyvalue-secret.png[Che - OpenShift Create Secret, 900]
+
+`*Enter the following configuration*`:
+
+.ArgoCD Task Secret
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Secret Name * 
+|argocd-env-secret
+
+|Key1/Value1
+|ARGOCD_USERNAME/user{USER_ID}
+
+|Key2/Value2
+|ARGOCD_PASSWORD/{OPENSHIFT_PASSWORD}
+
+|===
+
+`*Click on the 'Create button*` 
 
 '''
 
 === Expand your Pipeline
 
-Now, you have learnt and understood how to create a simple **Pipeline** with **Task** and **PipelineResource**.
-Let's create more tasks and expand the existing pipeline.
+Now let's expand your Inventory Pipeline to cover the Continuous Deployment.
 
-In your {CHE_URL}[Workspace^], via the command menu (`*'View' -> 'Find Command...'*`),
-`*run 'Kubernetes: Use Namespace' and enter 'cn-project{USER_ID}'*`
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'PL inventory-pipeline' -> 'Actions' -> 'Edit'*`
 
-image::images/che-kubernetes-use-namespace.png[Che - Kubernetes Create, 500]
+First, let's create a Input Git resource needed for the openshift-client task.
 
+`*Scroll down, click on 'Add Resources' and enter the following parameters*`
 
-Then,`*double click on each following file to open it*` then 
-via the command menu (`*'View' -> 'Find Command...'*`),
-`*run 'Kubernetes: Create'*`
+image::images/openshift-add-tekton-resources.png[OpenShift Pipeline,500]
 
-image::images/che-kubernetes-create.png[Che - Kubernetes Create, 500]
-
-.OpenShift Pipeline
+.Input Resources
 [%header,cols=2*]
 |===
-|OpenShift Resource
-|Description
+|Parameter 
+|Value
 
-|/projects/workshop/labs/pipelines/inventory/increment-version-task.yaml
-|**Task** which retrieves the current version of the current image of your application 
-then increment it. 
-If "latest" is the current version, the next version will be "1.0", then "1.1", ...
+|Name 
+|app-git
 
-|/projects/workshop/labs/pipelines/inventory/oc-tag-image-task.yaml
-|**Task** which tags the new version of the image and updates the Deployment configuration
-of your application.
-
-|/projects/workshop/labs/pipelines/inventory/oc-deploy-task.yaml 
-|**Task** which triggers a new deployment of your application.
-
-|/projects/workshop/labs/pipelines/inventory/jar-pipeline.yaml
-|**Pipeline** which defines Cloud-Native CI/CD of your Java Jar application by calling defined **Task** above.
+|Resource Type 
+|git
 
 |===
 
-Once created, trigger the **Inventory Pipeline**.
-In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Pipelines' -> 'jar-pipeline' -> 'Actions' -> 'Start'*` and the following parameters
+`*Complete your pipeline with the two following tasks and their configurations*`
 
-.Pipeline Parameters
+image::images/openshift-full-inventory-pipeline.png[OpenShift Pipeline,900]
+
+.ArgoCD Task Configuration
+[%header,cols=3*]
+|===
+|Section
+|Parameter 
+|Value
+
+|Parameters
+|application-name * 
+|inventory
+
+|===
+
+.OpenShift Client Task Configuration
+[%header,cols=3*]
+|===
+|Section
+|Parameter 
+|Value
+
+|Parameters
+|SCRIPT 
+|oc $@
+
+|Parameters
+|ARGS1
+|rollout
+
+|Parameters
+|ARGS2
+|latest
+
+|Parameters
+|ARGS3
+|inventory-coolstore
+
+|Input Resources
+|source *
+|app-git
+
+|===
+
+'''
+
+=== Run the Full Pipeline
+
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Pipelines' -> 'PL inventory-pipeline' -> 'Actions' -> 'Start' and enter the following parameters*`
+
+.Pipeline Git Resources
 [%header,cols=2*]
 |===
 |Name 
 |Value
 
-|componentName
-|inventory-coolstore
+|app-git *
+|Create Pipeline Resource
+
+|URL *
+|http://gitea-server.gitea.svc:3000/user{USER_ID}/inventory-quarkus.git
+
+|Revision
+|_leave it empty_
 
 |===
 
-image::images/openshift-jar-pipeline-run.png[OpenShift Pipeline,900]
+
+.Pipeline Workspaces
+[%header,cols=3*]
+|===
+|Name 
+|Type
+|Value
+
+|shared-workspace
+|PVC
+|PVC inventory-pipeline-pvc
+
+|===
+
+`* Finally click on 'Start'*`
+
+Congratulations!! You have deployed your first application using OpenShift Pipeline!!
+
+image::images/openshift-run-full-inventory-pipeline.png[OpenShift Pipeline,900]
 
 Once finished,from the **Topology view**, `*select the 'cn-project{USER_ID}'*`.
 
 image::images/openshift-tekton-inventory-deployed.png[OpenShift - Inventory Deployed by Tekton, 700]
 
-Now, you can see that the **Inventory Service has been deployed by Tekton** and it is up and running.
+Now, you can see that the **Inventory Service has been deployed by OpenShift Pipeline** and it is up and running.
 
 '''
 

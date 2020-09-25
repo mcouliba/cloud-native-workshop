@@ -227,7 +227,7 @@ data:
     quarkus.datasource.password=inventory
 ----
 
-And then `*configure the container to use the newly Config Map and overlay on the default application.properties*`:
+`*Click on the 'Create button*` and then `*configure the container to use the newly Config Map and overlay on the default application.properties*`:
 
 [source,shell,subs="{markup-in-source}",role=copy]
 ----
