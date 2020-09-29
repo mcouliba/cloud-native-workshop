@@ -113,10 +113,10 @@ commands:
               },
               {
                 "type": "che",
-                "label": "Pipeline - Start All",
-                "command": "./deploy_coolstore_by_tekton.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "label": "Pipeline - Deploy Coolstore",
+                "command": "oc project cn-project${CHE_WORKSPACE_NAMESPACE#user} && ./pipeline_deploy_coolstore.sh",
                 "target": {
-                    "workingDir": "/projects/workshop/labs/pipelines/others",
+                    "workingDir": "/projects/workshop/.tasks",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []

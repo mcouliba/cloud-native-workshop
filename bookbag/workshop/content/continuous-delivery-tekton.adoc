@@ -629,21 +629,28 @@ Now, you can see that the **Inventory Service has been deployed by OpenShift Pip
 
 === Deploy the whole application with Tekton
 
-Previously, for the **Inventory Service**, you have learned how to create, configure and run a Tekton pipeline.
-Now, `*let's deploy the rest of the application wioth Tekton*`.
+Previously, for the **Inventory Service**, you have learned how to create, configure and run an OpenShift pipeline.
+Now, `*let's deploy the rest of the application*`.
 
-For doing so, `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Start All'*`
+For doing so, `*click on 'Terminal' -> 'Run Task...' ->  'Pipeline - Deploy Coolstore'*`
 
 image::images/che-runtask.png[Che - RunTask, 500]
 
-image::images/che-pipeline-start-all.png[Che - Pipeline Start All, 500]
+image::images/che-pipeline-deploy-coolstore.png[Che - Pipeline Deploy Coolstore, 500]
 
 Once executed, in the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
-`*click on 'Pipelines' -> 'PL - git-pipeline' -> 'Pipeline Runs'*`
+`*click on 'Pipelines' -> 'PL - coolstore-java-pipeline' -> 'Pipeline Runs'*`
 
-image::images/openshift-three-pipeline-run.png[3 OpenShift Pipeline Runs, 700]
+image::images/openshift-coolstore-java-pipeline-run.png[OpenShift Pipeline Runs, 700]
 
-You should see 3 pipelines running for the 3 remaining services (Catalog, Gateway and Web).
+You should see 2 pipelines running for the 2 Java services (Catalog and Gateway).
+
+
+`*Click on 'Pipelines' -> 'PL - coolstore-nodejs-pipeline' -> 'Pipeline Runs'*`
+
+image::images/openshift-coolstore-nodejs-pipeline-run.png[OpenShift Pipeline Runs, 700]
+
+You should see 1 pipeline running for the Web services.
 
 Finally , `*click on 'Topology'*` from the **Developer view** of the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^]
 and validate that the CoolStore application is deployed, up and running in the **cn-project{USER_ID}** project.

@@ -1,0 +1,10 @@
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: coolstore-git
+spec:
+  params:
+    - name: url
+      value: 'https://github.com/mcouliba/cloud-native-workshop.git'
+  type: git
