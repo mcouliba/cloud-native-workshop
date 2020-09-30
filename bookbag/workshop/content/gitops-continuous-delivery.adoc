@@ -293,32 +293,7 @@ image::images/argocd-outofsync-application.png[Argo CD - OutOfSync Application, 
 The application status is initially in yellow **OutOfSync** state since the application has yet to be 
 deployed into cn-project{USER_ID} OpenShift project, and no Kubernetes resources have been created.
 
-'''
-
-=== Sync/Deploy The GitOps Application
-
-Let's deploy the Coolstore Application into cn-project{USER_ID}!
-
-From the **Application menu**, `*Click on 'Sync > Synchronize'*`.
-
-image::images/argocd-sync.png[Argo CD - Sync, 800]
-
-This task retrieves the manifests from the GitOps Repository and performs _kubectl apply_ command of 
-the manifests. Your application is now running and you can now view its resource components, 
-logs, events, and assessed health status.
-
-`*Click on your 'coolstore' application*` and you should see everything in green.
-
-image::images/argocd-synced-application.png[Argo CD - Synced Application, 800]
-
-In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
-`*Select the 'cn-project{USER_ID}'*` to be taken to the project overview page.
-
-image::images/openshift-app-deployed-by-argocd.png[OpenShift - Coolstore Project Deployed by Argo CD , 700]
-
-You can see that all resources of your application have been created by Argo CD. 
-None of the services is deployed, up and running as we removed all automatic deployment triggers when exporting the configuration
-and there is no image available on your **cn-project{USER_ID}** project. **You are going to fix it in the next lab.**
+**You are going to fix it in the next lab.**
 
 '''
 

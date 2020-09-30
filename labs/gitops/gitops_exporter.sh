@@ -179,4 +179,11 @@ do
     fi
 done
 
+# Specific to WebNodejs
+oc patch -n ${DEV_PROJECT} -f ${DIRECTORY}/web-coolstore-deployment.yaml \
+    -p '{"spec": {"template" : {"spec":  {"containers":[{"name":"web-coolstore", "env" : [{"name": "OPENSHIFT_BUILD_NAMESPACE", "valueFrom": {"fieldRef": {"fieldPath": "metadata.namespace"}}}]}]}}}}' \
+    --local --dry-run=client -o yaml \> ${DIRECTORY}/web-coolstore-deployment.yaml.tmp \
+    && mv ${DIRECTORY}/web-coolstore-deployment.yaml.tmp ${DIRECTORY}/web-coolstore-deployment.yaml
+
+
 echo "--- Kubernetes resources has been exported! ---"

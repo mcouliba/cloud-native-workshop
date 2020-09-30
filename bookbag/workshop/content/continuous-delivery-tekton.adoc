@@ -645,7 +645,6 @@ image::images/openshift-coolstore-java-pipeline-run.png[OpenShift Pipeline Runs,
 
 You should see 2 pipelines running for the 2 Java services (Catalog and Gateway).
 
-
 `*Click on 'Pipelines' -> 'PL - coolstore-nodejs-pipeline' -> 'Pipeline Runs'*`
 
 image::images/openshift-coolstore-nodejs-pipeline-run.png[OpenShift Pipeline Runs, 700]
