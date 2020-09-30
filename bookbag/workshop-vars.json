@@ -1,0 +1,11 @@
+{
+    "OPENSHIFT_CONSOLE_URL": "https://console-openshift-console.192.168.99.100.nip.io",
+    "APPS_HOSTNAME_SUFFIX": "192.168.99.100.nip.io",
+    "USER_ID": "X",
+    "OPENSHIFT_PASSWORD": "PASSWORD",
+    "CHE_URL": "http://codeready-workspaces.apps.openshift.com",
+	"JAEGER_URL": "https://jaeger-istio-system.apps.openshift.com",
+	"KIALI_URL": "https://kiali-istio-system.apps.openshift.com",
+	"KIBANA_URL": "https://kibana-openshift-logging.apps.openshift.com",
+	"GITOPS_URL": "https://argocd-server-argocd.apps.openshift.com"
+}

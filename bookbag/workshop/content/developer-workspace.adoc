@@ -1,0 +1,176 @@
+:CHE_URL: %CHE_URL%
+:USER_ID: %USER_ID%
+:OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
+:OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/my-project{USER_ID}/graph
+
+_10 MINUTE EXERCISE_
+
+In this lab you will learn about providing your Developer Workspace with a Kubernetes-native development platform 
+and getting familiar with the OpenShift CLI and OpenShift Web Console.
+
+=== What is CodeReady Workspaces?
+
+[sidebar]
+--
+[window=_blank, align="center"]
+image::images/codereadyworkspaces-logo.png[CodeReady Workspaces, 400]
+
+https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^] is a Kubernetes-native IDE and developer collaboration platform.
+
+As an open-source project, the core goals of https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^]  are to:
+
+* **Accelerate project and developer onboarding:** As a zero-install development environment that runs in your browser, https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^]  makes it easy for anyone to join your team and contribute to a project.
+* **Remove inconsistency between developer environments:** No more: “But it works on my machine.” Your code works exactly the same way in everyone’s environment.
+* **Provide built-in security and enterprise readiness:** As https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^]  becomes a viable replacement for VDI solutions, it must be secure and it must support enterprise requirements, such as role-based access control and the ability to remove all source code from developer machines.
+
+To achieve those core goals, https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^]  provides:
+
+* **Workspaces:** Container-based developer workspaces providing all the tools and dependencies needed to code, build, test, run, and debug applications.
+* **Browser-based IDEs:** Bundled browser-based IDEs with language tooling, debuggers, terminal, VCS integration, and much more.
+* **Extensible platform:** Bring your own IDE. Define, configure, and extend the tools that you need for your application by using plug-ins, which are compatible with Visual Studio Code extensions.
+* **Enterprise Integration:** Multi-user capabilities, including Keycloak for authentication and integration with LDAP or AD.
+--
+
+'''
+
+=== Getting your Developer Workspace with a single click
+
+https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^]  will provide you an out-of-box 
+*Developer Workspace* with all the tools and the dependencies we need to do the job. **And with only one single click!**
+
+[NOTE]
+.Devfile
+====
+https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^] uses https://access.redhat.com/products/red-hat-codeready-workspacesdocs/che-7/making-a-workspace-portable-using-a-devfile/[Devfiles^] to automate the provisioning 
+of a specific workspace by defining:
+
+* projects to clone
+* browser IDE to use
+* preconfigured commands
+* tools that you need
+* application runtime definition
+
+Providing a https://github.com/mcouliba/debugging-workshop/blob/master/devfile.yaml[devfile.yaml^] file inside a Git source repository signals to https://access.redhat.com/products/red-hat-codeready-workspaces[CodeReady Workspaces^] to configure the project and runtime according 
+to this file.
+====
+
+`*Click on the below button called 'Developer Workspace'*`
+
+[link={CHE_URL}/dashboard/#/ide/user{USER_ID}/wksp-cloud-native]
+[window=_blank, align="center"]
+image::images/developer-workspace-button.svg[Developer Workspace - Button, 300]
+
+Then `*login as user{USER_ID}/{OPENSHIFT_PASSWORD}*` and let's the magic happens...
+
+image::images/che-login.png[Che - Login, 500]
+
+
+[TIP]
+====
+If you have the following screen, please `*click on 'Allow selected permissions'*`
+
+image::images/che-openshift-authorize-access.png[Che - OpenShift OAuth Authorize Access, 600]
+====
+
+Once completed, you will have a fully functional Browser-based IDE within the source code already imported.
+
+image::images/che-workspace.png[Che - Workspace, 800]
+
+'''
+
+=== What is OpenShift Connect?
+
+[sidebar]
+.OpenShift Connector
+--
+[window=_blank, align="center"]
+image::images/openshiftconnect-logo.png[OpenShift Connector logo, 150]
+
+https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
+is a Visual Studio (VS) Code extension for interacting with Red Hat OpenShift cluster with more improved features for a seamless developer experience.
+
+Developers can now focus on higher-level abstractions like their application and components and can drill down deeper to get to the OpenShift and 
+Kubernetes resources that make up their application directly from CodeReady Workspaces.
+
+Three major benefits:
+
+The new OpenShift Connector 0.1.1 features offer three major benefits:
+
+* Speeds up OpenShift development by supporting fully integrated OpenShift development and deployment within CodeReady Workspaces, 
+which lets you connect to any OpenShift cluster and create, debug, and deploy from the IDE itself.
+* Simplifies inner-loop development for cloud infrastructure, since under the hood this extension uses tools like 
+https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_developer_cli/understanding-odo.html[OpenShift Do (odo)^],
+a fast and simple CLI tool for creating applications on Red Hat OpenShift Container Platform and 
+https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html[OpenShift CLI (oc)^] 
+to help you interact with the local or production OpenShift instance and complete the inner-loop experience.
+* Enhances developer workflow by providing a streamlined developer experience for working with OpenShift instances (3.x or 4.x) 
+and supporting public cloud instances such as Red Hat OpenShift on Azure and AWS.
+
+https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^] on CodeReady Workspaces provides an end-to-end developer experience for interacting with a Red Hat OpenShift cluster. 
+By leveraging the IDE features, developers can create, deploy, and debug applications and then deploy directly to 
+the running OpenShift cluster.
+--
+
+'''
+
+=== Connect Your Workspace to Your OpenShift User
+
+First, in your {CHE_URL}[Workspace^], 
+`*click on 'Terminal' -> 'Run Task...' ->  'OpenShift - Login'*`
+
+image::images/che-runtask.png[Che - RunTask, 500]
+
+image::images/che-openshift-login.png[Che - OpenShift Login, 500]
+
+
+Then, `*open the 'OpenShift' View*`, you should see at least 1 project as following:
+
+image::images/che-openshift-view.png[Che - OpenShift View, 300]
+
+* The **'cn-project{USER_ID}' project** will be used as a **Staging Environment**.
+
+So, as you can see, you are missing the **Development Environment**. Let's create it!
+
+In your {CHE_URL}[Workspace^], from **'OpenShift' View**, 
+`*right-click on the cluster URL and select 'New Project'*`
+
+image::images/che-openshift-new-project.png[Che - OpenShift New Project, 500]
+
+Finally, `*enter the following information*`:
+
+.OpenShift New Project
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Provide Project name.
+|my-project{USER_ID}
+
+|===
+
+'''
+
+=== Log in to the OpenShift Developer Console
+
+OpenShift ships with a web-based console that will allow users to
+perform various tasks via a browser.
+
+`*Click on the below button called 'Developer Console'*`
+
+[link={OPENSHIFT_CONSOLE_URL}]
+[window=_blank, align="center"]
+image::images/developer-console-button.png[Developer Workspace - Button, 300]
+
+`*Enter your username and password (user{USER_ID}/{OPENSHIFT_PASSWORD})*` and 
+then log in. After you have authenticated to the web console, you will be presented with a
+list of projects that your user has permission to work with. 
+
+`*Select the 'Developer View' then your 'my-project{USER_ID}'*` to be taken to the project overview page
+which will list all of the routes, services, deployments, and pods that you have
+running as part of your project. There's nothing there now, but that's about to
+change.
+
+image::images/openshift-empty-project.png[OpenShift - Empty Project, 700]
+
+Now you are ready to get started with the labs!

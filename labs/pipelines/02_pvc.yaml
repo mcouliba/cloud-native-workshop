@@ -1,0 +1,48 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: inventory-pipeline-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+  storageClassName: gp2
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: catalog-pipeline-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+  storageClassName: gp2
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: gateway-pipeline-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+  storageClassName: gp2
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: web-pipeline-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 512Mi
+  storageClassName: gp2

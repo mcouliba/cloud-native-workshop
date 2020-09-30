@@ -1,0 +1,18 @@
+name: OpenShift Cloud-Native Workshop
+
+modules:
+  activate:
+    - introduction
+    - developer-workspace
+    - inventory-quarkus
+    - catalog-spring-boot
+    - gateway-vertx
+    - webui-deployment
+    - app-health
+    - app-config
+    - gitops-continuous-delivery
+    - continuous-delivery-tekton
+    - fault-tolerance
+    - service-mesh
+    - traffic-routing
+    - env-info
