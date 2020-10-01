@@ -613,7 +613,7 @@ In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer vie
 
 |===
 
-`* Finally click on 'Start'*`
+`*Finally click on 'Start'*`
 
 Congratulations!! You have deployed your first application using OpenShift Pipeline!!
 
@@ -624,6 +624,18 @@ Once finished,from the **Topology view**, `*select the 'cn-project{USER_ID}'*`.
 image::images/openshift-tekton-inventory-deployed.png[OpenShift - Inventory Deployed by Tekton, 700]
 
 Now, you can see that the **Inventory Service has been deployed by OpenShift Pipeline** and it is up and running.
+
+In the {GITOPS_URL}[Argo CD^], `*Select the 'Application menu' then click on the 'cn-project{USER_ID}' application*`:
+
+image::images/argocd-outofsync-application.png[Argo CD - Out Of Sync Application, 500]
+
+Argo CD has synchronized all the Inventory OpenShift manifests stored into your {GIT_URL}/user{USER_ID}/gitops-cn-project['gitops-cn-project' Git Repository^] 
+with your 'cn-project{USER_ID}' project on OpenShift.
+
+image::images/argocd-synced-inventory.png[Argo CD - Synced Inventory, 900]
+
+Your Argo CD application is still 'OutofSync' because the other OpenShift Manifests (Catalog, Gateway and Web) are not synchronized yet.
+This is the next step.
 
 '''
 
@@ -651,10 +663,21 @@ image::images/openshift-coolstore-nodejs-pipeline-run.png[OpenShift Pipeline Run
 
 You should see 1 pipeline running for the Web services.
 
-Finally , `*click on 'Topology'*` from the **Developer view** of the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^]
+`*Click on 'Topology'*` from the **Developer view** of the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^]
 and validate that the CoolStore application is deployed, up and running in the **cn-project{USER_ID}** project.
 
 image::images/openshift-tekton-coolstore-deployed.png[OpenShift - Coolstore Deployed by Tekton, 700]
+
+Finally, in the {GITOPS_URL}[Argo CD^], `*Select the 'Application menu' then click on the 'cn-project{USER_ID}' application*`:
+
+image::images/argocd-sync-application.png[Argo CD - Sync Application, 500]
+
+Argo CD has synchronized all the OpenShift manifests stored into your {GIT_URL}/user{USER_ID}/gitops-cn-project['gitops-cn-project' Git Repository^] 
+with your 'cn-project{USER_ID}' project on OpenShift.
+
+image::images/argocd-synced-coolstore.png[Argo CD - Synced Coolstore, 900]
+
+Your Argo CD application is now 'Synced'.
 
 '''
 
