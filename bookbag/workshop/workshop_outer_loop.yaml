@@ -7,5 +7,4 @@ modules:
     - gitops-continuous-delivery
     - continuous-delivery-tekton
     - service-mesh
-    - traffic-routing
     - env-info

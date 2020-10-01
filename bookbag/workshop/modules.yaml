@@ -40,10 +40,7 @@ modules:
     exit_sign: Next Lab
   service-mesh:
     name:  Microservice Tracing with Service Mesh
-    exit_sign: Next Lab
-  traffic-routing:
-    name:  Traffic Routing with Service Mesh
-    exit_sign: Next Lab
+    exit_sign: Resources
   env-info:
     name: "Appendix: Lab Env Info"
     exit_sign: Finish Workshop

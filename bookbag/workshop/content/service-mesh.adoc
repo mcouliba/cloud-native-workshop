@@ -244,37 +244,216 @@ image::images/kiali-graph.png[Kiali- Graph,900]
 
 '''
 
-=== Tracing with Kiali and Jaeger
+=== Deploy the new Catalog Service
+
+A new **Catalog Service v2** has been implemented in https://golang.org/[Golang^] which uses the same business logic than **Catalog Service v1** 
+except that all product descriptions are returned in **UPPERCASE**.
+
+
+Let's deploy the service. In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on '+ Add' and select 'From Docker'*`
+
+image::images/openshift-add-from-docker.png[OpenShift - Add from Docker, 700]
+
+Then, `*enter the following information and click on 'Create' button*` :
+
+.Catalog v2 Project
+[%header,cols=2*]
+|===
+|Parameter 
+|Value
+
+|Git Repo URL
+|{WORKSHOP_GIT_REPO}
+
+|Git Reference
+|{WORKSHOP_GIT_REF}
+
+|Context Dir
+|/labs/catalog-go
+
+|Application Name
+|coolstore
+
+|Name
+|catalog-coolstore-v2
+
+|Create a route to the application
+|Checked
+
+|Labels
+|app=catalog app.kubernetes.io/instance=catalog app.kubernetes.io/name=golang app.kubernetes.io/part-of=coolstore version=2.0
+
+|===
+
+image::images/openshift-catalogv2-topology.png[OpenShift - Catalog Topology, 700]
+
+Now, `*enable the Service Mesh to the service*` by adding the Istio sidecar to the **Catalog Service v2**.
+
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
+.>_ workshop-tools terminal
+----
+oc patch deployment/catalog-coolstore-v2 --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}'
+----
+
+To confirm that the application is successfully deployed, `*run this following command*`:
+
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
+.>_ workshop-tools terminal
+----
+oc get pods -ldeploymentconfig=catalog-coolstore-v2
+
+----
+
+You should get an output as following:
+
+[source%nowrap,shell,subs="{markup-in-source}"]
+.>_ workshop-tools terminal
+----
+NAME                           READY     STATUS    RESTARTS   AGE
+catalog-coolstore-v2-3-n2bmf   2/2       Running   0          24s
+----
+
+The status should be **Running** and there should be **2/2** pods in the **Ready** column.
+Wait few seconds that the application restarts.
+
+'''
+
+=== Enabling A/B Testing
 
 [sidebar]
+.A/B Testing
 --
-image::images/jaeger-logo.png[Jaeger,400]
-
-Jaeger, inspired by Dapper and OpenZipkin, is a distributed tracing system released as open source by Uber Technologies. 
-It is used for monitoring and troubleshooting microservices-based distributed systems, including:
-
-* Distributed context propagation
-* Distributed transaction monitoring
-* Root cause analysis
-* Service dependency analysis
-* Performance / latency optimization
-
-https://www.kiali.io/[Kiali^] includes https://www.jaegertracing.io/[Jaeger Tracing^] to provide distributed tracing out of the box.
+https://en.wikipedia.org/wiki/A/B_testing[A/B testing^] allows running multiple versions of a functionality in parallel and using analytics of the user behavior it is possible to determine which version is the best. 
+It is also possible to launch the new features only for a small set of users, to prepare the general avalability of a new feature. 
 --
 
-In the {KIALI_URL}[Kiali Console^], from **Graph view**, 
-`*right-click on the gateway-service node and select 'Show Traces'*`.
+The implementation of such procedure like **A/B Testing** is one are the advantages coming with OpenShift Service Mesh.
+For this lab, you want to answer the following question: 
 
-image::images/kiali-show-traces.png[Kiali- Show Traces, 700]
+**Do the product descriptions written in uppercase increase sales rate?**
 
-You should be redirected to the {JAEGER_URL}[Jaeger Console^].
-`*Log in as user{USER_ID}/{OPENSHIFT_PASSWORD}'*`
+The only step is to define the rules to distribute the traffic between the services. A **VirtualService** defines a set of traffic routing rules 
+to apply when a host is addressed. Each routing rule defines matching criteria for traffic of a specific protocol. 
+If the traffic is matched, then it is sent to a named destination service (or subset/version of it) defined in the registry.
 
-image::images/kiali-traces-view.png[Kiali- Traces View,700]
+In the Terminal window, `*issue the following command*`:
 
-Let’s `*click on one of trace title bar*`.
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
+.>_ workshop-tools terminal
+----
+cat << EOF | oc apply -n cn-project{USER_ID} -f -
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: catalog-coolstore
+spec:
+  hosts:
+    - catalog-coolstore
+  http:
+  - route:
+    - destination:
+        host: catalog-coolstore
+      weight: 90
+    - destination:
+        host: catalog-coolstore-v2
+      weight: 10
+EOF
+----
+Doing so, you route **90%** of the **HTTP traffic** to pods of the **Catalog Service** and the **10%** remaining to pods of the **Catalog Service v2**.
 
-image::images/kiali-trace-detail-view.png[Kiali- Trace Detail View,700]
+'''
+
+=== Generate HTTP traffic.
+
+Let's now see the A/B testing with Site Mesh in action.
+First, we need to generate HTTP traffic by sending several requests to the **Gateway Service** from the **Istio Gateway**
+
+In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Gateway - Generate Traffic'*`
+
+image::images/che-runtask.png[Che - RunTask, 500]
+
+image::images/che-gateway-traffic.png[Che - Gateway Traffic, 500]
+
+In the window called **'>_ Gateway - Generate Traffic terminal'**, 
+you likely see **'Gateway => Catalog Spring Boot (v1)'** or **'Gateway => Catalog GoLang (v2)'**
+
+image::images/che-run-gateway-90-10.png[Terminal - RunGatewayService,200]
+
+TIP: You can also go to the Web interface and refresh the page to see that product descriptions is sometimes in uppercase (v2) or not (v1).
+
+In {KIALI_URL}[Kiali Console^], from the **'Graph' view**,
+`*enter the following parameters*` to see the traffic distribution between Catalog v1 and v2:
+
+.Graph Settings
+[%header,cols=2*]
+|===
+|Parameter
+|Value
+
+|Namespace 
+|cn-project{USER_ID}
+
+|Type Graph
+|Versioned app graph
+
+|Edge Label
+|Requests percentage
+
+|Display
+|'Traffic Animation' checked
+
+|===
+
+image::images/kiali-abtesting-90-10.png[Kiali- Graph,700]
+
+You can see that the traffic between the two version of the **Catalog** is shared as defined (at least very very close). 
+
+=== Validate the result
+
+After one week trial, you have collected enough information to confirm that product descriptions in uppercase do increate sales rates. 
+So you will route all the traffic to **Catalog Service v2**.
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
+[source%nowrap,shell,subs="{markup-in-source}",role=copy]
+.>_ workshop-tools terminal
+----
+cat << EOF | oc apply -n cn-project{USER_ID} -f -
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: catalog-coolstore
+spec:
+  hosts:
+    - catalog-coolstore
+  http:
+  - route:
+    - destination:
+        host: catalog-coolstore
+      weight: 0
+    - destination:
+        host: catalog-coolstore-v2
+      weight: 100
+EOF
+----
+
+Now, you likely see only *'Gateway => Catalog GoLang (v2)'* in the **'>_ Gateway - Generate Traffic terminal'**.
+
+image::images/che-run-gateway-100-0.png[Terminal - RunGatewayService,200]
+
+And from {KIALI_URL}[Kiali Console^], you can visualize that **100%** of the traffic is switching gradually to **Catalog Service v2**.
+
+image::images/kiali-abtesting-100-0.png[Kiali- Graph,700]
 
 '''
 
