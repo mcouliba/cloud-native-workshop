@@ -6,7 +6,6 @@ modules:
     - developer-workspace
     - gitops-continuous-delivery
     - continuous-delivery-tekton
-    - fault-tolerance
     - service-mesh
     - traffic-routing
     - env-info
