@@ -5,14 +5,16 @@ NAMESPACE=cn-project${CHE_WORKSPACE_NAMESPACE#user}
 
 oc apply -f ${DIRECTORY}/../labs/pipelines -n ${NAMESPACE}
 
-tkn pipeline start coolstore-java-pipeline -n ${NAMESPACE} \
-    --prefix-name inventory \
-    --resource app-git=coolstore-git \
-    --workspace name=shared-workspace,claimName=inventory-pipeline-pvc \
-    --param APP_NAME=inventory \
-    --param APP_GIT_URL=https://github.com/mcouliba/cloud-native-workshop.git \
-    --param APP_GIT_CONTEXT=labs/inventory-quarkus \
-    --param NAMESPACE=${NAMESPACE} 
+# tkn pipeline start coolstore-java-pipeline -n ${NAMESPACE} \
+#     --prefix-name inventory \
+#     --resource app-git=coolstore-git \
+#     --workspace name=shared-workspace,claimName=inventory-pipeline-pvc \
+#     --param APP_NAME=inventory \
+#     --param APP_GIT_URL=https://github.com/mcouliba/cloud-native-workshop.git \
+#     --param APP_GIT_CONTEXT=labs/inventory-quarkus \
+#     --param NAMESPACE=${NAMESPACE} 
+#
+# tkn pipeline logs coolstore-java-pipeline -n ${NAMESPACE} --last -f
 
 tkn pipeline start coolstore-java-pipeline -n ${NAMESPACE} \
     --prefix-name catalog \
@@ -23,6 +25,8 @@ tkn pipeline start coolstore-java-pipeline -n ${NAMESPACE} \
     --param APP_GIT_CONTEXT=labs/catalog-spring-boot \
     --param NAMESPACE=${NAMESPACE}
 
+tkn pipeline logs coolstore-java-pipeline -n ${NAMESPACE} --last -f
+
 tkn pipeline start coolstore-java-pipeline -n ${NAMESPACE} \
     --prefix-name gateway \
     --resource app-git=coolstore-git \
@@ -32,6 +36,8 @@ tkn pipeline start coolstore-java-pipeline -n ${NAMESPACE} \
     --param APP_GIT_CONTEXT=labs/gateway-vertx \
     --param NAMESPACE=${NAMESPACE}
 
+tkn pipeline logs coolstore-java-pipeline -n ${NAMESPACE} --last -f
+
 tkn pipeline start coolstore-nodejs-pipeline -n ${NAMESPACE} \
     --prefix-name web \
     --resource app-git=coolstore-git \
@@ -39,4 +45,6 @@ tkn pipeline start coolstore-nodejs-pipeline -n ${NAMESPACE} \
     --param APP_NAME=web \
     --param APP_GIT_URL=https://github.com/mcouliba/cloud-native-workshop.git \
     --param APP_GIT_CONTEXT=labs/web-nodejs \
-    --param NAMESPACE=${NAMESPACE}   
+    --param NAMESPACE=${NAMESPACE}  
+
+tkn pipeline logs coolstore-nodejs-pipeline -n ${NAMESPACE} --last -f 

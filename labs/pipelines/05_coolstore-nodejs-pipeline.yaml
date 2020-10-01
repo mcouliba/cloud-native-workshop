@@ -47,7 +47,7 @@ spec:
           value: 'false'
         - name: IMAGE
           value: >-
-            image-registry.openshift-image-registry.svc:5000/$(context.taskRun.namespace)/$(params.APP_NAME)-coolstore
+            image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/$(params.APP_NAME)-coolstore
       runAfter:
         - git-clone
       taskRef:
