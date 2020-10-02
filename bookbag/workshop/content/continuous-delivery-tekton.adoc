@@ -1,6 +1,7 @@
 :markup-in-source: verbatim,attributes,quotes
 :CHE_URL: %CHE_URL%
 :GIT_URL: %GIT_URL%
+:GITOPS_URL: %GITOPS_URL%
 :USER_ID: %USER_ID%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
 :OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
