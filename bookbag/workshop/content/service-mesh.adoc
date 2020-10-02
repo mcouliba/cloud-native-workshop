@@ -317,7 +317,7 @@ Then, `*enter the following information and click on 'Create' button*` :
 |Checked
 
 |Labels
-|app=catalog app.kubernetes.io/instance=catalog app.kubernetes.io/name=golang app.kubernetes.io/part-of=coolstore version=2.0
+|app.kubernetes.io/name=golang
 
 |===
 
@@ -356,6 +356,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: catalog-coolstore
+  namespace: cn-project{USER_ID}
 spec:
   hosts:
     - catalog-coolstore
