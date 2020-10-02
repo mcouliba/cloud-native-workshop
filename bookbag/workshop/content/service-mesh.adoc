@@ -416,7 +416,7 @@ In {KIALI_URL}[Kiali Console^], from the **'Graph' view**,
 
 |===
 
-image::images/kiali-abtesting-90-10.png[Kiali- Graph,700]
+image::images/kiali-abtesting-90-10.png[Kiali- Graph,900]
 
 You can see that the traffic between the two version of the **Catalog** is shared as defined (at least very very close). 
 
@@ -458,7 +458,7 @@ image::images/che-run-gateway-100-0.png[Terminal - RunGatewayService,400]
 
 And from {KIALI_URL}[Kiali Console^], you can visualize that **100%** of the traffic is switching gradually to **Catalog Service v2**.
 
-image::images/kiali-abtesting-100-0.png[Kiali- Graph,700]
+image::images/kiali-abtesting-100-0.png[Kiali- Graph,900]
 
 '''
 
