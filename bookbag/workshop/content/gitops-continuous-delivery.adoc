@@ -293,6 +293,8 @@ image::images/argocd-outofsync-application.png[Argo CD - OutOfSync Application, 
 The application status is initially in yellow **OutOfSync** state since the application has yet to be 
 deployed into cn-project{USER_ID} OpenShift project, and no Kubernetes resources have been created.
 
+image::images/argocd-outofsync-application-details.png[Argo CD - OutOfSync Application, 500]
+
 **You are going to fix it in the next lab.**
 
 '''

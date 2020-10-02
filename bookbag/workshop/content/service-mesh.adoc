@@ -6,6 +6,8 @@
 :APPS_HOSTNAME_SUFFIX: %APPS_HOSTNAME_SUFFIX%
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
 :OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
+:WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
+:WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
 
 _20 MINUTE EXERCISE_
 
@@ -44,82 +46,45 @@ The components that make up the data plane and the control plane are:
 
 OpenShift Service Mesh automatically injects the sidecar into the Pod by specifying **sidecar.istio.io/inject:true** annotation in the DeploymentConfig.
 
-In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on the 'DC inventory-coolstore' bubble -> 'DC inventory-coolstore'*`
 
-image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
+image::images/openshift-dc-inventory-topology.png[OpenShift - Inventory Topology, 700]
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+Then, `*click on the 'YAML' tab and add #sidecar.istio.io/inject: 'true'# under the 'spec.template.metadata.annotations' tag*`
 
-[source%nowrap,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}' -n cn-project{USER_ID}
+image::images/openshift-enable-istio-inventory.png[OpenShift - Enable Istio Inventory, 700]
 
-oc patch dc/inventory-coolstore --patch '{"spec": {"template": {"spec": {"containers": [{"name": "inventory-coolstore", "command" : ["/bin/bash"], "args": ["-c", "until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \"Waiting for Istio Sidecar...\"; sleep 1; done; sleep 10; /usr/local/s2i/run"]}]}}}}' -n cn-project{USER_ID}
+`*Click on the 'Save' button*`
 
-oc rollout latest dc/inventory-coolstore -n cn-project{USER_ID}
+Now, let's deploy this new configuration. `*Click on the 'POD' tab -> 'Actions' -> 'Start Rollout'*`
 
-----
-<1> Define the annotation to automatically inject an Istio sidecar
-<2> Wait for the Envoy Proxy to be up and running before starting the application
-<3> Trigger the deployment
+image::images/openshift-rollout-inventory.png[OpenShift - Rollout Inventory, 700]
 
-To confirm that the application is successfully deployed, `*run this following command*`:
+The current pod will be terminated and a new one will be deployed with 2/2 containers in the **Ready** column.
 
-[source%nowrap,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-oc get pods -ldeploymentconfig=inventory-coolstore -n cn-project{USER_ID}
-----
+image::images/openshift-istio-inventory.png[OpenShift - Istio Inventory, 700]
 
-You should get an output as following:
+`*Click on 'P inventory-coolstore-xxxx' then scroll down.*` 
+In the Container section, we should have 2 containers: *One for the inventory-coolstore application and one for the istio-proxy sidecar.*
 
-[source%nowrap,shell,subs="{markup-in-source}"]
-.>_ workshop-tools terminal
-----
-NAME                        READY     STATUS    RESTARTS   AGE
-inventory-coolstore-4-dhfrm   2/2       Running   0          12s
-----
+image::images/openshift-istio-inventory-details.png[OpenShift - Istio Inventory, 700]
 
-The status should be **Running** and there should be **2/2** pods in the **Ready** column. 
+Congratulations!! You successfully put the Inventory Service under Service Mesh control.
 
 '''
 
+
 === Enabling Service Mesh to Catalog and Gateway Service
 
-Now, we understand how to enable Service Mesh for one service, let's enable for Catalog and Gateway Services via a simple command.
+Now, we understand how to enable Service Mesh for a service, `*reproduce the previous step for Catalog and Gateway Services*`.
 
-In your {CHE_URL}[Workspace^], `*click on 'Terminal' -> 'Run Task...' ->  'Service Mesh - Deploy Catalog and Gateway'*`
+Once done, to verify the deployment, *in the Container section* of the *'catalog-coolstore-xxxx' and 'gateway-coolstore-xxxx'* pods, 
+`*we should find the 2 containers*`, one for the application, the other the istio-proxy sidecar.
 
-image::images/che-runtask.png[Che - RunTask, 500]
+image::images/openshift-istio-catalog-details.png[OpenShift - Istio Catalog, 700]
 
-image::images/che-servicemesh-deploy.png[Che - Service Mesh Deploy, 500]
-
-To verify the deployment `*run this following command*`:
-
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-oc get pods -ldeploymentconfig=catalog-coolstore -n cn-project{USER_ID}
-
-oc get pods -ldeploymentconfig=gateway-coolstore -n cn-project{USER_ID}
-
-----
-
-You should get an output as following:
-
-[source,bash,subs="{markup-in-source}"]
-.>_ workshop-tools terminal
-----
-NAME                        READY     STATUS    RESTARTS   AGE
-catalog-coolstore-4-xnwfp   2/2       Running   0          39s
-
-NAME                        READY     STATUS    RESTARTS   AGE
-gateway-coolstore-4-h5g7t   2/2       Running   0          73s
-----
-
-The status should be **Running** and there should be **2/2** pods in the **Ready** column.
+image::images/openshift-istio-gateway-details.png[OpenShift - Istio Gateway, 700]
 
 '''
 
@@ -131,17 +96,67 @@ In an OpenShift Service Mesh, a better approach is to use a different configurat
 * A **Gateway** describes a load balancer operating at the edge of the mesh receiving incoming or outgoing HTTP/TCP connections. The specification describes a set of ports that should be exposed, the type of protocol to use, SNI configuration for the load balancer, etc.
 * A **VirtualService** defines a set of traffic routing rules to apply when a host is addressed. Each routing rule defines matching criteria for traffic of a specific protocol. If the traffic is matched, then it is sent to a named destination service (or subset/version of it) defined in the registry.
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*` 
-to create an **Istio Gateway** and a **VirtualService** for the **Gateway Service**:
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Search' -> 'Resources' -> 'G Gateway' -> 'Create Gateway'*`.
 
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
+image::images/openshift-create-gateway.png[OpenShift - Create Gateway, 700]
+
+`*Then update the content as following:*`
+
+[source,yaml,subs="{markup-in-source}",role=copy]
 ----
-oc create -n cn-project{USER_ID} -f /projects/workshop/labs/gateway-vertx/openshift/istio-gateway.yml
-
-sed s/PROJECT/cn-project{USER_ID}/g /projects/workshop/labs/gateway-vertx/openshift/virtualservice.yml | oc create -n cn-project{USER_ID} -f -
-
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: gateway-coolstore
+  namespace: cn-project{USER_ID}
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
 ----
+
+`*Click on 'create'*`. Your Istio Gateway is now created.
+
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Search' -> 'Resources' -> 'VS VirtualService' -> 'Create VirtualService'*`.
+
+image::images/openshift-create-virtualservice.png[OpenShift - Create VirtualService, 700]
+
+`*Then update the content as following:*`
+
+[source,yaml,subs="{markup-in-source}",role=copy]
+----
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: gateway-coolstore
+  namespace: cn-project{USER_ID}
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - gateway-coolstore
+  http:
+    - match:
+        - uri:
+            prefix: /cn-project{USER_ID}/api
+      rewrite:
+        uri: "/api"
+      route:
+        - destination:
+            port:
+              number: 8080
+            host: gateway-coolstore
+----
+
+`*Then click on 'create'*`. The Virtual Service for the Gateway Service is now created.
 
 To confirm that the **Istio Gateway** is properly configured, 
 `*click on http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}/api/products[http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}/api/products^]*`
@@ -167,13 +182,27 @@ You should have the following result:
 
 === Updating the WebUI to use the Istio Gateway
 
-`*Issue the following command*` to configure the **WebUI Service** to use the **Istio Gateway** instead of the **OpenShift Route**:
+`*Configure the WebUI Service to use the Istio Gateway instead of the OpenShift Route*`.
 
-[source,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-oc set env deployment/web-coolstore -n cn-project{USER_ID} COOLSTORE_GW_ENDPOINT=http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}
-----
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on the 'D web-coolstore' bubble -> 'D web-coolstore' and go to the 'Environement' tab*`
+
+`*Click on '+ Add Value' then add the following environment variable*`
+
+.Web Environment Variables
+[%header,cols=2*]
+|===
+|Key 
+|Value
+
+|COOLSTORE_GW_ENDPOINT
+|http://istio-ingressgateway-istio-system.{APPS_HOSTNAME_SUFFIX}/cn-project{USER_ID}
+
+|===
+
+image::images/openshift-add-web-envvars.png[OpenShift - Add Web Environment Variables, 700]
+
+`*Click on 'Save'*`. The WebUI Service will be redeployed with the new environment variable.
 
 '''
 
@@ -278,6 +307,12 @@ Then, `*enter the following information and click on 'Create' button*` :
 |Name
 |catalog-coolstore-v2
 
+|Resources
+|Deployment
+
+|Pipelines
+|_Unchecked_
+
 |Create a route to the application
 |Checked
 
@@ -287,42 +322,6 @@ Then, `*enter the following information and click on 'Create' button*` :
 |===
 
 image::images/openshift-catalogv2-topology.png[OpenShift - Catalog Topology, 700]
-
-Now, `*enable the Service Mesh to the service*` by adding the Istio sidecar to the **Catalog Service v2**.
-
-In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
-on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
-
-image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
-
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
-
-[source%nowrap,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-oc patch deployment/catalog-coolstore-v2 --patch '{"spec": {"template": {"metadata": {"annotations": {"sidecar.istio.io/inject": "true"}}}}}'
-----
-
-To confirm that the application is successfully deployed, `*run this following command*`:
-
-[source%nowrap,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
-----
-oc get pods -ldeploymentconfig=catalog-coolstore-v2
-
-----
-
-You should get an output as following:
-
-[source%nowrap,shell,subs="{markup-in-source}"]
-.>_ workshop-tools terminal
-----
-NAME                           READY     STATUS    RESTARTS   AGE
-catalog-coolstore-v2-3-n2bmf   2/2       Running   0          24s
-----
-
-The status should be **Running** and there should be **2/2** pods in the **Ready** column.
-Wait few seconds that the application restarts.
 
 '''
 
@@ -344,13 +343,15 @@ The only step is to define the rules to distribute the traffic between the servi
 to apply when a host is addressed. Each routing rule defines matching criteria for traffic of a specific protocol. 
 If the traffic is matched, then it is sent to a named destination service (or subset/version of it) defined in the registry.
 
-In the Terminal window, `*issue the following command*`:
+In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
+`*click on 'Search' -> 'Resources' -> 'VS VirtualService' -> 'Create VirtualService'*`.
 
-[source%nowrap,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
+image::images/openshift-create-virtualservice.png[OpenShift - Create VirtualService, 700]
+
+Then `*update the content as following:*`
+
+[source,yaml,subs="{markup-in-source}",role=copy]
 ----
-cat << EOF | oc apply -n cn-project{USER_ID} -f -
----
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -366,9 +367,10 @@ spec:
     - destination:
         host: catalog-coolstore-v2
       weight: 10
-EOF
 ----
-Doing so, you route **90%** of the **HTTP traffic** to pods of the **Catalog Service** and the **10%** remaining to pods of the **Catalog Service v2**.
+
+`*Click on 'create'*`. By doing so, you route **90%** of the **HTTP traffic** to pods of the **Catalog Service** and 
+the **10%** remaining to pods of the **Catalog Service v2**.
 
 '''
 
@@ -386,7 +388,7 @@ image::images/che-gateway-traffic.png[Che - Gateway Traffic, 500]
 In the window called **'>_ Gateway - Generate Traffic terminal'**, 
 you likely see **'Gateway => Catalog Spring Boot (v1)'** or **'Gateway => Catalog GoLang (v2)'**
 
-image::images/che-run-gateway-90-10.png[Terminal - RunGatewayService,200]
+image::images/che-run-gateway-90-10.png[Terminal - RunGatewayService,400]
 
 TIP: You can also go to the Web interface and refresh the page to see that product descriptions is sometimes in uppercase (v2) or not (v1).
 
@@ -417,39 +419,41 @@ image::images/kiali-abtesting-90-10.png[Kiali- Graph,700]
 
 You can see that the traffic between the two version of the **Catalog** is shared as defined (at least very very close). 
 
+'''
+
 === Validate the result
 
 After one week trial, you have collected enough information to confirm that product descriptions in uppercase do increate sales rates. 
 So you will route all the traffic to **Catalog Service v2**.
 
-In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+In {KIALI_URL}[Kiali Console^], `*click on 'Istio Config' then 'catalog-coolstore' VirtualService*`
 
-[source%nowrap,shell,subs="{markup-in-source}",role=copy]
-.>_ workshop-tools terminal
+image::images/kiali-edit-catalog-coolstore-vs.png[Kiali- Edit Catalog Coolstore VirtualService,700]
+
+Then, `*click on the 'YAML' tab and change the configuration as following*`
+
+[source,yaml,subs="{markup-in-source}"]
 ----
-cat << EOF | oc apply -n cn-project{USER_ID} -f -
----
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: catalog-coolstore
+[...]
 spec:
   hosts:
     - catalog-coolstore
+  gateways: ~
   http:
-  - route:
-    - destination:
-        host: catalog-coolstore
-      weight: 0
-    - destination:
-        host: catalog-coolstore-v2
-      weight: 100
-EOF
+    - route:
+        - destination:
+            host: catalog-coolstore
+            **weight: 0**
+        - destination:
+            host: catalog-coolstore-v2
+            **weight: 100**
+[...]
 ----
 
-Now, you likely see only *'Gateway => Catalog GoLang (v2)'* in the **'>_ Gateway - Generate Traffic terminal'**.
+Now, In your {CHE_URL}[Workspace^], in the window called **'>_ Gateway - Generate Traffic terminal'**, 
+you likely see only *'Gateway => Catalog GoLang (v2)'* in the **'>_ Gateway - Generate Traffic terminal'**.
 
-image::images/che-run-gateway-100-0.png[Terminal - RunGatewayService,200]
+image::images/che-run-gateway-100-0.png[Terminal - RunGatewayService,400]
 
 And from {KIALI_URL}[Kiali Console^], you can visualize that **100%** of the traffic is switching gradually to **Catalog Service v2**.
 

@@ -6,7 +6,7 @@
 :OPENSHIFT_PASSWORD: %OPENSHIFT_PASSWORD%
 :OPENSHIFT_CONSOLE_URL: %OPENSHIFT_CONSOLE_URL%/topology/ns/cn-project{USER_ID}
 
-_30 MINUTE EXERCISE_
+_60 MINUTE EXERCISE_
 
 In this lab you will learn about deployment pipelines and you will create a pipeline to 
 automate build and deployment of the Inventory service.
