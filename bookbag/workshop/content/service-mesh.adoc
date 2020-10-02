@@ -9,7 +9,7 @@
 :WORKSHOP_GIT_REPO: %WORKSHOP_GIT_REPO%
 :WORKSHOP_GIT_REF: %WORKSHOP_GIT_REF%
 
-_20 MINUTE EXERCISE_
+_45 MINUTE EXERCISE_
 
 In this lab you will enable tracing and monitoring of your backend services using Service Mesh.
 
