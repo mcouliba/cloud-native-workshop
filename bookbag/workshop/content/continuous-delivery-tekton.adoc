@@ -48,24 +48,6 @@ In {GIT_URL}[Gitea^], `*create a new Repository for Inventory Service*` as follo
 |Repository Name*
 |inventory-quarkus
 
-|Visibility
-|_unchecked_
-
-|Description
-|_leave it empty_
-
-|.gitignore
-|_leave it empty_
-
-|License
-|_leave it empty_
-
-|Readme
-|Default
-
-|Intialize this repository with selected files and templates
-|_unchecked_
-
 |===
 
 '''
@@ -202,35 +184,8 @@ image::images/openshift-add-git-clone-task.png[OpenShift - Add Git Clone Task, 5
 |revision
 |master
 
-|refspec
-|_Leave it blank_
-
-|submodules
-|true
-
-|depth
-|1
-
-|refspec
-|_Leave it blank_
-
-|sslVerify
-|true
-
-|subdirectory
-|_Leave it blank_
-
 |deleteExisting
 |true
-
-|httpProxy
-|_Leave it blank_
-
-|httpsProxy
-|_Leave it blank_
-
-|noProxy
-|_Leave it blank_
 
 |===
 
@@ -252,12 +207,6 @@ image::images/openshift-add-task.png[OpenShift - Add task, 500]
 |.
 
 |TLSVERIFY
-|false
-
-|MAVEN_ARGS_APPEND
-|_Leave it blank_
-
-|MAVEN_CLEAR_REPO
 |false
 
 |MAVEN_MIRROR_URL
@@ -306,9 +255,6 @@ image::images/openshift-create-pvc.png[OpenShift - Create PVC, 700]
 
 |Size *
 |512 MiB
-
-|Use label selectors to request storage
-|_unchecked_
 
 |===
 

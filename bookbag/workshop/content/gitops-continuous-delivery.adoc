@@ -75,33 +75,6 @@ image::images/gitea-plus-icon.png[Create New Repository,900]
 |Repository Name*
 |gitops-cn-project
 
-|Visibility
-|_unchecked_
-
-|Description
-|_leave it empty_
-
-|Template
-|_leave it empty_
-
-|Issue Labels
-|_leave it empty_
-
-|.gitignore
-|_leave it empty_
-
-|License
-|_leave it empty_
-
-|Readme
-|Default
-
-|Intialize this repository with selected files and templates
-|_unchecked_
-
-|Default Branch
-|master
-
 |===
 
 image::images/gitea-new-repo.png[Create New Repository,700]

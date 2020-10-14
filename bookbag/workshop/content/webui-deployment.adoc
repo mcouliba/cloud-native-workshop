@@ -66,9 +66,6 @@ Then, enter the following information:
 |Context Dir
 |/labs/web-nodejs
 
-|Source Secret
-|Select Secret Name
-
 |Builder Image
 |Node.js
 
@@ -83,9 +80,6 @@ Then, enter the following information:
 
 |Resources
 |Deployment
-
-|Pipelines
-|_Unchecked_
 
 |Create a route to the application
 |_Checked_

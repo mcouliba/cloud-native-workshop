@@ -310,9 +310,6 @@ Then, `*enter the following information and click on 'Create' button*` :
 |Resources
 |Deployment
 
-|Pipelines
-|_Unchecked_
-
 |Create a route to the application
 |Checked
 
