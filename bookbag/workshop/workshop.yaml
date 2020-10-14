@@ -1,4 +1,4 @@
-name: OpenShift Cloud-Native Workshop - Inner Loop
+name: OpenShift Cloud-Native Workshop
 
 modules:
   activate:
@@ -10,4 +10,7 @@ modules:
     - webui-deployment
     - app-health
     - app-config
+    - gitops-continuous-delivery	
+    - continuous-delivery-tekton	
+    - service-mesh
     - env-info
