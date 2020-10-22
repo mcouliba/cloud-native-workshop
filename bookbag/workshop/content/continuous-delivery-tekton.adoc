@@ -175,6 +175,9 @@ image::images/openshift-add-git-clone-task.png[OpenShift - Add Git Clone Task, 5
 .git-clone cluster task
 [%header,cols=2*]
 |===
+|Parameter 
+|Value
+
 |Display Name
 |git-clone
 
@@ -200,6 +203,9 @@ image::images/openshift-add-task.png[OpenShift - Add task, 500]
 .s2i-java-11 cluster task
 [%header,cols=2*]
 |===
+|Parameter 
+|Value
+
 |Display Name
 |s2i-java-11
 

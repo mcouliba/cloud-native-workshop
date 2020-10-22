@@ -178,24 +178,6 @@ image::images/argocd-configure-repositories.png[Argo CD - Configure Repositories
 |Repository URL
 |http://gitea-server.gitea.svc:3000/user{USER_ID}/gitops-cn-project.git
 
-|Username (optional)
-|_leave it empty_
-
-|Password (optional)
-|_leave it empty_
-
-|TLS client certificate (optional)
-|_leave it empty_
-
-|TLS client certificate key (optional)
-|_leave it empty_
-
-|Skip server verification
-|_unchecked_
-
-|Enable LFS support (Git only)
-|_unchecked_
-
 |===
 
 Finally, `*Click on 'CONNECT'*`.
