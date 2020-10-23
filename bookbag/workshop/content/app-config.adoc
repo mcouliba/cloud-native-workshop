@@ -229,6 +229,15 @@ data:
 
 `*Click on the 'Create button*` and then `*configure the container to use the newly Config Map and overlay on the default application.properties*`:
 
+Now, let’s mount this Config Map as a volume inside the Inventory Service Pod.
+
+In your {CHE_URL}[Workspace^], open a new Terminal by `*clicking 
+on the 'My Workspace' white box in the right menu, then 'Plugins' -> 'workshop-tools' -> '>_ New terminal'*`:
+
+image::images/che-open-workshop-terminal.png[Che - Open OpenShift Terminal, 700]
+
+In the window called **'>_ workshop-tools terminal'**, `*execute the following commands*`:
+
 [source,shell,subs="{markup-in-source}",role=copy]
 ----
 oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project{USER_ID}

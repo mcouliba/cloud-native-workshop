@@ -182,7 +182,7 @@ You should have the following result:
 
 === Updating the WebUI to use the Istio Gateway
 
-`*Configure the WebUI Service to use the Istio Gateway instead of the OpenShift Route*`.
+Configure the WebUI Service to use the Istio Gateway instead of the OpenShift Route.
 
 In the {OPENSHIFT_CONSOLE_URL}[OpenShift Web Console^], from the **Developer view**,
 `*click on the 'D web-coolstore' bubble -> 'D web-coolstore' and go to the 'Environement' tab*`
