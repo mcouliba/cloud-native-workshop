@@ -10,6 +10,32 @@ _20 MINUTE EXERCISE_
 
 In this lab you will learn about deploying and managing Kubernetes resources using a GitOps tool.
 
+[sidebar]
+.GitOps Methodology
+--
+**GitOps** is a set of practices that leverages Git workflows to manage infrastructure and application configurations.
+By using Git repositories as the source of truth, it allows DevOps teams to store the entire state of the cluster configuration in Git 
+so that the trail of changes are visible and auditable. 
+
+**GitOps** simplifies the propagation of infrastructure and application 
+configuration changes across multiple clusters by defining your infrastructure and applications definitions as “code”.
+
+- Ensure that the clusters have similar states for configuration, monitoring, or storage.
+- Recover or recreate clusters from a known state.
+- Create clusters with a known state.
+- Apply or revert configuration changes to multiple clusters.
+- Associate templated configuration with different environments.
+
+
+**Gitops** is also beneficial for application configuration management. It ensures consistency in applications when you deploy them to 
+different clusters in different environments, like development, stage, and production.
+
+- Promote applications across clusters, from stage to production.
+- Apply or revert application changes to multiple OpenShift Container Platform clusters.
+
+OpenShift provides the flexibility to choose when and how you integrate GitOps methodology into your business practices and pipelines.
+--
+
 '''
 
 === Export OpenShift Resources
