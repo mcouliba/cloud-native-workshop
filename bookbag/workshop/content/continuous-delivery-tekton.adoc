@@ -260,7 +260,7 @@ image::images/openshift-create-pvc.png[OpenShift - Create PVC, 700]
 |Single User (RWO)
 
 |Size *
-|512 MiB
+|1 GiB
 
 |===
 
