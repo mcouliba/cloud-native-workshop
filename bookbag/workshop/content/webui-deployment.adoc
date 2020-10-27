@@ -40,7 +40,7 @@ in OpenShift.
 
 In the previous labs, you only used the S2I builder image for 
 injecting developer source code inside a running container.
-In this lab, you will fully use Openshift https://docs.openshift.com/container-platform/4.4/builds/understanding-image-builds.html#build-strategy-s2i_understanding-image-builds[Source-to-Image (S2I)].
+In this lab, you will fully use OpenShift https://docs.openshift.com/container-platform/4.4/builds/understanding-image-builds.html#build-strategy-s2i_understanding-image-builds[Source-to-Image (S2I)].
 OpenShift will obtain the application code directly from the source repository then build and deploy a 
 container image of it.
 

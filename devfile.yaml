@@ -134,9 +134,9 @@ commands:
               {
                   "type": "che",
                   "label": "Inner Loop - Deploy Coolstore",
-                  "command": "./deploy_coolstore.sh",
+                  "command": "./inner_loop_deploy_coolstore.sh",
                   "target": {
-                      "workingDir": "/projects/workshop/labs/solutions",
+                      "workingDir": "/projects/workshop/.tasks",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []

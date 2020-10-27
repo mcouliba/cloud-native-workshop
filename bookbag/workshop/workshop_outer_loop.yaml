@@ -3,7 +3,7 @@ name: OpenShift Cloud-Native Workshop - Outer Loop
 modules:
   activate:
     - introduction
-    - developer-workspace
+    - developer-workspace-outer-loop
     - gitops-continuous-delivery
     - continuous-delivery-tekton
     - service-mesh

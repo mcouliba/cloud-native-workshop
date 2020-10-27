@@ -78,41 +78,6 @@ image::images/che-workspace.png[Che - Workspace, 800]
 
 '''
 
-=== What is OpenShift Connect?
-
-[sidebar]
-.OpenShift Connector
---
-[window=_blank, align="center"]
-image::images/openshiftconnect-logo.png[OpenShift Connector logo, 150]
-
-https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^]
-is a Visual Studio (VS) Code extension for interacting with Red Hat OpenShift cluster with more improved features for a seamless developer experience.
-
-Developers can now focus on higher-level abstractions like their application and components and can drill down deeper to get to the OpenShift and 
-Kubernetes resources that make up their application directly from CodeReady Workspaces.
-
-Three major benefits:
-
-The new OpenShift Connector 0.1.1 features offer three major benefits:
-
-* Speeds up OpenShift development by supporting fully integrated OpenShift development and deployment within CodeReady Workspaces, 
-which lets you connect to any OpenShift cluster and create, debug, and deploy from the IDE itself.
-* Simplifies inner-loop development for cloud infrastructure, since under the hood this extension uses tools like 
-https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_developer_cli/understanding-odo.html[OpenShift Do (odo)^],
-a fast and simple CLI tool for creating applications on Red Hat OpenShift Container Platform and 
-https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html[OpenShift CLI (oc)^] 
-to help you interact with the local or production OpenShift instance and complete the inner-loop experience.
-* Enhances developer workflow by providing a streamlined developer experience for working with OpenShift instances (3.x or 4.x) 
-and supporting public cloud instances such as Red Hat OpenShift on Azure and AWS.
-
-https://marketplace.visualstudio.com/items?itemName=redhat.vscode-openshift-connector[OpenShift Connector^] on CodeReady Workspaces provides an end-to-end developer experience for interacting with a Red Hat OpenShift cluster. 
-By leveraging the IDE features, developers can create, deploy, and debug applications and then deploy directly to 
-the running OpenShift cluster.
---
-
-'''
-
 === Connect Your Workspace to Your OpenShift User
 
 First, in your {CHE_URL}[Workspace^], 
@@ -135,31 +100,29 @@ You have access to the following projects and can switch between them with 'oc p
 Using project "cn-project{USER_ID}".
 ----
 
-Then, `*open the 'OpenShift' View*`, you should see at least 1 project as following:
+'''
 
-image::images/che-openshift-view.png[Che - OpenShift View, 300]
+=== Deploy the CoolStore Application in your Development Environment
 
-* The **'cn-project{USER_ID}' project** will be used as a **Staging Environment**.
+In your {CHE_URL}[Workspace^], 
+`*click on 'Terminal' -> 'Run Task...' ->  'Inner Loop - Deploy Coolstore'*`
 
-So, as you can see, you are missing the **Development Environment**. Let's create it!
+image::images/che-runtask.png[Che - RunTask, 500]
 
-In your {CHE_URL}[Workspace^], from **'OpenShift' View**, 
-`*right-click on the cluster URL and select 'New Project'*`
+image::images/che-innerloop-deploycoolstore.png[Che - Inner Loop Deploy Coolstore, 500]
 
-image::images/che-openshift-new-project.png[Che - OpenShift New Project, 500]
+A terminal should be opened with the following output:
 
-Finally, `*enter the following information*`:
+[source,shell,subs="{markup-in-source}"]
+----
+Login successful.
 
-.OpenShift New Project
-[%header,cols=2*]
-|===
-|Parameter 
-|Value
+You have access to the following projects and can switch between them with 'oc project <projectname>':
 
-|Provide Project name.
-|my-project{USER_ID}
+  * cn-project{USER_ID}
 
-|===
+Using project "cn-project{USER_ID}".
+----
 
 '''
 
@@ -180,9 +143,10 @@ list of projects that your user has permission to work with.
 
 `*Select the 'Developer View' then your 'my-project{USER_ID}'*` to be taken to the project overview page
 which will list all of the routes, services, deployments, and pods that you have
-running as part of your project. There's nothing there now, but that's about to
-change.
+running as part of your project. 
 
-image::images/openshift-empty-project.png[OpenShift - Empty Project, 700]
+You should have the whole Coolstore Application up and running in your Development environment (my-project{USER_ID})
+
+image::images/openshift-inner-loop-coolstore.png[OpenShift - Inner Loop Coolstore, 700]
 
 Now you are ready to get started with the labs!

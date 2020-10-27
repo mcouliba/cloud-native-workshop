@@ -386,7 +386,7 @@ In your {CHE_URL}[Workspace^], stop the service by `*hitting Ctrl+c in the '>_ I
 
 It’s time to deploy your service on OpenShift. 
 
-Openshift https://docs.openshift.com/container-platform/4.4/builds/understanding-image-builds.html#build-strategy-s2i_understanding-image-builds[Source-to-Image (S2I)] is an open-source project 
+OpenShift https://docs.openshift.com/container-platform/4.4/builds/understanding-image-builds.html#build-strategy-s2i_understanding-image-builds[Source-to-Image (S2I)] is an open-source project 
 which helps in building artifacts from source code and injecting these into container images. 
 S2I produces ready-to-run images by building source code without the need of a Dockerfile.
 

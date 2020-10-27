@@ -47,4 +47,6 @@ tkn pipeline start coolstore-nodejs-pipeline -n ${NAMESPACE} \
     --param APP_GIT_CONTEXT=labs/web-nodejs \
     --param NAMESPACE=${NAMESPACE}  
 
-tkn pipeline logs coolstore-nodejs-pipeline -n ${NAMESPACE} --last -f 
+tkn pipeline logs coolstore-nodejs-pipeline -n ${NAMESPACE} --last -f
+
+echo -e "\033[0;32mThe deployment of the Coolstore Application by OpenShift Pipeline has succeeded\033[0m"

@@ -5,6 +5,9 @@ modules:
   developer-workspace:
     name: Get your Developer Workspace
     exit_sign: Next Lab
+  developer-workspace-outer-loop:
+    name: Get your Developer Workspace
+    exit_sign: Next Lab
   inventory-quarkus:
     name: Create Inventory Service as an Enterprise Microservice with Quarkus
     exit_sign: Next Lab
@@ -33,7 +36,7 @@ modules:
     name:  GitOps Continuous Delivery with Argo CD
     exit_sign: Next Lab
   continuous-delivery-tekton:
-    name:  Continuous Delivery with Openshift Pipelines
+    name:  Continuous Delivery with OpenShift Pipelines
     exit_sign: Next Lab
   fault-tolerance:
     name: Service Resilience and Fault Tolerance
