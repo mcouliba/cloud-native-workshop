@@ -128,11 +128,10 @@ A terminal should be opened with the following output:
 ----
 Login successful.
 
-You have access to the following projects and can switch between them with 'oc project <projectname>':
-
-  * cn-project{USER_ID}
+You have one project on this server: "cn-project{USER_ID}"
 
 Using project "cn-project{USER_ID}".
+Welcome! See 'oc help' to get started.
 ----
 
 Then, `*open the 'OpenShift' View*`, you should see at least 1 project as following:

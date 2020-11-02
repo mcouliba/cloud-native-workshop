@@ -115,13 +115,22 @@ A terminal should be opened with the following output:
 
 [source,shell,subs="{markup-in-source}"]
 ----
-Login successful.
+Now using project "my-project{USER_ID}" on server "https://api.cluster-3738.3738.example.opentlc.com:6443".
 
-You have access to the following projects and can switch between them with 'oc project <projectname>':
+You can add applications to this project with the 'new-app' command. For example, try:
 
-  * cn-project{USER_ID}
+    oc new-app ruby~https://github.com/sclorg/ruby-ex.git
 
-Using project "cn-project{USER_ID}".
+to build a new example application in Ruby. Or use kubectl to deploy a simple Kubernetes application:
+
+    kubectl create deployment hello-node --image=gcr.io/hello-minikube-zero-install/hello-node
+
+[...]
+
+deploymentconfig.apps.openshift.io/catalog-coolstore annotated
+deploymentconfig.apps.openshift.io/inventory-coolstore annotated
+Application Configuration Externalization Done
+The deployment of the Coolstore Application by Inner Loop has succeeded
 ----
 
 '''

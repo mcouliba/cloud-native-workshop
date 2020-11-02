@@ -10,7 +10,8 @@ modules:
     - webui-deployment
     - app-health
     - app-config
-    - gitops-continuous-delivery	
-    - continuous-delivery-tekton	
+    - continuous-integration-tekton
+    - gitops-workflow
+    - continuous-delivery-tekton
     - service-mesh
     - env-info

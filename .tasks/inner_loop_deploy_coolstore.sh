@@ -6,7 +6,7 @@ DIRECTORY=`dirname $0`
 
 #Starting from scratch
 oc delete project my-project${CHE_WORKSPACE_NAMESPACE#user} 2> /dev/null
-until [ $? -eq 0 ]
+until [ $? -ne 0 ]
 do
     sleep 1
     oc get project my-project${CHE_WORKSPACE_NAMESPACE#user} 2> /dev/null

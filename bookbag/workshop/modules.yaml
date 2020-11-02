@@ -9,22 +9,22 @@ modules:
     name: Get your Developer Workspace
     exit_sign: Next Lab
   inventory-quarkus:
-    name: Create Inventory Service as an Enterprise Microservice with Quarkus
+    name: Create Inventory Service with Quarkus
     exit_sign: Next Lab
   catalog-spring-boot:
-    name: Create Catalog Service as a Microservice with Spring Boot
+    name: Create Catalog Service with Spring Boot
     exit_sign: Next Lab
   catalog-deployment:
-    name: Deploy Catalog Service as a Microservice with Spring Boot
+    name: Deploy Catalog Service with Spring Boot
     exit_sign: Next Lab
   gateway-vertx:
-    name: Create Gateway Service as a Reactive Microservice with Eclipse Vert.x
+    name: Create Gateway Service with Eclipse Vert.x
     exit_sign: Next Lab
   gateway-deployment:
     name: Deploy Gateway Service
     exit_sign: Next Lab
   webui-deployment:
-    name: Deploy Web UI as a Microservice with with Node.js and AngularJS
+    name: Deploy Web UI with with Node.js and AngularJS
     exit_sign: Next Lab
   app-health:
     name: Monitor Application Health 
@@ -32,17 +32,17 @@ modules:
   app-config:
     name:  Externalize Application Configuration
     exit_sign: Next Lab
-  gitops-continuous-delivery:
-    name:  GitOps Continuous Delivery with Argo CD
+  continuous-integration-tekton:
+    name:  Continuous Integration with OpenShift Pipelines
+    exit_sign: Next Lab
+  gitops-workflow:
+    name:  GitOps Workflow with Argo CD
     exit_sign: Next Lab
   continuous-delivery-tekton:
     name:  Continuous Delivery with OpenShift Pipelines
     exit_sign: Next Lab
-  fault-tolerance:
-    name: Service Resilience and Fault Tolerance
-    exit_sign: Next Lab
   service-mesh:
-    name:  Microservice Tracing with Service Mesh
+    name: Connect and Monitor your Application with OpenShift Service Mesh
     exit_sign: Resources
   env-info:
     name: "Appendix: Lab Env Info"

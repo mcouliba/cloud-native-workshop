@@ -4,7 +4,8 @@ modules:
   activate:
     - introduction
     - developer-workspace-outer-loop
-    - gitops-continuous-delivery
+    - continuous-integration-tekton
+    - gitops-workflow
     - continuous-delivery-tekton
     - service-mesh
     - env-info
