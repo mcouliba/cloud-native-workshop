@@ -306,10 +306,10 @@ by using the following inputs:
 |$(plus) Add new context folder.
 
 |Open
-|/projects/catalog
+|/projects/workshop/labs/catalog-spring-boot
 
 |Select binary file
-|$(file-zip) labs/catalog-spring-boot/catalog-1.0-SNAPSHOT.jar
+|$(file-zip) target/catalog-1.0-SNAPSHOT.jar
 
 |Provide Component name
 |catalog

@@ -297,10 +297,10 @@ by using the following inputs:
 |$(plus) Add new context folder.
 
 |Open
-|/projects/gateway
+|/projects/workshop/labs/gateway-vertx
 
 |Select binary file
-|$(file-zip) labs/gateway-vertx/gateway-1.0-SNAPSHOT.jar
+|$(file-zip) target/gateway-1.0-SNAPSHOT.jar
 
 |Provide Component name
 |gateway

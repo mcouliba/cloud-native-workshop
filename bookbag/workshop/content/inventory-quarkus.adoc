@@ -427,10 +427,10 @@ Then, `*enter the following information*`:
 |$(plus) Add new context folder.
 
 |Open
-|/projects/inventory
+|/projects/workshop/labs/inventory-quarkus
 
 |Select binary file
-|$(file-zip) labs/inventory-quarkus/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar
+|$(file-zip) target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar
 
 |Provide Component name
 |inventory
