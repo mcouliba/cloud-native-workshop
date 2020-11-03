@@ -5,14 +5,12 @@
 DIRECTORY=`dirname $0`
 
 #Starting from scratch
-oc delete project my-project${CHE_WORKSPACE_NAMESPACE#user} 2> /dev/null
-until [ $? -ne 0 ]
-do
-    sleep 1
-    oc get project my-project${CHE_WORKSPACE_NAMESPACE#user} 2> /dev/null
-done
-
 oc new-project my-project${CHE_WORKSPACE_NAMESPACE#user}
+if [ $? -ne 0 ]
+then
+    echo -e "\033[0;31mPlease delete the 'my-project${CHE_WORKSPACE_NAMESPACE#user}' project\033[0m"
+    exit 1
+fi
 
 $DIRECTORY/solutions/catalog-spring-boot/solve_deploy.sh
 $DIRECTORY/solutions/inventory-quarkus/solve_deploy.sh

@@ -5,9 +5,9 @@ url=http://istio-ingressgateway.istio-system.svc/cn-project${CHE_WORKSPACE_NAMES
 while true; do 
     if curl -s ${url} | grep -q OFFICIAL
     then
-        echo "Gateway => Catalog GoLang (v2)";
+        echo -e "\e[96mGateway => Catalog GoLang (v2)\e[0m";
     else
-        echo "Gateway => Catalog Spring Boot (v1)";
+        echo -e "\e[92mGateway => Catalog Spring Boot (v1)\e[0m";
     fi
     sleep 1
 done

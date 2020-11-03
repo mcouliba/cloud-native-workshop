@@ -31,20 +31,21 @@ then
     cp $DIRECTORY/application.properties ${CHE_PROJECTS_ROOT}/inventory/labs/inventory-quarkus/src/main/resources
     cd ${CHE_PROJECTS_ROOT}/inventory/labs/inventory-quarkus
     mvn clean package -DskipTests
+    cd ${CHE_PROJECTS_ROOT}/inventory
     odo push
     oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite
     
-    cat <<EOF > /projects/inventory-openshift-application.properties
+    cat <<EOF > $DIRECTORY/inventory-openshift-application.properties
 quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 EOF
 
-    oc create configmap inventory --from-file=application.properties=/projects/inventory-openshift-application.properties
+    oc create configmap inventory --from-file=application.properties=$DIRECTORY/inventory-openshift-application.properties
     oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory
     oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config
 
-    cat <<EOF > /projects/catalog-openshift-application.properties
+    cat <<EOF > $DIRECTORY/catalog-openshift-application.properties
 spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb
 spring.datasource.username=catalog
 spring.datasource.password=catalog
@@ -53,7 +54,7 @@ spring.jpa.hibernate.ddl-auto=create
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 EOF
 
-    oc create configmap catalog --from-file=application.properties=/projects/catalog-openshift-application.properties
+    oc create configmap catalog --from-file=application.properties=$DIRECTORY/catalog-openshift-application.properties
     oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog
 
     oc delete pod -l deploymentconfig=catalog-coolstore

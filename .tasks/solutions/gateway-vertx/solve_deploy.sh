@@ -6,18 +6,16 @@ DIRECTORY=`dirname $0`
 
 $DIRECTORY/solve.sh
 
-cd /projects/gateway/labs/gateway-vertx
+cd ${CHE_PROJECTS_ROOT}/gateway/labs/gateway-vertx
 mvn clean package -DskipTests
 
+cd ${CHE_PROJECTS_ROOT}/gateway
 odo delete --all --force
 odo project set my-project${CHE_WORKSPACE_NAMESPACE#user}
-
-odo create java:11 gateway --context /projects/gateway --binary labs/gateway-vertx/target/gateway-1.0-SNAPSHOT.jar --s2i --app coolstore
-odo push
-
+odo create java:11 gateway --binary labs/gateway-vertx/target/gateway-1.0-SNAPSHOT.jar --s2i --app coolstore
+odo push 
 odo url create gateway --port 8080
 odo push
-
 odo link inventory --component gateway --port 8080
 odo link catalog --component gateway --port 8080
 
