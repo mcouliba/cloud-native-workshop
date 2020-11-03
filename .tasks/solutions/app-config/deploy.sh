@@ -27,11 +27,10 @@ then
         --labels=app=coolstore,app.kubernetes.io/instance=inventory-mariadb,app.kubernetes.io/name=mariadb,app.kubernetes.io/part-of=coolstore,app.openshift.io/runtime=mariadb
 
 
-    cp $DIRECTORY/pom.xml ${CHE_PROJECTS_ROOT}/inventory/labs/inventory-quarkus
-    cp $DIRECTORY/application.properties ${CHE_PROJECTS_ROOT}/inventory/labs/inventory-quarkus/src/main/resources
-    cd ${CHE_PROJECTS_ROOT}/inventory/labs/inventory-quarkus
+    cp $DIRECTORY/pom.xml $DIRECTORY/../../../labs/inventory-quarkus
+    cp $DIRECTORY/application.properties $DIRECTORY/../../../labs/inventory-quarkus/src/main/resources
+    cd $DIRECTORY/../../../labs/inventory-quarkus
     mvn clean package -DskipTests
-    cd ${CHE_PROJECTS_ROOT}/inventory
     odo push
     oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite
     

@@ -55,7 +55,7 @@ image::images/vertx-event-loop.png[Vert.x Event Loop,600]
 
 Although you can have multiple, there is currently only one Verticle created in the *_gateway-vertx_* project. 
 
-`*Examine 'GatewayVerticle' class*` in the **com.redhat.cloudnative.gateway** package in the **/projects/gateway/labs/gateway-vertx/src** directory.
+`*Examine 'GatewayVerticle' class*` in the **com.redhat.cloudnative.gateway** package in the **/projects/workshop/labs/gateway-vertx/src** directory.
 
 [source,java]
 ----
@@ -94,7 +94,7 @@ image::images/che-runtask.png[Che - RunTask, 500]
 
 image::images/che-gateway-build.png[Che - Catalog Build, 500]
 
-Once successfully built, the resulting **gateway-1.0-SNAPSHOT.jar** is located in the **/projects/gateway/labs/gateway-vertx/target/** directory.
+Once successfully built, the resulting **gateway-1.0-SNAPSHOT.jar** is located in the **/projects/workshop/labs/gateway-vertx/target/** directory.
 This is an uber-jar with all the dependencies required packaged in the **jar** to enable running the application with **java -jar**.
 
 '''
@@ -109,7 +109,7 @@ architecture.
 
 image::images/coolstore-arch.png[API Gateway Pattern,400]
 
-`*Replace the content of '/projects/gateway/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java'*` class with the following:
+`*Replace the content of '/projects/workshop/labs/gateway-vertx/src/main/java/com/redhat/cloudnative/gateway/GatewayVerticle.java'*` class with the following:
 
 [source,java,role=copy]
 ----

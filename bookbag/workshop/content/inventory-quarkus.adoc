@@ -48,7 +48,7 @@ the Quarkus project laid out in different subdirectories according to Maven best
 
 image::images/inventory-quarkus-project.png[Inventory Project,300]
 
-The **'/projects/inventory/labs/inventory-quarkus'** folder contents:
+The **'/projects/workshop/labs/inventory-quarkus'** folder contents:
 
 * the Maven structure
 * a com.redhat.cloudnative.InventoryResource resource exposed on /hello
@@ -447,7 +447,7 @@ Then, `*enter the following information*`:
 [TIP]
 ====
 Now the configuration file **'config.yaml'** is in the local directory of the inventory component 
-(**'/projects/inventory/.odo'**) that contains information about the component for deployment.
+(**'/projects/workshop/.odo'**) that contains information about the component for deployment.
 ====
 
 Then, `*push the component to the OpenShift cluster*` by right-clicking on the **inventory component**, 

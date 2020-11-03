@@ -6,31 +6,6 @@ projects:
       location: 'https://github.com/mcouliba/cloud-native-workshop.git'
       type: github
       branch: 'ocp4.6'
-      sparseCheckoutDir: .tasks
-  - name: inventory
-    source:
-      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
-      type: github
-      branch: 'ocp4.6'
-      sparseCheckoutDir: labs/inventory-quarkus
-  - name: catalog
-    source:
-      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
-      type: github
-      branch: 'ocp4.6'
-      sparseCheckoutDir: labs/catalog-spring-boot
-  - name: gateway
-    source:
-      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
-      type: github
-      branch: 'ocp4.6'
-      sparseCheckoutDir: labs/gateway-vertx
-  - name: cicd
-    source:
-      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
-      type: github
-      branch: 'ocp4.6'
-      sparseCheckoutDir: labs/pipelines
 components:
   - id: redhat/workshop-tools/4.6.0
     type: chePlugin
@@ -72,7 +47,7 @@ commands:
                 "label": "Catalog - Run",
                 "command": "mvn spring-boot:run",
                 "target": {
-                    "workingDir": "/projects/catalog/labs/catalog-spring-boot",
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -91,7 +66,7 @@ commands:
                 "label": "Inventory - Compile (Dev Mode)",
                 "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev -Ddebug=false",
                 "target": {
-                    "workingDir": "/projects/inventory/labs/inventory-quarkus",
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -101,7 +76,7 @@ commands:
                 "label": "Catalog - Build",
                 "command": "mvn clean package -DskipTests",
                 "target": {
-                    "workingDir": "/projects/catalog/labs/catalog-spring-boot",
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -111,7 +86,7 @@ commands:
                 "label": "Gateway - Build",
                 "command": "mvn clean package -DskipTests",
                 "target": {
-                    "workingDir": "/projects/gateway/labs/gateway-vertx",
+                    "workingDir": "/projects/workshop/labs/gateway-vertx",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -121,7 +96,7 @@ commands:
                 "label": "Inventory - Build",
                 "command": "mvn clean package -DskipTests",
                 "target": {
-                    "workingDir": "/projects/inventory/labs/inventory-quarkus",
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -181,7 +156,7 @@ commands:
                   "label": "GitOps - Commit Inventory",
                   "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git 2> /dev/null; git add inventory*.yaml; git commit -m \"Initial Inventory GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
                   "target": {
-                      "workingDir": "/projects/gitops",
+                      "workingDir": "/projects/workshop/labs/gitops",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
@@ -191,7 +166,7 @@ commands:
                   "label": "GitOps - Commit Coolstore",
                   "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git 2> /dev/null; git add *.yaml; git commit -m \"Initial Coolstore GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
                   "target": {
-                      "workingDir": "/projects/gitops",
+                      "workingDir": "/projects/workshop/labs/gitops",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
@@ -201,7 +176,7 @@ commands:
                   "label": "Inventory - Commit",
                   "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git; git add *; git commit -m \"Initial\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git",
                   "target": {
-                      "workingDir": "/projects/inventory/labs/inventory-quarkus",
+                      "workingDir": "/projects/workshop/labs/inventory-quarkus",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIRECTORY=`dirname $0`
-GITOPS_DIR=${DIRECTORY}/../gitops
+GITOPS_DIR=${DIRECTORY}/../../../labs/gitops
 DEV_PROJECT=$1
 PROJECT=$2
 
