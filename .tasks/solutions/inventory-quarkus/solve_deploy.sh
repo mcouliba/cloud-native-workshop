@@ -3,15 +3,15 @@
 ##############################
 
 DIRECTORY=`dirname $0`
-
+CONTEXT_FOLDER=/projects/workshop/labs/inventory-quarkus
 $DIRECTORY/solve.sh
 
-cd $DIRECTORY/../../../labs/inventory-quarkus
+cd ${CONTEXT_FOLDER}
 mvn clean package -DskipTests
 
 odo delete --all --force
 odo project set my-project${CHE_WORKSPACE_NAMESPACE#user}
-odo create java:11 inventory --context $DIRECTORY/../../../labs/inventory-quarkus --binary target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --s2i --app coolstore
+odo create java:11 inventory --context ${CONTEXT_FOLDER} --binary target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --s2i --app coolstore
 odo push
 odo url create inventory --port 8080
 odo push

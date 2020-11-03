@@ -3,15 +3,15 @@
 ##########################
 
 DIRECTORY=`dirname $0`
-
+CONTEXT_FOLDER=/projects/workshop/labs/gateway-vertx
 $DIRECTORY/solve.sh
 
-cd $DIRECTORY/../../../labs/gateway-vertx
+cd ${CONTEXT_FOLDER}
 mvn clean package -DskipTests
 
 odo delete --all --force
 odo project set my-project${CHE_WORKSPACE_NAMESPACE#user}
-odo create java:11 gateway --context $DIRECTORY/../../../labs/gateway-vertx --binary labs/gateway-vertx/target/gateway-1.0-SNAPSHOT.jar --s2i --app coolstore
+odo create java:11 gateway --context ${CONTEXT_FOLDER} --binary target/gateway-1.0-SNAPSHOT.jar --s2i --app coolstore
 odo push 
 odo url create gateway --port 8080
 odo push
