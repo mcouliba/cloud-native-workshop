@@ -5,7 +5,7 @@
 DIRECTORY=`dirname $0`
 
 oc project my-project${CHE_WORKSPACE_NAMESPACE#user}
-oc new-app nodejs~https://github.com/mcouliba/cloud-native-workshop#ocp4.5 \
+oc new-app nodejs~https://github.com/mcouliba/cloud-native-workshop#ocp4.6 \
         --context-dir=labs/web-nodejs \
         --name=web-coolstore \
         --labels=app=coolstore,app.kubernetes.io/instance=web,app.kubernetes.io/part-of=coolstore,app.kubernetes.io/name=nodejs

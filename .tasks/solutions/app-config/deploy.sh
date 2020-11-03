@@ -29,7 +29,7 @@ then
 
     cp $DIRECTORY/pom.xml $DIRECTORY/../../inventory-quarkus
     cp $DIRECTORY/application.properties $DIRECTORY/../../inventory-quarkus/src/main/resources
-    cd /projects/workshop/labs/inventory-quarkus
+    cd /projects/inventory/labs/inventory-quarkus
     mvn clean package -DskipTests
     odo push
     oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite

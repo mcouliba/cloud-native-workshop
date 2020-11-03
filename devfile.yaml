@@ -4,10 +4,35 @@ projects:
   - name: workshop
     source:
       location: 'https://github.com/mcouliba/cloud-native-workshop.git'
-      type: git
+      type: github
       branch: 'ocp4.6'
+      sparseCheckoutDir: .tasks
+  - name: inventory
+    source:
+      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
+      type: github
+      branch: 'ocp4.6'
+      sparseCheckoutDir: labs/inventory-quarkus
+  - name: catalog
+    source:
+      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
+      type: github
+      branch: 'ocp4.6'
+      sparseCheckoutDir: labs/catalog-spring-boot
+  - name: gateway
+    source:
+      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
+      type: github
+      branch: 'ocp4.6'
+      sparseCheckoutDir: labs/gateway-vertx
+  - name: cicd
+    source:
+      location: 'https://github.com/mcouliba/cloud-native-workshop.git'
+      type: github
+      branch: 'ocp4.6'
+      sparseCheckoutDir: labs/pipelines
 components:
-  - id: redhat/workshop-tools/3.3.0
+  - id: redhat/workshop-tools/4.6.0
     type: chePlugin
     alias: workshop-tools
     env:
@@ -35,9 +60,9 @@ commands:
               {
                 "type": "che",
                 "label": "Gateway - Generate Traffic",
-                "command": "./runGatewayService.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "command": "./gateway_generate_traffic.sh",
                 "target": {
-                    "workingDir": "/projects/workshop/labs/scripts",
+                    "workingDir": "/projects/workshop/.tasks",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -47,7 +72,7 @@ commands:
                 "label": "Catalog - Run",
                 "command": "mvn spring-boot:run",
                 "target": {
-                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
+                    "workingDir": "/projects/catalog/labs/catalog-spring-boot",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -66,7 +91,7 @@ commands:
                 "label": "Inventory - Compile (Dev Mode)",
                 "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev -Ddebug=false",
                 "target": {
-                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "workingDir": "/projects/inventory/labs/inventory-quarkus",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -76,7 +101,7 @@ commands:
                 "label": "Catalog - Build",
                 "command": "mvn clean package -DskipTests",
                 "target": {
-                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
+                    "workingDir": "/projects/catalog/labs/catalog-spring-boot",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -86,7 +111,7 @@ commands:
                 "label": "Gateway - Build",
                 "command": "mvn clean package -DskipTests",
                 "target": {
-                    "workingDir": "/projects/workshop/labs/gateway-vertx",
+                    "workingDir": "/projects/gateway/labs/gateway-vertx",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -96,7 +121,7 @@ commands:
                 "label": "Inventory - Build",
                 "command": "mvn clean package -DskipTests",
                 "target": {
-                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "workingDir": "/projects/inventory/labs/inventory-quarkus",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -156,7 +181,7 @@ commands:
                   "label": "GitOps - Commit Inventory",
                   "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git 2> /dev/null; git add inventory*.yaml; git commit -m \"Initial Inventory GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
                   "target": {
-                      "workingDir": "/projects/workshop/labs/gitops",
+                      "workingDir": "/projects/gitops",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
@@ -166,7 +191,7 @@ commands:
                   "label": "GitOps - Commit Coolstore",
                   "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git 2> /dev/null; git add *.yaml; git commit -m \"Initial Coolstore GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
                   "target": {
-                      "workingDir": "/projects/workshop/labs/gitops",
+                      "workingDir": "/projects/gitops",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
@@ -176,7 +201,7 @@ commands:
                   "label": "Inventory - Commit",
                   "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git; git add *; git commit -m \"Initial\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git",
                   "target": {
-                      "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                      "workingDir": "/projects/inventory/labs/inventory-quarkus",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []

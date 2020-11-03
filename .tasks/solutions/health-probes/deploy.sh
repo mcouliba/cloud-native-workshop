@@ -12,7 +12,7 @@ oc set probe dc/catalog-coolstore  --liveness --readiness --initial-delay-second
 echo "Catalog Service Health Probes Done"
 
 cp $DIRECTORY/pom.xml $DIRECTORY/../../inventory-quarkus
-cd /projects/workshop/labs/inventory-quarkus
+cd /projects/inventory/labs/inventory-quarkus
 mvn clean package -DskipTests
 odo push
 oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite

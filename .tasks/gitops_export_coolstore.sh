@@ -1,13 +1,15 @@
 #!/bin/bash
 
 DIRECTORY=`dirname $0`
-GITOPS_DIR=${DIRECTORY}/../labs/gitops
+GITOPS_DIR=${DIRECTORY}/../gitops
 DEV_PROJECT=$1
 PROJECT=$2
 
 declare -a COMPONENTS=("inventory-coolstore" "catalog-coolstore" "gateway-coolstore" "web-coolstore")
 
 echo "--- Export Kubernetes resources for GitOps from ${DEV_PROJECT} to ${PROJECT} ---"
+
+mkdir ${GITOPS_DIR} 2> /dev/null
 
 for COMPONENT_NAME in "${COMPONENTS[@]}"
 do

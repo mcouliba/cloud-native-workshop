@@ -66,7 +66,7 @@ A terminal should be opened with the following output:
 
 [source,shell,subs="{markup-in-source}"]
 ----
-Initialized empty Git repository in /projects/workshop/labs/inventory-quarkus/.git/
+Initialized empty Git repository in /projects/inventory/labs/inventory-quarkus/.git/
 [master (root-commit) f7b9db7] Initial
  12 files changed, 831 insertions(+)
  [...]

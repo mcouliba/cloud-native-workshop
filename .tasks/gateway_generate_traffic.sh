@@ -1,13 +1,6 @@
 #!/bin/bash
 
-project_name=$1
-if [ -z "${project_name}" ]
-then
-    echo "Usage: ./runGatewayService.sh <project_name>"
-    exit 
-fi
-
-url=http://istio-ingressgateway.istio-system.svc/${project_name}/api/products
+url=http://istio-ingressgateway.istio-system.svc/cn-project${CHE_WORKSPACE_NAMESPACE#user}/api/products
 
 while true; do 
     if curl -s ${url} | grep -q OFFICIAL

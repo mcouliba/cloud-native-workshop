@@ -47,7 +47,7 @@ function build_push() {
 
 parse_arguments "$@"
 
-if [ -z ${TAG} ]
+if [ -z "${TAG}" ]
 then
     print_usage
     exit 1

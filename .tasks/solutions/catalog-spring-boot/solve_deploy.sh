@@ -6,12 +6,12 @@ DIRECTORY=`dirname $0`
 
 $DIRECTORY/solve.sh
 
-cd /projects/workshop/labs/catalog-spring-boot
+cd /projects/catalog/labs/catalog-spring-boot
 mvn clean package -DskipTests
 
 odo delete --all --force
 odo project set my-project${CHE_WORKSPACE_NAMESPACE#user}
-odo create java:11 catalog --context /projects/workshop/labs/catalog-spring-boot/ --binary target/catalog-1.0-SNAPSHOT.jar --app coolstore
+odo create java:11 catalog --context /projects/catalog --binary labs/catalog-spring-boot/target/catalog-1.0-SNAPSHOT.jar --s2i --app coolstore
 odo push
 odo url create catalog --port 8080
 odo push

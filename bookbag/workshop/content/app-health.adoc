@@ -109,8 +109,8 @@ https://quarkus.io/guides/health-guide[SmallRye Health^] is a Quarkus extension 
 It allows applications to provide information about their state to external viewers which is typically useful 
 in cloud environments where automated processes must be able to determine whether the application should be discarded or restarted.
 
-Let's add the needed dependencies to **/projects/workshop/labs/inventory-quarkus/pom.xml**. 
-In your {CHE_URL}[Workspace^], `*edit the '/projects/workshop/labs/inventory-quarkus/pom.xml' file*`:
+Let's add the needed dependencies to **/projects/inventory/labs/inventory-quarkus/pom.xml**. 
+In your {CHE_URL}[Workspace^], `*edit the '/projects/inventory/labs/inventory-quarkus/pom.xml' file*`:
 
 [source,xml,subs="{markup-in-source}",role=copy]
 ----

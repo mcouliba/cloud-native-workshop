@@ -42,7 +42,7 @@ This is a minimal Spring Boot project with support for RESTful services and Spri
 to a database. This project currently contains no code other than the main class, ***CatalogApplication***
 which is there to bootstrap the Spring Boot application.
 
-`*Examine 'com.redhat.cloudnative.catalog.CatalogApplication' class*` in the **/projects/workshop/labs/catalog-spring-boot/src/main** directory:
+`*Examine 'com.redhat.cloudnative.catalog.CatalogApplication' class*` in the **/projects/catalog/labs/catalog-spring-boot/src/main** directory:
 
 [source,java]
 ----
@@ -61,7 +61,7 @@ public class CatalogApplication {
 ----
 
 The database is configured using the Spring application configuration file which is located at 
-**/projects/workshop/labs/catalog-spring-boot/src/main/resources/application.properties**. Examine this file to see the database connection details 
+**/projects/catalog/labs/catalog-spring-boot/src/main/resources/application.properties**. Examine this file to see the database connection details 
 and note that an in-memory H2 database is used in this lab for local development and will be replaced
 with a PostgreSQL database in the following labs. Be patient! More on that later.
 
@@ -74,7 +74,7 @@ image::images/che-runtask.png[Che - RunTask, 500]
 
 image::images/che-catalog-build.png[Che - Catalog Build, 500]
 
-Once successfully built, the resulting **catalog-1.0-SNAPSHOT.jar** is located in the **/projects/workshop/labs/catalog-spring-boot/target/** directory.
+Once successfully built, the resulting **catalog-1.0-SNAPSHOT.jar** is located in the **/projects/catalog/labs/catalog-spring-boot/target/** directory.
 This is an uber-jar with all the dependencies required packaged in the **jar** to enable running the application with **java -jar**.
 
 Now that the project is ready, let's get coding and create a domain model, data repository, and a  
@@ -86,7 +86,7 @@ image::images/springboot-catalog-arch.png[Catalog RESTful Service,640]
 
 === Create the Domain Model
 
-In your {CHE_URL}[Workspace^], `*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/Product.java' file`* 
+In your {CHE_URL}[Workspace^], `*create the '/projects/catalog/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/Product.java' file`* 
 
 [source,java,role=copy]
 ----
@@ -174,7 +174,7 @@ Create a new Java interface named **ProductRepository** in **com.redhat.cloudnat
 and extend https://docs.spring.io/spring-data/commons/docs/current/api/org/springframework/data/repository/CrudRepository.html[CrudRepository^] interface in order to indicate to Spring that you want to expose a complete set of methods to manipulate the entity.
 
 In your {CHE_URL}[Workspace^], 
-`*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/ProductRepository.java' file`*.
+`*create the '/projects/catalog/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/ProductRepository.java' file`*.
 
 [source,java,role=copy]
 ----
@@ -199,7 +199,7 @@ Spring Boot uses Spring Web MVC as the default RESTful stack in Spring applicati
 a new Java class named **CatalogController** in **com.redhat.cloudnative.catalog** package.
 
 In your {CHE_URL}[Workspace^], 
-`*create the '/projects/workshop/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/CatalogController.java' file`*.
+`*create the '/projects/catalog/labs/catalog-spring-boot/src/main/java/com/redhat/cloudnative/catalog/CatalogController.java' file`*.
 
 [source,java,role=copy]
 ----
@@ -306,10 +306,10 @@ by using the following inputs:
 |$(plus) Add new context folder.
 
 |Open
-|/projects/workshop/labs/catalog-spring-boot
+|/projects/catalog
 
 |Select binary file
-|$(file-zip) catalog-1.0-SNAPSHOT.jar
+|$(file-zip) labs/catalog-spring-boot/catalog-1.0-SNAPSHOT.jar
 
 |Provide Component name
 |catalog
