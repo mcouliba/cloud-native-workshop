@@ -5,7 +5,7 @@ projects:
     source:
       location: 'https://github.com/mcouliba/cloud-native-workshop.git'
       type: git
-      branch: 'ocp4.5'
+      branch: 'ocp4.6'
 components:
   - id: redhat/workshop-tools/3.3.0
     type: chePlugin
