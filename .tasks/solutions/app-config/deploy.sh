@@ -3,7 +3,7 @@
 ######################################
 
 DIRECTORY=`dirname $0`
-
+CONTEXT_FOLDER=/projects/workshop/.tasks/solutions/app-config
 
 oc project my-project${CHE_WORKSPACE_NAMESPACE#user}
 
@@ -34,11 +34,26 @@ then
     odo push
     oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite
 
-    oc create configmap inventory --from-file=application.properties=/projects/workshop/.tasks/solutions/app-config/inventory-openshift-application.properties
+     cat <<EOF > ${CONTEXT_FOLDER}/inventory-openshift-application.properties
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:3306/inventorydb
+quarkus.datasource.username=inventory
+quarkus.datasource.password=inventory
+EOF
+
+    oc create configmap inventory --from-file=application.properties=${CONTEXT_FOLDER}/inventory-openshift-application.properties
     oc label configmap inventory app=coolstore app.kubernetes.io/instance=inventory
     oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config
 
-    oc create configmap catalog --from-file=application.properties=/projects/workshop/.tasks/solutions/app-config/catalog-openshift-application.properties
+    cat <<EOF > ${CONTEXT_FOLDER}/catalog-openshift-application.properties
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb
+spring.datasource.username=catalog
+spring.datasource.password=catalog
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+EOF
+
+    oc create configmap catalog --from-file=application.properties=${CONTEXT_FOLDER}/catalog-openshift-application.properties
     oc label configmap catalog app=coolstore app.kubernetes.io/instance=catalog
 
     oc delete pod -l deploymentconfig=catalog-coolstore
