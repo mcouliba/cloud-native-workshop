@@ -60,7 +60,7 @@ Exporting resources for web-coolstore...
 
 This operation exports the project resources (deploymentconfig, route, secret, service)
 and cleans them up. As a result, you should have all resources in YAML files under 
-the **/project/gitops** folder.
+the **/projects/workshop/labs/gitops** folder.
 
 image::images/che-gitops-export-result.png[Che - GitOps Export Result, 300]
 
@@ -105,7 +105,7 @@ A terminal should be opened with the following output:
 
 [source,shell,subs="{markup-in-source}"]
 ----
-Initialized empty Git repository in /projects/gitops/.git/
+Initialized empty Git repository in /projects/workshop/labs/gitops/.git/
 [master (root-commit) b066fd2] Initial Inventory GitOps
  6 files changed, 251 insertions(+)
  create mode 100644 inventory-coolstore-configmap.yaml
