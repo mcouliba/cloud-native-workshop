@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIRECTORY=`dirname $0`
-GITOPS_DIR=${DIRECTORY}/../../../labs/gitops
+GITOPS_DIR=/projects/workshop/labs/gitops
 DEV_PROJECT=$1
 PROJECT=$2
 
@@ -9,7 +9,7 @@ declare -a COMPONENTS=("inventory-coolstore" "catalog-coolstore" "gateway-coolst
 
 echo "--- Export Kubernetes resources for GitOps from ${DEV_PROJECT} to ${PROJECT} ---"
 
-mkdir ${GITOPS_DIR} 2> /dev/null
+mkdir -p ${GITOPS_DIR} 2> /dev/null
 
 for COMPONENT_NAME in "${COMPONENTS[@]}"
 do
@@ -184,10 +184,10 @@ do
 done
 
 # Specific to WebNodejs
-oc patch -n ${DEV_PROJECT} -f ${DIRECTORY}/web-coolstore-deployment.yaml \
+oc patch -n ${DEV_PROJECT} -f ${GITOPS_DIR}/web-coolstore-deployment.yaml \
     -p '{"spec": {"template" : {"spec":  {"containers":[{"name":"web-coolstore", "env" : [{"name": "OPENSHIFT_BUILD_NAMESPACE", "valueFrom": {"fieldRef": {"fieldPath": "metadata.namespace"}}}]}]}}}}' \
-    --local -o yaml > ${DIRECTORY}/web-coolstore-deployment.yaml.tmp \
-    && mv ${DIRECTORY}/web-coolstore-deployment.yaml.tmp ${DIRECTORY}/web-coolstore-deployment.yaml
+    --local -o yaml > ${GITOPS_DIR}/web-coolstore-deployment.yaml.tmp \
+    && mv ${GITOPS_DIR}/web-coolstore-deployment.yaml.tmp ${GITOPS_DIR}/web-coolstore-deployment.yaml
 
 
 echo "--- Kubernetes resources has been exported! ---"

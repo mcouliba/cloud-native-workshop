@@ -66,26 +66,12 @@ image::images/che-gitops-export-result.png[Che - GitOps Export Result, 300]
 
 '''
 
-=== Push the Inventory Configuration into a Git Repository
+=== Create a Git Repository for Your Configuration
 
-The first step is to store all Kubernetes/OpenShift resources in 
-a source code repository. You can use any Git server (e.g. GitHub, BitBucket, etc) for this lab but we have prepared a 
-Gitea git server.
+The next step is to store all Kubernetes/OpenShift resources in 
+a source code repository.
 
-`*Click on the below button called 'Developer Repository'*`
-
-[link={GIT_URL}]
-[window=_blank, align="center"]
-image::images/developer-repository-button.png[Developer Repository - Button, 300]
-
-Then, `*click on 'Sign In' and login via OpenShift as user{USER_ID}/{OPENSHIFT_PASSWORD}*`
-
-image::images/gitea-signin.png[Sign Up Gitea,700]
-
-Create a new repository *'gitops-cn-project'*.
-`*Click on the plus icon*` as below and enter the following values:
-
-image::images/gitea-plus-icon.png[Create New Repository,900]
+In {GIT_URL}[Gitea^], `*create a new Repository*` as following:
 
 .GitOps Repository
 [%header,cols=2*]
@@ -101,15 +87,13 @@ image::images/gitea-plus-icon.png[Create New Repository,900]
 
 |===
 
-image::images/gitea-new-repo.png[Create New Repository,700]
-
 `*Click on 'Create Repository' button*`.
 
 The Git repository is created now. 
 
 '''
 
-=== Push the Inventory Service Configuration to the Git Repository
+=== Push the Configuration of Inventory Service into the Git Repository
 
 Now that you have a Git repository for the configuration, you should push it into this Git repository.
 

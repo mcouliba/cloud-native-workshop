@@ -30,10 +30,24 @@ the platform and enables defining truly complex workflows directly from within O
 
 === Create a Git Repository for Inventory
 
-The first step for any deployment pipeline is to store all code and configurations in 
-a source code repository.
+The first step is to create a Git repository to store your source code. 
+You can use any Git server (e.g. GitHub, BitBucket, etc). For this lab we will use a 
+Gitea git server.
 
-In {GIT_URL}[Gitea^], `*create a new Repository for Inventory Service*` as following:
+`*Click on the below button called 'Developer Repository'*`
+
+[link={GIT_URL}]
+[window=_blank, align="center"]
+image::images/developer-repository-button.png[Developer Repository - Button, 300]
+
+Then, `*click on 'Sign In' and login via OpenShift as user{USER_ID}/{OPENSHIFT_PASSWORD}*`
+
+image::images/gitea-signin.png[Sign Up Gitea,700]
+
+Create a new repository called *'inventory-quarkus'*.
+`*Click on the plus icon*` as below and enter the following values:
+
+image::images/gitea-plus-icon.png[Create New Repository,900]
 
 .Inventory Repository
 [%header,cols=2*]
@@ -48,6 +62,10 @@ In {GIT_URL}[Gitea^], `*create a new Repository for Inventory Service*` as follo
 |inventory-quarkus
 
 |===
+
+`*Click on 'Create Repository' button*`.
+
+The Git repository is created now. 
 
 '''
 
