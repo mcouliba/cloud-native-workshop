@@ -105,7 +105,7 @@ image::images/openshift-create-gateway.png[OpenShift - Create Gateway, 700]
 
 [source,yaml,subs="{markup-in-source}",role=copy]
 ----
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: gateway-coolstore
@@ -133,7 +133,7 @@ image::images/openshift-create-virtualservice.png[OpenShift - Create VirtualServ
 
 [source,yaml,subs="{markup-in-source}",role=copy]
 ----
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: gateway-coolstore
@@ -349,7 +349,7 @@ Then `*update the content as following:*`
 
 [source,yaml,subs="{markup-in-source}",role=copy]
 ----
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   name: catalog-coolstore
