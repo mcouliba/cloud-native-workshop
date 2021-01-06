@@ -28,12 +28,72 @@ commands:
               {
                   "type": "che",
                   "label": "OpenShift - Login",
-                  "command": "oc login $(oc whoami --show-server) --username=${CHE_WORKSPACE_NAMESPACE} --password=openshift --insecure-skip-tls-verify",
+                  "command": "odo login $(oc whoami --show-server) --username=${CHE_WORKSPACE_NAMESPACE} --password=openshift --insecure-skip-tls-verify",
                   "target": {
                       "workingDir": "/projects/workshop",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
+              },
+              {
+                  "type": "che",
+                  "label": "OpenShift - Create Development Project",
+                  "command": "odo project create my-project${CHE_WORKSPACE_NAMESPACE#user}",
+                  "target": {
+                      "workingDir": "/projects/workshop",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Inventory - Compile (Dev Mode)",
+                "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev -Ddebug=false",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Inventory - Build",
+                "command": "mvn clean package -DskipTests",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Inventory - Create Component",
+                "command": "odo component create java:11 inventory --app coolstore --binary target/inventory-quarkus-1.0.0-SNAPSHOT-runner.jar --s2i --project my-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Inventory - Push",
+                "command": "odo push",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Inventory - Expose",
+                "command": "odo url create inventory --port 8080",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
               },
               {
                 "type": "che",
@@ -66,16 +126,6 @@ commands:
               },
               {
                 "type": "che",
-                "label": "Inventory - Compile (Dev Mode)",
-                "command": "[[ ! -z \"$(ps aux | grep -v grep | grep \"compile quarkus:dev\" | awk '{print $2}')\" ]] &&  echo '!! Application already running in Dev Mode !!' ||  mvn compile quarkus:dev -Ddebug=false",
-                "target": {
-                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
-              {
-                "type": "che",
                 "label": "Catalog - Build",
                 "command": "mvn clean package -DskipTests",
                 "target": {
@@ -90,16 +140,6 @@ commands:
                 "command": "mvn clean package -DskipTests",
                 "target": {
                     "workingDir": "/projects/workshop/labs/gateway-vertx",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
-              {
-                "type": "che",
-                "label": "Inventory - Build",
-                "command": "mvn clean package -DskipTests",
-                "target": {
-                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
