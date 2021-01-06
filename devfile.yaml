@@ -14,7 +14,10 @@ components:
       - name: MAVEN_OPTS
         value: '-Xmx2048m -Duser.home=/home/theia'
       - name: MAVEN_MIRROR_URL
-        value: http://nexus.opentlc-shared.svc:8081/repository/maven-all-public 
+        value: http://nexus.opentlc-shared.svc:8081/repository/maven-all-public
+    volumes:
+      - name: kubefolder
+        containerPath: /home/theia/.kube
 apiVersion: 1.0.0
 commands:
   - name: Configure tasks
