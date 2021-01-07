@@ -97,10 +97,10 @@ commands:
               },
               {
                 "type": "che",
-                "label": "Gateway - Generate Traffic",
-                "command": "./gateway_generate_traffic.sh",
+                "label": "Catalog - Build",
+                "command": "mvn clean package -DskipTests",
                 "target": {
-                    "workingDir": "/projects/workshop/.tasks",
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -111,6 +111,46 @@ commands:
                 "command": "mvn spring-boot:run",
                 "target": {
                     "workingDir": "/projects/workshop/labs/catalog-spring-boot",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Catalog - Create Component",
+                "command": "odo component create java:11 catalog --app coolstore --binary target/catalog-1.0-SNAPSHOT.jar --s2i --project my-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Catalog - Expose",
+                "command": "odo url create catalog --port 8080",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Catalog - Push",
+                "command": "odo push",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Gateway - Generate Traffic",
+                "command": "./gateway_generate_traffic.sh",
+                "target": {
+                    "workingDir": "/projects/workshop/.tasks",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
