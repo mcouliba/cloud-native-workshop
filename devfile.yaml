@@ -147,6 +147,56 @@ commands:
               },
               {
                 "type": "che",
+                "label": "Gateway - Create Component",
+                "command": "odo component create dotnet gateway --app coolstore --s2i --project my-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/gateway-dotnet",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Gateway - Expose",
+                "command": "odo url create gateway --port 8080",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/gateway-dotnet",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Gateway - Push",
+                "command": "odo push",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/gateway-dotnet",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Catalog - Link to Gateway",
+                "command": "odo link catalog --port 8080 --component gateway",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/gateway-dotnet",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Inventory - Link to Gateway",
+                "command": "odo link inventory --port 8080 --component gateway",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/gateway-dotnet",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
                 "label": "Gateway - Generate Traffic",
                 "command": "./gateway_generate_traffic.sh",
                 "target": {
@@ -163,27 +213,7 @@ commands:
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
-              },
-              {
-                "type": "che",
-                "label": "Catalog - Build",
-                "command": "mvn clean package -DskipTests",
-                "target": {
-                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
-              {
-                "type": "che",
-                "label": "Gateway - Build",
-                "command": "mvn clean package -DskipTests",
-                "target": {
-                    "workingDir": "/projects/workshop/labs/gateway-vertx",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
+              
               {
                 "type": "che",
                 "label": "Catalog - Generate Traffic",
