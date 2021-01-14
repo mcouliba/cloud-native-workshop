@@ -197,39 +197,20 @@ commands:
               },
               {
                 "type": "che",
-                "label": "Gateway - Generate Traffic",
-                "command": "./gateway_generate_traffic.sh",
-                "target": {
-                    "workingDir": "/projects/workshop/.tasks",
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              },
-              {
-                "type": "che",
-                "label": "Service Mesh - Deploy Catalog and Gateway",
-                "command": "oc patch dc/catalog-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user}&& oc patch dc/catalog-coolstore --patch '{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"catalog-coolstore\", \"command\" : [\"/bin/bash\"], \"args\": [\"-c\", \"until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \\\"Waiting for Istio Sidecar...\\\"; sleep 1; done; sleep 10; /usr/local/s2i/run\"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/catalog-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc patch dc/gateway-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc patch dc/gateway-coolstore --patch '{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"gateway-coolstore\", \"command\" : [\"/bin/bash\"], \"args\": [\"-c\", \"until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \\\"Waiting for Istio Sidecar...\\\"; sleep 1; done; sleep 10; /usr/local/s2i/run\"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/gateway-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user}",
-                "target": {
-                    "component": "workshop-tools"
-                },
-                "problemMatcher": []
-              
-              {
-                "type": "che",
                 "label": "Catalog - Generate Traffic",
                 "command": "for i in {1..60}; do if [ $(curl -s -w \"%{http_code}\" -o /dev/null http://catalog-coolstore.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:8080/actuator/health) == \"200\" ]; then MSG=\"\\033[0;32mThe request to Catalog Service has succeeded\\033[0m\"; else MSG=\"\\033[0;31mERROR - The request to Catalog Service has failed\\033[0m\"; fi;echo -e $MSG;sleep 2s; done",
                 "target": {
-                    "workingDir": "/projects/workshop",
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
               },
               {
                 "type": "che",
-                "label": "Pipeline - Deploy Coolstore",
-                "command": "oc project cn-project${CHE_WORKSPACE_NAMESPACE#user} && ./pipeline_deploy_coolstore.sh",
+                "label": "Catalog - Add PodAffinity",
+                "command": "oc patch dc/catalog-coolstore -n my-project${CHE_WORKSPACE_NAMESPACE#user} --patch '{\"spec\": {\"template\": {\"spec\": {\"affinity\": {\"podAffinity\": {\"requiredDuringSchedulingIgnoredDuringExecution\": [{\"labelSelector\": { \"matchExpressions\": [{\"key\" : \"deploymentconfig\", \"operator\" : \"In\", \"values\": [\"catalog-coolstore\"]}]}, \"topologyKey\" : \"kubernetes.io/hostname\"}]}}}}}}'",
                 "target": {
-                    "workingDir": "/projects/workshop/.tasks",
+                    "workingDir": "/projects/workshop/labs/catalog-spring-boot",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
@@ -245,6 +226,26 @@ commands:
                   "problemMatcher": []
               },
               {
+                "type": "che",
+                "label": "Inventory - Mount ConfigMap",
+                "command": "oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config -n my-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Gateway - Generate Traffic",
+                "command": "./gateway_generate_traffic.sh",
+                "target": {
+                    "workingDir": "/projects/workshop/.tasks",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
                   "type": "che",
                   "label": "Inner Loop - Deploy Coolstore",
                   "command": "./inner_loop_deploy_coolstore.sh",
@@ -255,9 +256,29 @@ commands:
                   "problemMatcher": []
               },
               {
+                  "type": "che",
+                  "label": "Inventory - Commit",
+                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git; git add *; git commit -m \"Initial\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git",
+                  "target": {
+                      "workingDir": "/projects/workshop/labs/inventory-quarkus",
+                      "component": "workshop-tools"
+                  },
+                  "problemMatcher": []
+              },
+              {
                 "type": "che",
                 "label": "GitOps - Export Coolstore",
                 "command": "./gitops_export_coolstore.sh my-project${CHE_WORKSPACE_NAMESPACE#user} cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop/.tasks",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Pipeline - Deploy Coolstore",
+                "command": "oc project cn-project${CHE_WORKSPACE_NAMESPACE#user} && ./pipeline_deploy_coolstore.sh",
                 "target": {
                     "workingDir": "/projects/workshop/.tasks",
                     "component": "workshop-tools"
@@ -285,14 +306,13 @@ commands:
                   "problemMatcher": []
               },
               {
-                  "type": "che",
-                  "label": "Inventory - Commit",
-                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git; git add *; git commit -m \"Initial\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-quarkus.git",
-                  "target": {
-                      "workingDir": "/projects/workshop/labs/inventory-quarkus",
-                      "component": "workshop-tools"
-                  },
-                  "problemMatcher": []
+                "type": "che",
+                "label": "Service Mesh - Deploy Catalog and Gateway",
+                "command": "oc patch dc/catalog-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user}&& oc patch dc/catalog-coolstore --patch '{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"catalog-coolstore\", \"command\" : [\"/bin/bash\"], \"args\": [\"-c\", \"until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \\\"Waiting for Istio Sidecar...\\\"; sleep 1; done; sleep 10; /usr/local/s2i/run\"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/catalog-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc patch dc/gateway-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc patch dc/gateway-coolstore --patch '{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"gateway-coolstore\", \"command\" : [\"/bin/bash\"], \"args\": [\"-c\", \"until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \\\"Waiting for Istio Sidecar...\\\"; sleep 1; done; sleep 10; /usr/local/s2i/run\"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/gateway-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
               }
             ]
           }
