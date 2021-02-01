@@ -18,6 +18,7 @@ curl -X POST ${GITEA_URL_WITH_CREDENTIALS}/api/v1/user/repos \
     -d '{"name" : "gitops-cn-project"}' 
 
 cd ${CONTEXT_FOLDER}
+rm -rf .git
 git init
 git remote add origin ${GITEA_URL}/user${USER_ID}/gitops-cn-project.git
 git add *

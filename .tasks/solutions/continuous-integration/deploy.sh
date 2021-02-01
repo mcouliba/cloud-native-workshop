@@ -17,6 +17,7 @@ curl -X POST ${GITEA_URL_WITH_CREDENTIALS}/api/v1/user/repos \
     -d '{"name" : "inventory-quarkus"}' 
 
 cd ${CONTEXT_FOLDER}
+rm -rf .git
 git init
 git remote add origin ${GITEA_URL}/user${USER_ID}/inventory-quarkus.git
 git add *
