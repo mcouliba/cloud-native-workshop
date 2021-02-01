@@ -1,6 +1,8 @@
 #!/bin/bash
 
-url=http://istio-ingressgateway.istio-system.svc/cn-project${CHE_WORKSPACE_NAMESPACE#user}/api/products
+PROJECT_NAME=$1
+
+url=http://istio-ingressgateway.istio-system.svc/${PROJECT_NAME}/api/products
 
 while true; do 
     if curl -s ${url} | grep -q OFFICIAL

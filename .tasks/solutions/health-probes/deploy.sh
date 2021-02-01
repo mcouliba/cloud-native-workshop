@@ -3,8 +3,9 @@
 ##########################
 
 DIRECTORY=`dirname $0`
+PROJECT_NAME=$1
 
-oc project my-project${CHE_WORKSPACE_NAMESPACE#user}
+oc project ${PROJECT_NAME}
 oc policy add-role-to-user view -z default
 
 oc set probe dc/catalog-coolstore  --liveness --readiness --initial-delay-seconds=30 --failure-threshold=3 --get-url=http://:8080/actuator/health

@@ -4,8 +4,9 @@
 
 DIRECTORY=`dirname $0`
 CONTEXT_FOLDER=/projects/workshop/.tasks/solutions/app-config
+PROJECT_NAME=$1
 
-oc project my-project${CHE_WORKSPACE_NAMESPACE#user}
+oc project ${PROJECT_NAME}
 
 if [ $? -eq 0 ]
 then
@@ -35,7 +36,7 @@ then
     oc label dc inventory-coolstore app.openshift.io/runtime=quarkus --overwrite
 
      cat <<EOF > ${CONTEXT_FOLDER}/inventory-openshift-application.properties
-quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:3306/inventorydb
+quarkus.datasource.url=jdbc:mariadb://inventory-mariadb.${PROJECT_NAME}.svc:3306/inventorydb
 quarkus.datasource.username=inventory
 quarkus.datasource.password=inventory
 EOF
@@ -45,7 +46,7 @@ EOF
     oc set volume dc/inventory-coolstore --add --configmap-name=inventory --mount-path=/deployments/config
 
     cat <<EOF > ${CONTEXT_FOLDER}/catalog-openshift-application.properties
-spring.datasource.url=jdbc:postgresql://catalog-postgresql.my-project${CHE_WORKSPACE_NAMESPACE#user}.svc:5432/catalogdb
+spring.datasource.url=jdbc:postgresql://catalog-postgresql.${PROJECT_NAME}.svc:5432/catalogdb
 spring.datasource.username=catalog
 spring.datasource.password=catalog
 spring.datasource.driver-class-name=org.postgresql.Driver

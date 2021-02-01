@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIRECTORY=`dirname $0`
-NAMESPACE=cn-project${CHE_WORKSPACE_NAMESPACE#user}
+NAMESPACE=$1
 
 oc apply -f ${DIRECTORY}/../labs/pipelines -n ${NAMESPACE}
 
