@@ -12,6 +12,10 @@ USER_ID=$1
 GITEA_URL=http://gitea-server.gitea.svc:3000
 GITEA_URL_WITH_CREDENTIALS=http://user${USER_ID}:openshift@gitea-server.gitea.svc:3000
 
+curl -X DELETE ${GITEA_URL_WITH_CREDENTIALS}/api/v1/repos/user${USER_ID}/gitops-cn-project \
+    -H  "accept: application/json" \
+    -H  "Content-Type: application/json"
+    
 curl -X POST ${GITEA_URL_WITH_CREDENTIALS}/api/v1/user/repos \
     -H  "accept: application/json" \
     -H  "Content-Type: application/json" \
