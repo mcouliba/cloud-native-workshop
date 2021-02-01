@@ -238,7 +238,7 @@ commands:
               {
                 "type": "che",
                 "label": "Gateway - Generate Traffic",
-                "command": "./gateway_generate_traffic.sh",
+                "command": "./gateway_generate_traffic.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}",
                 "target": {
                     "workingDir": "/projects/workshop/.tasks",
                     "component": "workshop-tools"
@@ -248,7 +248,7 @@ commands:
               {
                   "type": "che",
                   "label": "Inner Loop - Deploy Coolstore",
-                  "command": "./inner_loop_deploy_coolstore.sh",
+                  "command": "./inner_loop_deploy_coolstore.sh my-project${CHE_WORKSPACE_NAMESPACE#user}",
                   "target": {
                       "workingDir": "/projects/workshop/.tasks",
                       "component": "workshop-tools"
@@ -278,7 +278,7 @@ commands:
               {
                 "type": "che",
                 "label": "Pipeline - Deploy Coolstore",
-                "command": "oc project cn-project${CHE_WORKSPACE_NAMESPACE#user} && ./pipeline_deploy_coolstore.sh",
+                "command": "oc project cn-project${CHE_WORKSPACE_NAMESPACE#user} && ./pipeline_deploy_coolstore.sh cn-project${CHE_WORKSPACE_NAMESPACE#user}",
                 "target": {
                     "workingDir": "/projects/workshop/.tasks",
                     "component": "workshop-tools"
