@@ -327,7 +327,7 @@ commands:
               {
                 "type": "che",
                 "label": "OpenShift - Demo Preparation",
-                "command": "odo login $(oc whoami --show-server) --username=${CHE_WORKSPACE_NAMESPACE} --password=openshift --insecure-skip-tls-verify;/projects/workshop/.tasks/inner_loop_deploy_coolstore.sh my-project${CHE_WORKSPACE_NAMESPACE#user};/projects/workshop/.tasks/outer_loop_deploy_coolstore.sh ${CHE_WORKSPACE_NAMESPACE#user};oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap,service,pvc --all --namespace my-project${CHE_WORKSPACE_NAMESPACE#user};oc delete deployment,deploymentconfig,buildconfig,route,service,pipeline,pipelinerun --all --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user};oc project my-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "command": "odo login $(oc whoami --show-server) --username=${CHE_WORKSPACE_NAMESPACE} --password=openshift --insecure-skip-tls-verify;/projects/workshop/.tasks/inner_loop_deploy_coolstore.sh my-project${CHE_WORKSPACE_NAMESPACE#user};/projects/workshop/.tasks/outer_loop_deploy_coolstore.sh ${CHE_WORKSPACE_NAMESPACE#user};oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap,service,pvc --all --namespace my-project${CHE_WORKSPACE_NAMESPACE#user};oc delete deployment,deploymentconfig,buildconfig,route,service,pipeline,pipelinerun --all --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user};git checkout .; git clean -fd; git clean -f;oc project my-project${CHE_WORKSPACE_NAMESPACE#user}",
                 "target": {
                     "workingDir": "/projects/workshop",
                     "component": "workshop-tools"
