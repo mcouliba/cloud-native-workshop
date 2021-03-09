@@ -107,6 +107,6 @@ spec:
     - name: shared-workspace
 EOF
 
-tkn pipeline start inventory-pipeline -n cn-project${USER_ID} \
-    --workspace name=shared-workspace,claimName=inventory-pipeline-pvc
-tkn pipeline logs inventory-pipeline -n cn-project${USER_ID} --last -f
+# tkn pipeline start inventory-pipeline -n cn-project${USER_ID} \
+#     --workspace name=shared-workspace,claimName=inventory-pipeline-pvc
+# tkn pipeline logs inventory-pipeline -n cn-project${USER_ID} --last -f

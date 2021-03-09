@@ -1,13 +1,13 @@
 metadata:
-  name: wksp-cloud-native
+  name: wksp-demo
 projects:
   - name: workshop
     source:
       location: 'https://github.com/mcouliba/cloud-native-workshop.git'
       type: github
-      branch: 'ocp4.6'
+      branch: 'demo-mode'
 components:
-  - id: redhat/workshop-tools/4.6.0
+  - reference: https://raw.githubusercontent.com/mcouliba/che-plugin-registry/5.0/v3/plugins/redhat/workshop-tools/5.0.0/meta.yaml
     type: chePlugin
     alias: workshop-tools
     env:
@@ -308,8 +308,58 @@ commands:
               {
                 "type": "che",
                 "label": "Service Mesh - Deploy Catalog and Gateway",
-                "command": "oc patch dc/catalog-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user}&& oc patch dc/catalog-coolstore --patch '{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"catalog-coolstore\", \"command\" : [\"/bin/bash\"], \"args\": [\"-c\", \"until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \\\"Waiting for Istio Sidecar...\\\"; sleep 1; done; sleep 10; /usr/local/s2i/run\"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/catalog-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc patch dc/gateway-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc patch dc/gateway-coolstore --patch '{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"gateway-coolstore\", \"command\" : [\"/bin/bash\"], \"args\": [\"-c\", \"until $(curl -o /dev/null -s -I -f http://127.0.0.1:15000); do echo \\\"Waiting for Istio Sidecar...\\\"; sleep 1; done; sleep 10; /usr/local/s2i/run\"]}]}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/gateway-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "command": "oc patch dc/catalog-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/catalog-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc patch dc/gateway-coolstore --patch '{\"spec\": {\"template\": {\"metadata\": {\"annotations\": {\"sidecar.istio.io/inject\": \"true\"}}}}}' -n cn-project${CHE_WORKSPACE_NAMESPACE#user} && oc rollout latest dc/gateway-coolstore -n cn-project${CHE_WORKSPACE_NAMESPACE#user}",
                 "target": {
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "OpenShift - Cleanup",
+                "command": " git checkout .; git clean -fd; git clean -f; oc delete project my-project${CHE_WORKSPACE_NAMESPACE#user}; oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap,pvc,service,pipeline,pipelinerun --all --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "OpenShift - Demo Preparation",
+                "command": "odo login $(oc whoami --show-server) --username=${CHE_WORKSPACE_NAMESPACE} --password=openshift --insecure-skip-tls-verify;/projects/workshop/.tasks/inner_loop_deploy_coolstore.sh my-project${CHE_WORKSPACE_NAMESPACE#user};/projects/workshop/.tasks/outer_loop_deploy_coolstore.sh ${CHE_WORKSPACE_NAMESPACE#user};oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap,service,pvc --all --namespace my-project${CHE_WORKSPACE_NAMESPACE#user};oc delete deployment,deploymentconfig,buildconfig,route,service,pipeline,pipelinerun --all --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user};oc project my-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Inventory - Code",
+                "command": " ./solve.sh",
+                "target": {
+                    "workingDir": "/projects/workshop/.tasks/solutions/inventory-quarkus",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Catalog & Gateway - Code & Deploy",
+                "command": " cd catalog-spring-boot;./solve_deploy.sh my-project${CHE_WORKSPACE_NAMESPACE#user}; cd ..; cd gateway-vertx;./solve_deploy.sh my-project${CHE_WORKSPACE_NAMESPACE#user}; cd ..; ",
+                "target": {
+                    "workingDir": "/projects/workshop/.tasks/solutions",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "Probes & Config - Deploy",
+                "command": " cd health-probes; ./deploy.sh my-project${CHE_WORKSPACE_NAMESPACE#user}; cd ..; cd app-config; ./deploy.sh my-project${CHE_WORKSPACE_NAMESPACE#user}; cd ..",
+                "target": {
+                    "workingDir": "/projects/workshop/.tasks/solutions",
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
