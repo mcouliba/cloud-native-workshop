@@ -49,7 +49,7 @@ do
         yq delete --inplace  ${SERVICE_YAML} items[*].metadata.ownerReferences
         yq delete --inplace  ${SERVICE_YAML} items[*].metadata.managedFields
         yq delete --inplace  ${SERVICE_YAML} items[*].spec.clusterIP
-        
+        yq delete --inplace  ${SERVICE_YAML} items[*].spec.clusterIPs
 
         # Specific changes for Staging Environment with Istio
         yq delete --inplace  ${SERVICE_YAML} items[*].spec.selector
