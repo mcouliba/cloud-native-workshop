@@ -313,6 +313,16 @@ commands:
                     "component": "workshop-tools"
                 },
                 "problemMatcher": []
+              },
+              {
+                "type": "che",
+                "label": "OpenShift - Cleanup",
+                "command": " git checkout .; git clean -fd; git clean -f; oc delete project my-project${CHE_WORKSPACE_NAMESPACE#user}; oc delete deployment,deploymentconfig,buildconfig,imagestream,route,secret,configmap,pvc,service,pipeline,pipelinerun --all --namespace cn-project${CHE_WORKSPACE_NAMESPACE#user}",
+                "target": {
+                    "workingDir": "/projects/workshop",
+                    "component": "workshop-tools"
+                },
+                "problemMatcher": []
               }
             ]
           }
