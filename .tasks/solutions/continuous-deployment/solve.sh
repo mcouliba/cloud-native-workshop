@@ -45,11 +45,11 @@ spec:
     - name: sync
       image: argoproj/argocd:v1.7.6
       script: |
-        argocd app sync cn-project${USER_ID} --label app.kubernetes.io/instance=\$(params.application-name)
+        argocd app sync \$(params.application-name)
     - name: wait
       image: argoproj/argocd:v1.7.6
       script: |
-        argocd app wait -l app.kubernetes.io/instance=\$(params.application-name) --health
+        argocd app wait \$(params.application-name) --health
 EOF
 
 #Create ArgoCD ConfigMap

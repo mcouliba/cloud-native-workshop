@@ -288,9 +288,9 @@ commands:
               {
                   "type": "che",
                   "label": "GitOps - Commit Inventory",
-                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git 2> /dev/null; git add inventory*.yaml; git commit -m \"Initial Inventory GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
+                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-gitops.git 2> /dev/null; git add *; git commit -m \"Initial Inventory GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-gitops.git",
                   "target": {
-                      "workingDir": "/projects/workshop/labs/gitops",
+                      "workingDir": "/projects/workshop/labs/gitops/inventory-coolstore",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
@@ -298,7 +298,7 @@ commands:
               {
                   "type": "che",
                   "label": "GitOps - Commit Coolstore",
-                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git 2> /dev/null; git add *.yaml; git commit -m \"Initial Coolstore GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
+                  "command": "for component in catalog gateway web; do cd ${component}-coolstore; git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/${component}-gitops.git 2> /dev/null; git add *.yaml; git commit -m \"Commit from CRW task\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/${component}-gitops.git; cd ..; done",
                   "target": {
                       "workingDir": "/projects/workshop/labs/gitops",
                       "component": "workshop-tools"

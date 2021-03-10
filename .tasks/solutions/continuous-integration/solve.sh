@@ -48,7 +48,6 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: gp2
   volumeMode: Filesystem
 EOF
 
