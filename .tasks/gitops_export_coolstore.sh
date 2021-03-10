@@ -15,12 +15,16 @@ for COMPONENT_NAME in "${COMPONENTS[@]}"
 do
     echo "Exporting resources for ${COMPONENT_NAME}..."
 
-    SECRET_YAML=${GITOPS_DIR}/${COMPONENT_NAME}-secret.yaml
-    SERVICE_YAML=${GITOPS_DIR}/${COMPONENT_NAME}-service.yaml
-    ROUTE_YAML=${GITOPS_DIR}/${COMPONENT_NAME}-route.yaml
-    CONFIGMAP_YAML=${GITOPS_DIR}/${COMPONENT_NAME}-configmap.yaml
-    DEPLOYMENTCONFIG_YAML=${GITOPS_DIR}/${COMPONENT_NAME}-deploymentconfig.yaml
-    DEPLOYMENT_YAML=${GITOPS_DIR}/${COMPONENT_NAME}-deployment.yaml
+    COMPONENT_DIR=${GITOPS_DIR}/${COMPONENT_NAME}
+
+    mkdir ${COMPONENT_DIR} 2> /dev/null
+
+    SECRET_YAML=${COMPONENT_DIR}/secret.yaml
+    SERVICE_YAML=${COMPONENT_DIR}/service.yaml
+    ROUTE_YAML=${COMPONENT_DIR}/route.yaml
+    CONFIGMAP_YAML=${COMPONENT_DIR}/configmap.yaml
+    DEPLOYMENTCONFIG_YAML=${COMPONENT_DIR}/deploymentconfig.yaml
+    DEPLOYMENT_YAML=${COMPONENT_DIR}/deployment.yaml
 
     ## Secret
     oc get secret -n ${DEV_PROJECT} -lapp.kubernetes.io/instance=${COMPONENT_NAME%-coolstore} -o yaml --ignore-not-found > ${SECRET_YAML}
@@ -184,10 +188,11 @@ do
 done
 
 # Specific to WebNodejs
-oc patch -n ${DEV_PROJECT} -f ${GITOPS_DIR}/web-coolstore-deployment.yaml \
+WEB_COMPONENT_DIR=${GITOPS_DIR}/web-coolstore
+oc patch -n ${DEV_PROJECT} -f ${WEB_COMPONENT_DIR}/deployment.yaml \
     -p '{"spec": {"template" : {"spec":  {"containers":[{"name":"web-coolstore", "env" : [{"name": "OPENSHIFT_BUILD_NAMESPACE", "valueFrom": {"fieldRef": {"fieldPath": "metadata.namespace"}}}]}]}}}}' \
-    --local -o yaml > ${GITOPS_DIR}/web-coolstore-deployment.yaml.tmp \
-    && mv ${GITOPS_DIR}/web-coolstore-deployment.yaml.tmp ${GITOPS_DIR}/web-coolstore-deployment.yaml
+    --local -o yaml > ${WEB_COMPONENT_DIR}/deployment.yaml.tmp \
+    && mv ${WEB_COMPONENT_DIR}/deployment.yaml.tmp ${WEB_COMPONENT_DIR}/deployment.yaml
 
 
 echo "--- Kubernetes resources has been exported! ---"

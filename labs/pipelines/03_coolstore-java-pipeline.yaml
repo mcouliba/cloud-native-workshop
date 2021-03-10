@@ -4,9 +4,6 @@ kind: Pipeline
 metadata:
   name: coolstore-java-pipeline
 spec:
-  resources:
-    - name: app-git
-      type: git
   params:
     - name: APP_NAME
       type: string
@@ -76,10 +73,6 @@ spec:
             - rollout
             - latest
             - $(params.APP_NAME)-coolstore
-      resources:
-        inputs:
-          - name: source
-            resource: app-git
       runAfter:
         - argocd-task-sync-and-wait
       taskRef:

@@ -288,9 +288,9 @@ commands:
               {
                   "type": "che",
                   "label": "GitOps - Commit Inventory",
-                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git 2> /dev/null; git add inventory*.yaml; git commit -m \"Initial Inventory GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/gitops-cn-project.git",
+                  "command": "git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-gitops.git 2> /dev/null; git add *; git commit -m \"Initial Inventory GitOps\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/inventory-gitops.git",
                   "target": {
-                      "workingDir": "/projects/workshop/labs/gitops",
+                      "workingDir": "/projects/workshop/labs/gitops/inventory-coolstore",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
