@@ -45,11 +45,11 @@ spec:
     - name: sync
       image: argoproj/argocd:v1.7.6
       script: |
-        argocd app sync \$(params.application-name)
+        argocd app sync \$(params.application-name)${USER_ID}
     - name: wait
       image: argoproj/argocd:v1.7.6
       script: |
-        argocd app wait \$(params.application-name) --health
+        argocd app wait \$(params.application-name)${USER_ID} --health
 EOF
 
 #Create ArgoCD ConfigMap
