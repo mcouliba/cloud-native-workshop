@@ -48,7 +48,7 @@ do
 
     argocd repo add ${GITEA_URL}/user${USER_ID}/${REPO_NAME}.git
 
-    argocd app create ${COMPONENT_NAME} \
+    argocd app create ${COMPONENT_NAME}${USER_ID} \
         --project "cn-project${USER_ID}" \
         --sync-policy "none" \
         --repo "${GITEA_URL}/user${USER_ID}/${REPO_NAME}.git" \
