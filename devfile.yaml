@@ -297,10 +297,10 @@ commands:
               },
               {
                   "type": "che",
-                  "label": "GitOps - Commit Coolstore",
-                  "command": "for component in catalog gateway web; do cd ${component}-coolstore; git init; git remote add origin http://gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/${component}-gitops.git 2> /dev/null; git add *.yaml; git commit -m \"Commit from CRW task\"; git push http://${CHE_WORKSPACE_NAMESPACE}:openshift@gitea-server.gitea.svc:3000/${CHE_WORKSPACE_NAMESPACE}/${component}-gitops.git; cd ..; done",
+                  "label": "GitOps - Commit & Configure Coolstore",
+                  "command": "./gitops_commit_configure_coolstore.sh ${CHE_WORKSPACE_NAMESPACE#user}",
                   "target": {
-                      "workingDir": "/projects/workshop/labs/gitops",
+                      "workingDir": "/projects/workshop/.tasks",
                       "component": "workshop-tools"
                   },
                   "problemMatcher": []
