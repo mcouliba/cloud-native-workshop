@@ -1,45 +1,10 @@
-# Cloud Native Roadshow Labs  [![Build Status](https://travis-ci.org/openshift-labs/cloud-native-labs.svg?branch=ocp-3.11)](https://travis-ci.org/openshift-labs/cloud-native-labs)
+# End-to-End Developer Story
 
-This is a one-day hands-on lab experience for bulding Cloud Native applications using 
-Red Hat OpenShift Application Runtimes (Spring Boot, WildFly Swarm, Eclipse Vert.x and Node.js) 
-utilizing a microservices architecture.
+[![Contribute](https://raw.githubusercontent.com/mcouliba/cloud-native-workshop/demo-mode/factory-contribute.svg)](https://codeready-workspaces.apps.cluster-faff.faff.sandbox1469.opentlc.com/f?url=https://github.com/mcouliba/cloud-native-workshop/tree/demo-mode)
 
+## Overview
 
-## CoolStore Online Store App
+This immersive demo will put you in the role of a Developer in the Cloud Native world. This two-part demo delivers an end-to-end Developer journey through the Inner Loop and the Outer Loop of Cloud Native Technologies.
+- **Part One - Inner Loop** (before committing the code): Build, Run and Deploy a microservice based application to OpenShift. 
+- **Part Two - Outer Loop** (after pushing the code to source control): First Containerize and then Promote the application to the staging environment using rich advanced development tools.
 
-CoolStore is an online store web application built using Spring Boot, WildFly Swarm, Eclipse Vert.x, 
-Node.js and AngularJS adopting the microservices architecture.
-
-* **Web**: A Node.js/Angular front-end
-* **API Gateway**: aggregates API calls to back-end services and provides a condenses REST API for front-end
-* **Catalog**: a REST API for the product catalog and product information
-* **Inventory**: a REST API for product's inventory status
-
-```
-                    +-------------+
-                    |             |
-                    |     Web     |
-                    |             |
-                    |   Node.js   |
-                    |  AngularJS  |
-                    +------+------+
-                          |
-                          v
-                    +------+------+
-                    |             |
-                    | API Gateway |
-                    |             |
-                    |   Vert.x    |
-                    |             |
-                    +------+------+
-                          |
-                +---------+---------+
-                v                   v
-          +------+------+     +------+------+
-          |             |     |             |
-          |   Catalog   |     |  Inventory  |
-          |             |     |             |
-          | Spring Boot |     |WildFly Swarm|
-          |             |     |             |
-          +-------------+     +-------------+
-```
