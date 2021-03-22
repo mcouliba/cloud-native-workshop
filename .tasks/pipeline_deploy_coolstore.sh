@@ -29,4 +29,10 @@ tkn pipeline start coolstore-nodejs-pipeline -n ${NAMESPACE} \
     --param APP_GIT_CONTEXT=labs/web-nodejs \
     --param NAMESPACE=${NAMESPACE}
 
+while [ $(tkn pipelinerun list -n ${NAMESPACE} --no-headers | grep -i "running" | wc -l) -gt 0 ]
+do 
+    echo "Waiting the pipelines to complete..."
+    sleep 10
+done
+
 echo -e "\033[0;32mThe deployment of the Coolstore Application by OpenShift Pipeline has succeeded\033[0m"
