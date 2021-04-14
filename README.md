@@ -1,6 +1,6 @@
 # End-to-End Developer Story
 
-[![Contribute](https://raw.githubusercontent.com/mcouliba/cloud-native-workshop/demo-mode/factory-contribute.svg)](https://codeready-workspaces.apps.cluster-faff.faff.sandbox1469.opentlc.com/f?url=https://github.com/mcouliba/cloud-native-workshop/tree/demo-mode&policies.create=peruser)
+[![Contribute](https://raw.githubusercontent.com/mcouliba/cloud-native-workshop/demo-mode/factory-contribute.svg)](https://codeready-workspaces.apps.cluster-5187.5187.sandbox1371.opentlc.com/f?url=https://github.com/mcouliba/cloud-native-workshop/tree/demo-mode&policies.create=peruser)
 
 ## Overview
 
