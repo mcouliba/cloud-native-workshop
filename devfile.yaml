@@ -1,5 +1,7 @@
 metadata:
   name: wksp-cloud-native
+attributes:
+  extensions.ignoreRecommendations: 'true'
 projects:
   - name: workshop
     source:
