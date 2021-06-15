@@ -1,5 +1,7 @@
 metadata:
   name: wksp-cloud-native
+attributes:
+  extensions.ignoreRecommendations: 'true'
 projects:
   - name: workshop
     source:
@@ -7,7 +9,7 @@ projects:
       type: github
       branch: '5.0'
 components:
-  - reference: https://raw.githubusercontent.com/mcouliba/che-plugin-registry/5.0/v3/plugins/redhat/workshop-tools/5.0.0/meta.yaml
+  - reference: https://raw.githubusercontent.com/mcouliba/che-plugin-registry/5.0/v3/plugins/redhat/workshop-tools/5.0.1/meta.yaml
     type: chePlugin
     alias: workshop-tools
     env:
