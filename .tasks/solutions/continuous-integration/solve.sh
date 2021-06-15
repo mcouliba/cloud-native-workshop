@@ -81,7 +81,7 @@ spec:
       workspaces:
         - name: output
           workspace: shared-workspace
-    - name: s2i-java-11
+    - name: s2i-java
       params:
         - name: PATH_CONTEXT
           value: .
@@ -98,7 +98,7 @@ spec:
         - git-clone
       taskRef:
         kind: ClusterTask
-        name: s2i-java-11
+        name: s2i-java
       workspaces:
         - name: source
           workspace: shared-workspace
