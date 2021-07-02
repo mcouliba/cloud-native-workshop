@@ -1,0 +1,82 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: coolstore-java-pipeline
+spec:
+  params:
+    - name: APP_NAME
+      type: string
+    - name: APP_GIT_URL
+      type: string
+    - name: APP_GIT_CONTEXT
+      type: string
+    - name: NAMESPACE
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.APP_GIT_URL)
+        - name: revision
+          value: completed
+        - name: submodules
+          value: 'true'
+        - name: depth
+          value: '1'
+        - name: sslVerify
+          value: 'true'
+        - name: deleteExisting
+          value: 'true'
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+    - name: s2i-java
+      params:
+        - name: PATH_CONTEXT
+          value: $(params.APP_GIT_CONTEXT)
+        - name: TLSVERIFY
+          value: 'false'
+        - name: MAVEN_CLEAR_REPO
+          value: 'false'
+        - name: MAVEN_MIRROR_URL
+          value: 'http://nexus.opentlc-shared.svc:8081/repository/maven-all-public'
+        - name: IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/$(params.NAMESPACE)/$(params.APP_NAME)-coolstore
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: ClusterTask
+        name: s2i-java
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    - name: argocd-task-sync-and-wait
+      params:
+        - name: application-name
+          value: $(params.APP_NAME)
+      runAfter:
+        - s2i-java
+      taskRef:
+        kind: Task
+        name: argocd-task-sync-and-wait
+    - name: openshift-client
+      params:
+        - name: SCRIPT
+          value: oc $@
+        - name: ARGS
+          value:
+            - rollout
+            - latest
+            - $(params.APP_NAME)-coolstore
+      runAfter:
+        - argocd-task-sync-and-wait
+      taskRef:
+        kind: ClusterTask
+        name: openshift-client
+  workspaces:
+    - name: shared-workspace

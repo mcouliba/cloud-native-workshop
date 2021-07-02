@@ -46,15 +46,12 @@
   },
   "homepage": "https://github.com/mcouliba/cloud-native-workshop#readme",
   "devDependencies": {
-    "dot-prop": ">=4.2.1",
-    "ini": ">=1.3.6",
     "js-yaml": "~3.13.1",
-    "node-forge": ">=0.10.0",
-    "nodeshift": "^8.0.0",
+    "nodeshift": "~3.0.0",
     "nyc": "~14.1.0",
     "proxyquire": "^2.0.0",
     "rhoaster": "^0.4.1",
-    "standard-version": ">=8.0.1",
+    "standard-version": "^8.0.1",
     "supertest": "^4.0.2",
     "tap-spec": "~5.0.0",
     "xo": "^0.32.1"

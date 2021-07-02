@@ -5,8 +5,9 @@
 DIRECTORY=`dirname $0`
 USER_ID=$1
 
-$DIRECTORY/solutions/continuous-integration/deploy.sh ${USER_ID}
-$DIRECTORY/solutions/gitops/deploy.sh ${USER_ID}
+$DIRECTORY/solutions/continuous-integration/solve.sh ${USER_ID}
+$DIRECTORY/solutions/gitops/solve.sh ${USER_ID}
+$DIRECTORY/solutions/continuous-deployment/solve.sh ${USER_ID}
 $DIRECTORY/solutions/continuous-deployment/deploy.sh ${USER_ID}
 $DIRECTORY/solutions/service-mesh/deploy.sh ${USER_ID}
 
