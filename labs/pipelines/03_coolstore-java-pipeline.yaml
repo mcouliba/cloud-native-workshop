@@ -34,11 +34,7 @@ spec:
       workspaces:
         - name: output
           workspace: shared-workspace
-<<<<<<< HEAD
     - name: s2i-java
-=======
-    - name: s2i-java-11
->>>>>>> 37ffd75367e38038b05d04c7171b0d1ec0ebc6a5
       params:
         - name: PATH_CONTEXT
           value: $(params.APP_GIT_CONTEXT)
