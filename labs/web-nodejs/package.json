@@ -50,11 +50,11 @@
     "nodeshift": "~3.0.0",
     "nyc": "~14.1.0",
     "proxyquire": "^2.0.0",
-    "rhoaster": "~0.2.0",
-    "standard-version": "^6.0.1",
+    "rhoaster": "^0.4.1",
+    "standard-version": "^8.0.1",
     "supertest": "^4.0.2",
     "tap-spec": "~5.0.0",
-    "xo": "~0.24.0"
+    "xo": "^0.32.1"
   },
   "dependencies": {
     "@patternfly/patternfly": "^2.36.2",
@@ -67,6 +67,7 @@
     "gulp": "^4.0.2",
     "gulp-ng-config": "^1.5.1",
     "kube-probe": "^0.3.0",
-    "license-reporter": "^1.2.0"
+    "license-reporter": "^1.3.0",
+    "webpack": ">=1.11.0"
   }
 }

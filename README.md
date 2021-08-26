@@ -24,7 +24,7 @@ Quarkus, Vert.x and more.
 ## Deploy the Workshop on RHPDS
 
 An [Operator](https://docs.openshift.com/container-platform/4.2/operators/olm-what-operators-are.html)
-is provided for deploying the workshop infrastructure (lab instructions, Nexus, Gogs, Eclipse Che, etc)
+is provided for deploying the workshop infrastructure (lab instructions, Nexus, Gitea, Eclipse Che, etc)
 on OpenShift.
 
 Please follow the instructions from [OpenShift Workshop Operator](https://github.com/mcouliba/openshift-workshop-operator/tree/3.0)
