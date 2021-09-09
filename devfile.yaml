@@ -153,7 +153,7 @@ commands:
   - name: 'Gateway - Create Component'
     actions:
       - command: >-
-          odo component create dotnet gateway --app coolstore --s2i --project my-project${CHE_WORKSPACE_NAMESPACE#user}
+          odo component create dotnet:3.1-ubi8 gateway --app coolstore --s2i --project my-project${CHE_WORKSPACE_NAMESPACE#user}
         type: exec
         workdir: /projects/workshop/labs/gateway-dotnet
         component: workshop-tools
