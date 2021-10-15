@@ -67,16 +67,7 @@ spec:
     - name: openshift-client
       params:
         - name: SCRIPT
-<<<<<<< HEAD:labs/pipelines/03_coolstore-java-pipeline.yaml
-          value: oc $@
-        - name: ARGS
-          value:
-            - rollout
-            - latest
-            - $(params.APP_NAME)-coolstore
-=======
           value: oc rollout latest $(params.APP_NAME)-coolstore
->>>>>>> 5.1:labs/pipelines/04_coolstore-java-pipeline.yaml
       runAfter:
         - argocd-task-sync-and-wait
       taskRef:
