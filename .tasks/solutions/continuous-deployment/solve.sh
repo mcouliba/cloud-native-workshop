@@ -127,12 +127,16 @@ spec:
     - name: openshift-client
       params:
         - name: SCRIPT
+<<<<<<< HEAD
           value: oc \$@
         - name: ARGS
           value:
             - rollout
             - latest
             - inventory-coolstore
+=======
+          value: oc rollout latest inventory-coolstore
+>>>>>>> 5.1
       runAfter:
         - argocd-task-sync-and-wait
       taskRef:
