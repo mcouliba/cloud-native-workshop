@@ -1,30 +1,63 @@
-<section class="pf-c-page__main-section">
-    <div class="pf-l-gallery pf-m-gutter">
-        <div ng-repeat="item in products" class="pf-l-gallery__item">
-            <div class="pf-c-card pf-m-hoverable pf-m-compact">
-                <div class="pf-c-card__head">
-                    <img class="img-responsive img-circle" ng-src="/app/imgs/{{item.product.name}}.jpg"></img>
-                </div>
-                <div class="pf-c-card__header pf-c-title pf-m-md">
-                    <p>{{item.product.name}}</p>
-                    <div class="pf-c-content">
-                    <small>Provided by Red Hat</small>
-                    </div>
-                </div>
-                <div class="pf-c-card__body">
-                    {{item.product.description}}
-                </div>
-                <div class="pf-c-card__footer">
-                    <span>{{item.product.price | currency}}</span>
-                    <div ng-if="item.product.availability.quantity > 0" style="float:right">
-                        <span class="pf-c-label pf-m-compact label-{{item.product.availability.quantity < 15 ? 'warning' : 'primary'}}">
-                            {{item.product.availability.quantity}} left!
-                        </span>
-                        <a target="_blank" href="{{item.product.availability.link}}">&nbsp;</span></a>
-                    </div>
-                    <div ng-if="item.product.availability.quantity == 0" style="float:right"><span class="fa fa-warning fa-lg"></span>&nbsp;Not in Stock</div>
-                </div>
+<section class="pf-c-page__main-section coolstore-home">
+    <section class="hero-banner">
+        <div class="hero-banner__copy">
+            <p class="hero-banner__eyebrow">New season collection</p>
+            <h1>Modern gear that teams actually want to wear</h1>
+            <p>
+                Discover premium, limited-run Red Hat and Quarkus essentials curated for developers,
+                advocates, and conference giveaways.
+            </p>
+            <div class="hero-banner__actions">
+                <a href="#catalog" class="hero-banner__cta">Shop now</a>
+                <span class="hero-banner__meta">Fast shipping on in-stock items</span>
             </div>
         </div>
-    </div>
+        <div class="hero-banner__visual">
+            <img ng-src="/app/imgs/Quarkus T-shirt.jpg" alt="Featured Quarkus shirt">
+        </div>
+    </section>
+
+    <section id="catalog" class="catalog-shell">
+        <div class="catalog-shell__header">
+            <h2>Trending products</h2>
+            <p>Fresh picks designed to improve engagement and conversion in your store channel.</p>
+        </div>
+
+        <div class="modern-product-grid">
+            <article ng-repeat="item in products" class="product-card">
+                <div class="product-card__media">
+                    <img ng-src="/app/imgs/{{item.product.name}}.jpg" alt="{{item.product.name}}">
+                </div>
+                <div class="product-card__content">
+                    <p class="product-card__brand">CoolStore exclusive</p>
+                    <h3>{{item.product.name}}</h3>
+                    <p class="product-card__description">{{item.product.description}}</p>
+                    <div class="product-card__footer">
+                        <div>
+                            <p class="product-card__price">{{item.product.price | currency}}</p>
+                            <p
+                                class="product-card__inventory"
+                                ng-class="{
+                                    'is-critical': item.product.availability.quantity === 0,
+                                    'is-warning': item.product.availability.quantity > 0 && item.product.availability.quantity < 15
+                                }">
+                                <span ng-if="item.product.availability.quantity > 0">
+                                    {{item.product.availability.quantity}} left in stock
+                                </span>
+                                <span ng-if="item.product.availability.quantity === 0">Currently sold out</span>
+                            </p>
+                        </div>
+                        <a
+                            ng-if="item.product.availability.link"
+                            class="product-card__cta"
+                            target="_blank"
+                            href="{{item.product.availability.link}}"
+                            rel="noopener noreferrer">
+                            Buy now
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
 </section>
