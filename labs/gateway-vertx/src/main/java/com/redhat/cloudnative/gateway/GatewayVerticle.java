@@ -112,8 +112,10 @@ public class GatewayVerticle extends AbstractVerticle {
                         product.getString("itemId"), resp.statusCode());
                     return product.copy();
                 }
-                return product.copy().put("availability",
-                    new JsonObject().put("quantity", resp.body().getInteger("quantity")));
+                JsonObject availability = new JsonObject()
+                    .put("quantity", resp.body().getInteger("quantity"))
+                    .put("link", "https://redhat.com/coolstore/product/" + product.getString("itemId"));
+                return product.copy().put("availability", availability);
             });
     }
 
