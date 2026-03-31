@@ -46,28 +46,28 @@
   },
   "homepage": "https://github.com/mcouliba/cloud-native-workshop#readme",
   "devDependencies": {
-    "js-yaml": "~3.13.1",
-    "nodeshift": "~3.0.0",
-    "nyc": "~14.1.0",
-    "proxyquire": "^2.0.0",
+    "js-yaml": "^4.1.1",
+    "nodeshift": "^13.0.0",
+    "nyc": "^18.0.0",
+    "proxyquire": "^2.1.3",
     "rhoaster": "^0.4.1",
-    "standard-version": "^6.0.1",
-    "supertest": "^4.0.2",
-    "tap-spec": "~5.0.0",
-    "xo": "^0.32.1"
+    "standard-version": "^9.5.0",
+    "supertest": "^7.2.2",
+    "tap-spec": "^5.0.0",
+    "xo": "^2.0.2"
   },
   "dependencies": {
-    "@patternfly/patternfly": "^2.36.2",
-    "angular": ">=1.7.9",
-    "angular-route": ">=1.7.9",
-    "body-parser": "~1.19.0",
-    "cors": "^2.8.5",
-    "debug": "^4.0.1",
-    "express": "4.16.4",
-    "gulp": "^4.0.2",
+    "@patternfly/patternfly": "^6.4.0",
+    "angular": "^1.8.3",
+    "angular-route": "^1.8.3",
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "debug": "^4.4.3",
+    "express": "^5.2.1",
+    "gulp": "^5.0.1",
     "gulp-ng-config": "^1.5.1",
-    "kube-probe": "^0.3.0",
-    "license-reporter": "^1.3.0",
-    "webpack": ">=1.11.0"
+    "kube-probe": "^1.0.3",
+    "license-reporter": "^1.5.0",
+    "webpack": "^5.105.4"
   }
 }
