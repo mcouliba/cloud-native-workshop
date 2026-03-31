@@ -48,13 +48,27 @@
                             </p>
                         </div>
                         <a
-                            ng-if="item.product.availability.link"
+                            ng-if="item.product.availability.quantity > 0 && item.product.availability.link"
                             class="product-card__cta"
                             target="_blank"
                             href="{{item.product.availability.link}}"
                             rel="noopener noreferrer">
                             Buy now
                         </a>
+                        <button
+                            ng-if="item.product.availability.quantity > 0 && !item.product.availability.link"
+                            type="button"
+                            class="product-card__cta product-card__cta--disabled"
+                            disabled>
+                            Notify me
+                        </button>
+                        <button
+                            ng-if="item.product.availability.quantity === 0"
+                            type="button"
+                            class="product-card__cta product-card__cta--disabled"
+                            disabled>
+                            Sold out
+                        </button>
                     </div>
                 </div>
             </article>

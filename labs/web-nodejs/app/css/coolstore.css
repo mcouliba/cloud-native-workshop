@@ -402,6 +402,24 @@ body.coolstore-theme {
 	text-decoration: none;
 }
 
+.product-card__cta.product-card__cta--ghost {
+	background: #eef2ff;
+	color: #3730a3;
+}
+
+.product-card__cta.product-card__cta--ghost:hover,
+.product-card__cta.product-card__cta--ghost:focus {
+	background: #e0e7ff;
+	color: #312e81;
+}
+
+.product-card__cta.product-card__cta--disabled {
+	background: #e5e7eb;
+	color: #6b7280;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
 @media (max-width: 960px) {
 	.coolstore-nav {
 		display: none;
